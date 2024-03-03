@@ -1,9 +1,15 @@
 from datetime import datetime
 from data import get_data
-from get_risk_free import get_risk_free_rate
 from algo import run_algo
-# from algorithm import process_stock_data  # Ensure this function exists in algorithm.py
+from flask import Flask
 
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Hello, World!"
+
+# from algorithm import process_stock_data  # Ensure this function exists in algorithm.py
 def get_user_input():
     tickers = input("Enter tickers separated by commas (e.g., AAPL,MSFT,GOOG): ").split(',')
     lookback_start = input("Enter lookback start date (YYYY-MM-DD): ")
@@ -31,4 +37,5 @@ def main():
     print(corr)
 
 if __name__ == "__main__":
-    main()
+    # main()
+    app.run(debug=True)
