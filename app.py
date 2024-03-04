@@ -12,9 +12,6 @@ CORS(app)
 def hello_world():
     return 'Hello, World!'
 
-
-
-
 # from algorithm import process_stock_data  # Ensure this function exists in algorithm.py
 def get_user_input():
     tickers = input("Enter tickers separated by commas (e.g., AAPL,MSFT,GOOG): ").split(',')
