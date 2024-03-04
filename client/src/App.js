@@ -1,28 +1,20 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import LandingPage from './pages/LandingPage.js';
+import InputPage from './pages/InputPage.js';
 
-class App extends Component {
-  constructor() {
-    super();
-    this.state = { message: '' };
-  }
 
-  componentDidMount() {
-    axios.get('http://localhost:5000')
-      .then(response => this.setState({ message: response.data }));
-  }
-
-  render() {
-    const { message } = this.state;
-    return (
-      <div className="App">
-        <header className="App-header">
-          <p>{message}</p>
-        </header>
-
-      </div>
-    );
-  }
-}
+const App = () => {
+  return (
+    <div className='App'>
+      <BrowserRouter>
+        <Routes>
+          <Route index element={<LandingPage/>} />
+          <Route path='/input' element={<InputPage/>} />
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
+};
 
 export default App;
