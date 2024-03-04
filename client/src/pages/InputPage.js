@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react';
-//import './InputPage.css';
 import { Link } from 'react-router-dom';
 
 const InputPage = () => {
   const [formData, setFormData] = useState({
-    tickers: '',
-    startDate: '',
-    riskTolerance: '',
-    investmentAmount: '',
-    minBound: '',
-    maxBound: '',
-    
+    tickers: [],
+    lookback_start: '',
+    risk_tolerance: '',
+    investment_amount: '',
+    min_bound: '',
+    max_bound: '',
   });
 
   useEffect(() => {
@@ -28,17 +26,42 @@ const InputPage = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    if (name === 'tickers') {
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: value.split(',').map(ticker => ticker.trim()),
+      }));
+    } else {
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
   };
 
-  //for now log it
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('Form Data:', formData);
-    //not yet handled
+
+    try {
+      const response = await fetch('http://localhost:5000/process_data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('Response Data:', data);
+      // Now you can use this data to update your state and render it in your component
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
@@ -48,43 +71,43 @@ const InputPage = () => {
         <input
           type="text"
           name="tickers"
-          placeholder="Tickers"
-          value={formData.tickers}
+          placeholder="Enter tickers separated by commas"
+          value={formData.tickers.join(', ')}
           onChange={handleChange}
         />
         <input
           type="date"
-          name="startDate"
+          name="lookback_start"
           placeholder="Lookback Start Date"
-          value={formData.startDate}
+          value={formData.lookback_start}
           onChange={handleChange}
         />
         <input
           type="text"
-          name="riskTolerance"
+          name="risk_tolerance"
           placeholder="Risk Tolerance"
-          value={formData.riskTolerance}
+          value={formData.risk_tolerance}
           onChange={handleChange}
         />
         <input
           type="number"
-          name="investmentAmount"
+          name="investment_amount"
           placeholder="Investment Amount"
-          value={formData.investmentAmount}
+          value={formData.investment_amount}
           onChange={handleChange}
         />
         <input
           type="number"
-          name="minBound"
+          name="min_bound"
           placeholder="Minimum Bound"
-          value={formData.minBound}
+          value={formData.min_bound}
           onChange={handleChange}
         />
         <input
           type="number"
-          name="maxBound"
+          name="max_bound"
           placeholder="Maximum Bound"
-          value={formData.maxBound}
+          value={formData.max_bound}
           onChange={handleChange}
         />
         <div className="button-container">
