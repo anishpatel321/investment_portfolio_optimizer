@@ -1,15 +1,19 @@
 from datetime import datetime
+from data import get_data
 from algo import run_algo
-import pandas as pd
-from flask import Flask, request, jsonify
+from flask import Flask
 from flask_cors import CORS
 
 app = Flask(__name__)
+
 CORS(app)
 
 @app.route('/')
 def hello_world():
     return 'Hello, World!'
+
+
+
 
 # from algorithm import process_stock_data  # Ensure this function exists in algorithm.py
 def get_user_input():
@@ -42,4 +46,4 @@ def main():
 
 if __name__ == '__main__':
     #app.run(host='0.0.0.0', port=5000)
-    app.run(debug=True)
+    app.run()
