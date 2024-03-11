@@ -1,5 +1,44 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import TopBar from '../components/TopBar';
+import ContinueButton from '../components/ContinueButton';
+import { Box, TextField, Typography, Grid } from '@mui/material';
+import { styled } from '@mui/system';
+
+const StyledTextField = styled(TextField)({
+  '& label.Mui-focused': {
+    color: 'white',
+  },
+  '& .MuiInput-underline:after': {
+    borderBottomColor: 'white',
+  },
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      borderColor: 'white',
+    },
+    '&:hover fieldset': {
+      borderColor: 'white',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: 'white',
+    },
+  },
+  backgroundColor: 'white',
+  width: '50%',
+});
+
+const InputField = ({ name, placeholder, value, handleChange }) => (
+  <StyledTextField
+    type={name === 'tickers' ? 'text' : 'number'}
+    name={name}
+    placeholder={placeholder}
+    value={value}
+    onChange={handleChange}
+    variant="outlined"
+    fullWidth
+    margin="normal"
+  />
+);
 
 const InputPage = () => {
   const [formData, setFormData] = useState({
@@ -66,59 +105,51 @@ const InputPage = () => {
 
   return (
     <div className="main-page">
+      <TopBar home />
       <h1>Time to make money!</h1>
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
+        <InputField
           name="tickers"
           placeholder="Enter tickers separated by commas"
           value={formData.tickers.join(', ')}
-          onChange={handleChange}
+          handleChange={handleChange}
         />
-        <input
-          type="date"
+        <InputField
           name="lookback_start"
           placeholder="Lookback Start Date"
           value={formData.lookback_start}
-          onChange={handleChange}
+          handleChange={handleChange}
         />
-        <input
-          type="text"
+        <InputField
           name="risk_tolerance"
           placeholder="Risk Tolerance"
           value={formData.risk_tolerance}
-          onChange={handleChange}
+          handleChange={handleChange}
         />
-        <input
-          type="number"
+        <InputField
           name="investment_amount"
           placeholder="Investment Amount"
           value={formData.investment_amount}
-          onChange={handleChange}
+          handleChange={handleChange}
         />
-        <input
-          type="number"
+        <InputField
           name="min_bound"
           placeholder="Minimum Bound"
           value={formData.min_bound}
-          onChange={handleChange}
+          handleChange={handleChange}
         />
-        <input
-          type="number"
+        <InputField
           name="max_bound"
           placeholder="Maximum Bound"
           value={formData.max_bound}
-          onChange={handleChange}
+          handleChange={handleChange}
         />
-        <div className="button-container">
-          <button type="submit">Continue</button>
-        </div>
+        <Box sx={{ display: 'flex', width: '95%', mx: 'auto', justifyContent: 'flex-end', marginTop: '0%'}}>
+          <ContinueButton/>
+        </Box>
       </form>
-      <Link to="/">
-        <button>Back to Landing Page</button>
-      </Link>
     </div>
-  );
+  );  
 };
 
 export default InputPage;

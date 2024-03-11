@@ -1,4 +1,3 @@
-// src/components/NumberPill.js
 import { Typography } from '@mui/material';
 import { styled } from '@mui/system';
 
