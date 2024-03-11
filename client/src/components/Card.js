@@ -1,4 +1,3 @@
-// src/components/Card.js
 import { Card, CardContent, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 import NumberPill from './NumberPill'; 
@@ -10,7 +9,7 @@ const StyledCard = styled(Card)({
     borderRadius: '30px',
     boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)',
     margin: '7px',
-    height: '170%', 
+    height: '100%', 
     position: 'relative', // Added to position the NumberPill component
   });
 
@@ -20,12 +19,12 @@ const StyledCardContent = styled(CardContent)({
 
 const CardComponent = ({ title, subtitle, body }) => (
     <StyledCard>
-      <NumberPill>{title}</NumberPill> {/* Use the NumberPill component */}
+      <NumberPill>{title}</NumberPill>
       <StyledCardContent>
-        <Typography variant="h6" component="p">
+        <Typography variant="h1" component="p" style={{fontSize: '350%', fontWeight: 'bold', paddingTop: '10%',paddingBottom: '3%', margin: '4%'}}>
           {subtitle}
         </Typography>
-        <Typography variant="body1" component="p">
+        <Typography variant="body1" component="p" style={{fontSize: '150%', margin: '4%'}}>
           {body}
         </Typography>
       </StyledCardContent>

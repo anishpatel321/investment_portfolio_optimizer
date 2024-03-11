@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import TopBar from '../components/TopBar';
 
 const InputPage = () => {
   const [formData, setFormData] = useState({
@@ -66,6 +67,7 @@ const InputPage = () => {
 
   return (
     <div className="main-page">
+      <TopBar home />
       <h1>Time to make money!</h1>
       <form onSubmit={handleSubmit}>
         <input

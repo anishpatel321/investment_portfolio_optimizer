@@ -27,14 +27,14 @@ const LandingPage = () => {
         flexDirection: 'column', 
         alignItems: 'center', 
         justifyContent: 'center', 
-        minHeight: '80vh', 
+        minHeight: '77vh', 
         color: 'white', 
         m: 0, // Remove margin
         width: '100%', // Full width
       }}>
         <Box sx={{ width: '95%', mx: 'auto' }}>
           <Typography variant="h3" component="h1" gutterBottom align="left"
-                      style={{marginLeft: '7px', marginRight: '7px', marginBottom: '30px', fontWeight: 'bold'}}>
+                      style={{marginLeft: '7px', marginRight: '7px', marginBottom: '30px', fontWeight: 'bold', fontSize: '350%'}}>
             Welcome to financial freedom!
           </Typography>
         </Box>
@@ -49,9 +49,9 @@ const LandingPage = () => {
             <Card title="#three" subtitle="Invest in your future" body="Implement the White Whale portfolio recommendations to see your wallet grow" />
           </Grid>
         </Grid>
-        <Box sx={{justifyContent: 'right', width: '100%'}}>
-          <ContinueButton />
-        </Box>
+      </Box>
+      <Box sx={{ display: 'flex', width: '95%', mx: 'auto', justifyContent: 'flex-end', marginTop: '0%'}}>
+          <ContinueButton/>
       </Box>
     </>
   );
