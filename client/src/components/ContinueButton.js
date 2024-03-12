@@ -6,11 +6,13 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 const StyledButton = styled(Button)({
   background: 'white',
   borderRadius: '30px',
-  padding: '0.5% 1%',
-  color: '#2b2b6e',
+  padding: '0.3vw 0.8vw',
+  color: '#163A5F',
   '&:hover': {
     backgroundColor: 'white',
+    transform: 'scale(1.05)', // Scale up on hover
   },
+  transition: 'transform 0.3s ease-in-out', // Smooth transition
 });
 
 const ArrowIcon = styled(ArrowForwardIosIcon)({
@@ -24,7 +26,7 @@ const Circle = styled(Box)({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  background: '#2b2b6e',
+  background: '#163A5F',
 });
 
 const ContinueButton = () => (
@@ -32,7 +34,7 @@ const ContinueButton = () => (
     <Circle>
       <ArrowIcon />
     </Circle>
-  } style={{fontWeight: 'bold', fontSize:'120%', marginRight: '7px'}}>
+  } style={{fontWeight: 'bold', fontSize:'120%', marginRight: '7px', top: '1vh'}}>
     Continue
   </StyledButton>
 );

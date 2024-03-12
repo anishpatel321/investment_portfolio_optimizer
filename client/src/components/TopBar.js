@@ -14,7 +14,7 @@ const TopBar = ({ home }) => (
     <AppBar position="static" color="transparent" elevation={0}>
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <IconButton edge="start" color="inherit" aria-label="logo">
-          <img src={Logo} alt="Logo" style={{ width: '5vw', height: '4vw', paddingLeft: '10%', paddingTop: '10%' }} />
+          <img src={Logo} alt="Logo" style={{ width: '5vw', height: '4vw', paddingLeft: '0.5vw', paddingTop: '0.5vw' }} />
         </IconButton>
         <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
           <TopBarButton color="inherit" component={RouterLink} to={home ? "/" : "/input"}>

@@ -4,6 +4,7 @@ import TopBar from '../components/TopBar';
 import ContinueButton from '../components/ContinueButton';
 import { Box, TextField, Typography, Grid } from '@mui/material';
 import { styled } from '@mui/system';
+import Card from '../components/Card';
 
 const StyledTextField = styled(TextField)({
   '& label.Mui-focused': {
@@ -104,52 +105,25 @@ const InputPage = () => {
   };
 
   return (
-    <div className="main-page">
-      <TopBar home />
-      <h1>Time to make money!</h1>
-      <form onSubmit={handleSubmit}>
-        <InputField
-          name="tickers"
-          placeholder="Enter tickers separated by commas"
-          value={formData.tickers.join(', ')}
-          handleChange={handleChange}
-        />
-        <InputField
-          name="lookback_start"
-          placeholder="Lookback Start Date"
-          value={formData.lookback_start}
-          handleChange={handleChange}
-        />
-        <InputField
-          name="risk_tolerance"
-          placeholder="Risk Tolerance"
-          value={formData.risk_tolerance}
-          handleChange={handleChange}
-        />
-        <InputField
-          name="investment_amount"
-          placeholder="Investment Amount"
-          value={formData.investment_amount}
-          handleChange={handleChange}
-        />
-        <InputField
-          name="min_bound"
-          placeholder="Minimum Bound"
-          value={formData.min_bound}
-          handleChange={handleChange}
-        />
-        <InputField
-          name="max_bound"
-          placeholder="Maximum Bound"
-          value={formData.max_bound}
-          handleChange={handleChange}
-        />
-        <Box sx={{ display: 'flex', width: '95%', mx: 'auto', justifyContent: 'flex-end', marginTop: '0%'}}>
-          <ContinueButton/>
-        </Box>
-      </form>
-    </div>
-  );  
+    <>
+      <TopBar home/>
+      <Grid sx={{ width: '95%', mx: 'auto', color:'white' }}>
+        <Typography variant="h3" component="h1" gutterBottom align="left"
+                    style={{marginLeft: '7px', marginRight: '7px', marginTop: '30px', fontWeight: 'bold', fontSize: '350%'}}>
+          Define your portfolio, your way
+        </Typography>
+      </Grid>
+      <Grid container spacing={1} justifyContent="center" sx={{ width: '95%', mx: 'auto' }}>
+        <Grid item xs={12} sm={6} md={4} style={{padding: 0}}>
+          <Card title="Definitions" subtitle="Define your inputs" body="Pick your favorite stocks, and lookback period. Don’t worry you can also specify the amount of risk you are willing to take!" height={'67.5vh'}/>
+        </Grid>
+        <Grid item xs={12} sm={6} md={8} style={{padding: 0}}>
+          <Card title="Inputs" height={'67.5vh'} hasButton={true} textFields={true}/>
+        </Grid>
+      </Grid>
+    </>
+);
+
 };
 
 export default InputPage;
