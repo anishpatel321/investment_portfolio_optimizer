@@ -1,7 +1,9 @@
+import React from 'react';
 import { Card, CardContent, Typography, Box, TextField, OutlinedInput } from '@mui/material';
-import { styled, keyframes } from '@mui/system';
+import { styled } from '@mui/system';
 import NumberPill from './NumberPill'; 
 import ContinueButton from './ContinueButton';
+import InputAdornment from '@mui/material/InputAdornment';
 
 const StyledCard = styled(Card)(({ height }) => ({
   background: '#163A5F',
@@ -24,7 +26,7 @@ const StyledCardContent = styled(CardContent)({
 const StyledTextField = styled(TextField)({
   background: 'white', // White background
   borderRadius: '20px', // Rounded edges
-  margin: '10px 10px', 
+  margin: '10px 25px', 
 });
 
 const StyledOutlinedInput = styled(OutlinedInput)({
@@ -42,22 +44,83 @@ const StyledOutlinedInput = styled(OutlinedInput)({
   },
 });
 
-const CardComponent = ({ title, subtitle, body, height, hasButton, textFields }) => (
-  <StyledCard height={height}>
-    <NumberPill>{title}</NumberPill>
-    <StyledCardContent>
-      {!textFields && <Typography variant="h1" component="p" style={{fontSize: '350%', fontWeight: 'bold', paddingTop: '10%',paddingBottom: '3%', margin: '4%'}}>
-        {subtitle}
-      </Typography>}
-      {!textFields && <Typography variant="body1" component="p" style={{fontSize: '150%', margin: '4%'}}>
-        {body}
-      </Typography>}
-      {textFields && Array(6).fill().map((_, i) => (
-        <StyledTextField key={i} label={`Input ${i+1}`} variant='outlined' InputProps={{ component: StyledOutlinedInput }}/>
-      ))}
-      {hasButton && <Box sx={{ position: 'absolute', bottom: '2.6vh', right: '0.4vw' }}><ContinueButton /></Box>}
-    </StyledCardContent>
-  </StyledCard>
-);
+const CardComponent = ({ title, subtitle, body, height, hasButton, textFields }) => {
+  const [values, setValues] = React.useState({
+    riskThreshold: '',
+    investmentAmount: '',
+    minBound: '',
+    maxBound: '',
+    lookbackPeriod: '', 
+  });
+
+  const handleChange = (prop) => (event) => {
+    setValues({ ...values, [prop]: event.target.value });
+  };
+
+  const validateInput = (value, min, max) => {
+    return value >= min && value <= max;
+  };
+
+  return (
+    <StyledCard height={height}>
+      <NumberPill>{title}</NumberPill>
+      <StyledCardContent>
+        {!textFields && <Typography variant="h1" component="p" style={{fontSize: '350%', fontWeight: 'bold', paddingTop: '10%',paddingBottom: '3%', margin: '4%'}}>
+          {subtitle}
+        </Typography>}
+        {!textFields && <Typography variant="body1" component="p" style={{fontSize: '150%', margin: '4%'}}>
+          {body}
+        </Typography>}
+        {textFields && (
+          <>
+            <StyledTextField label="Tickers" variant='filled' InputProps={{ component: StyledOutlinedInput }} />
+            <StyledTextField label="Lookback Period" variant='filled' InputProps={{ component: StyledOutlinedInput }} type="date" InputLabelProps={{ shrink: true }} />
+            <StyledTextField 
+              label="Risk Threshold" 
+              variant='filled' 
+              InputProps={{ component: StyledOutlinedInput }} 
+              type="number" 
+              value={values.riskThreshold}
+              onChange={handleChange('riskThreshold')}
+              error={!validateInput(values.riskThreshold, 0, 1)}
+              
+            />
+            <StyledTextField 
+              label="Investment amount" 
+              variant='filled' 
+              InputProps={{ 
+                component: StyledOutlinedInput,
+                startAdornment: <InputAdornment position="start">$</InputAdornment>,
+              }} 
+              type="number" 
+              value={values.investmentAmount}
+              onChange={handleChange('investmentAmount')}
+              error={!validateInput(values.investmentAmount, 0, Infinity)}
+            />
+            <StyledTextField 
+              label="Minimum Bound" 
+              variant='filled' 
+              InputProps={{ component: StyledOutlinedInput }} 
+              type="number" 
+              value={values.minBound}
+              onChange={handleChange('minBound')}
+              error={!validateInput(values.minBound, 0, 1)}
+            />
+            <StyledTextField 
+              label="Max Bound" 
+              variant='filled' 
+              InputProps={{ component: StyledOutlinedInput }} 
+              type="number" 
+              value={values.maxBound}
+              onChange={handleChange('maxBound')}
+              error={!validateInput(values.maxBound, 0, 1)}
+            />
+          </>
+        )}
+        {hasButton && <Box sx={{ position: 'absolute', bottom: '2.6vh', right: '0.4vw' }}><ContinueButton /></Box>}
+      </StyledCardContent>
+    </StyledCard>
+  );
+};
 
 export default CardComponent;
