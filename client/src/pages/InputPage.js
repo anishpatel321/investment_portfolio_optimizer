@@ -1,107 +1,64 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
 import TopBar from '../components/TopBar';
-import ContinueButton from '../components/ContinueButton';
-import { Box, TextField, Typography, Grid } from '@mui/material';
+import { Box, TextField, Typography, Grid, InputAdornment, FormHelperText } from '@mui/material';
 import { styled } from '@mui/system';
-import Card from '../components/Card';
+import CardComponent from '../components/Card';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const StyledTextField = styled(TextField)({
+  backgroundColor: 'white',
+  width: '25vw',
+  borderRadius: '20px',
+  border: 'none',
+  outline: 'none',
   '& label.Mui-focused': {
-    color: 'white',
+    color: 'transparent',
   },
   '& .MuiInput-underline:after': {
-    borderBottomColor: 'white',
+    borderBottomColor: 'transparent',
   },
   '& .MuiOutlinedInput-root': {
+    // fontSize: '2.4vh',
     '& fieldset': {
-      borderColor: 'white',
+      borderColor: 'transparent',
     },
     '&:hover fieldset': {
-      borderColor: 'white',
+      borderColor: 'transparent',
     },
     '&.Mui-focused fieldset': {
-      borderColor: 'white',
+      borderColor: 'transparent',
+    },
+    '&.Mui-error fieldset': {
+      borderColor: 'transparent',
     },
   },
-  backgroundColor: 'white',
-  width: '50%',
 });
 
-const InputField = ({ name, placeholder, value, handleChange }) => (
-  <StyledTextField
-    type={name === 'tickers' ? 'text' : 'number'}
-    name={name}
-    placeholder={placeholder}
-    value={value}
-    onChange={handleChange}
-    variant="outlined"
-    fullWidth
-    margin="normal"
-  />
-);
-
 const InputPage = () => {
-  const [formData, setFormData] = useState({
-    tickers: [],
-    lookback_start: '',
-    risk_tolerance: '',
-    investment_amount: '',
-    min_bound: '',
-    max_bound: '',
-  });
+  const [tickers, setTickers] = useState('');
+  const [investmentAmount, setInvestmentAmount] = useState('');
+  const [riskThreshold, setRiskThreshold] = useState('');
+  const [lookBackDate, setLookBackDate] = useState(null);
+  const [minAllocationBound, setMinAllocationBound] = useState('');
+  const [maxAllocationBound, setMaxAllocationBound] = useState('');
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await fetch('/api/resetSession');
-        console.log('API call successful');
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-  
-    fetchData();
-  }, []);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    if (name === 'tickers') {
-      setFormData((prevState) => ({
-        ...prevState,
-        [name]: value.split(',').map(ticker => ticker.trim()),
-      }));
-    } else {
-      setFormData((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
-    }
+  const validateAllocation = (value) => {
+    return value >= 0 && value <= 1;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log('Form Data:', formData);
-
-    try {
-      const response = await fetch('http://localhost:5000/process_data', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log('Response Data:', data);
-      // Now you can use this data to update your state and render it in your component
-    } catch (error) {
-      console.error('Error:', error);
+  const validateInvestAndRisk = (value) => {
+    if (value.trim() === '') {
+      return true; // No error if the field is empty
     }
+    const numValue = parseFloat(value);
+    return !isNaN(numValue) && numValue > 0 && numValue.toString() === value;
+  };
+
+  const validateLookBackDate = (selectedDate) => {
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+    return selectedDate instanceof Date && selectedDate < oneWeekAgo;
   };
 
   return (
@@ -115,15 +72,94 @@ const InputPage = () => {
       </Grid>
       <Grid container spacing={1} justifyContent="center" sx={{ width: '95%', mx: 'auto' }}>
         <Grid item xs={12} sm={6} md={4} style={{padding: 0}}>
-          <Card title="Definitions" subtitle="Define your inputs" body="Pick your favorite stocks, and lookback period. Don’t worry you can also specify the amount of risk you are willing to take!" height={'67.5vh'}/>
+          <CardComponent title="Definitions" subtitle="Define your inputs" body="Pick your favorite stocks, and lookback period. Don’t worry you can also specify the amount of risk you are willing to take!" height={'67.5vh'} hasTransition={true}/>
         </Grid>
         <Grid item xs={12} sm={6} md={8} style={{padding: 0}}>
-          <Card title="Inputs" height={'67.5vh'} hasButton={true} textFields={true}/>
+          <CardComponent title="Inputs" height={'67.5vh'} hasButton={true} hasInputs={true}>
+            <Box sx={{ position: 'absolute', top: '10vh', left: '4vw'}}>
+              <Typography variant='h6' style={{ marginLeft: '0.5vw', fontWeight: 'bold', fontSize: '2vw'}} >Tickers</Typography>
+              <StyledTextField
+                value={tickers}
+                onChange={(e) => setTickers(e.target.value)}
+              />
+            </Box>
+            <Box sx={{ position: 'absolute', top: '25vh', left: '4vw' }}>
+              <Typography variant="h6" style={{ marginLeft: '0.5vw', fontWeight: 'bold', fontSize: '2vw'}} >Investment Amount</Typography>
+              <StyledTextField
+                value={investmentAmount}
+                onChange={(e) => setInvestmentAmount(e.target.value)}
+                error={!validateInvestAndRisk(investmentAmount)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Typography variant="h5" style={{fontWeight: 'bold'}} >$</Typography>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              {!validateInvestAndRisk(investmentAmount) && <FormHelperText error style={{marginLeft: '1vw', fontWeight: 'bolder', color:'palevioletred', fontSize: '1.8vh'}}>Value must be a number greater than 0</FormHelperText>}
+            </Box>
+            <Box sx={{ position: 'absolute', top: '40vh', left: '4vw' }}>
+              <Typography variant="h6" style={{ marginLeft: '0.5vw', fontWeight: 'bold', fontSize: '2vw'}} >Risk Threshold</Typography>
+              <StyledTextField
+                value={riskThreshold}
+                onChange={(e) => setRiskThreshold(e.target.value)}
+                error={!validateInvestAndRisk(riskThreshold)}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Typography variant='h4' style={{fontWeight: 'bold', fontSize: '190%'}} >%</Typography>
+                    </InputAdornment>
+                  ), 
+                }}
+              />
+              {!validateInvestAndRisk(riskThreshold) && <FormHelperText error style={{marginLeft: '1vw', fontWeight: 'bolder', color:'palevioletred', fontSize: '1.8vh'}}>Value must be a number greater than 0</FormHelperText>}
+            </Box>
+            <Box sx={{ position: 'absolute', top:'10vh', left: '33.5vw' }}>
+              <Typography variant="h6" style={{ marginLeft: '0.5vw', fontWeight: 'bold', fontSize: '2vw'}} >Look-Back Date</Typography>
+              <DatePicker
+                selected={lookBackDate}
+                onChange={(date) => setLookBackDate(date)}
+                error={!validateLookBackDate(lookBackDate)}
+                dateFormat="yyyy-MM-dd"
+                isClearable
+                showYearDropdown
+                scrollableMonthYearDropdown
+                popperPlacement='top'
+                customInput={
+                  <StyledTextField
+                    sx={{
+                      backgroundColor: 'white',
+                      width: '25vw',
+                    }}
+                  />
+                }
+              />
+              {!validateLookBackDate(lookBackDate) && <FormHelperText error style={{marginLeft: '1vw', fontWeight: 'bolder', color:'palevioletred', fontSize: '1.8vh'}}>Date must be at least a week before today</FormHelperText>}
+            </Box>
+            <Box sx={{ position: 'absolute', top:'25vh', left: '33.5vw' }}>
+              <Typography variant="h6" style={{ marginLeft: '0.5vw', fontWeight: 'bold', fontSize: '2vw'}} >Min. Allocation Bound</Typography>
+              <StyledTextField
+                value={minAllocationBound}
+                onChange={(e) => setMinAllocationBound(e.target.value)}
+                error={!validateAllocation(minAllocationBound)}
+              />
+              {!validateAllocation(minAllocationBound) && <FormHelperText error style={{marginLeft: '1vw', fontWeight: 'bolder', color:'palevioletred', fontSize: '1.8vh'}}>Value must be between 0 and 1</FormHelperText>}
+            </Box>
+            <Box sx={{ position: 'absolute', top: '40vh', left: '33.5vw' }}>
+              <Typography variant="h6" style={{ marginLeft: '0.5vw', fontWeight: 'bold', fontSize: '2vw'}} >Max. Allocation Bound</Typography>
+              <StyledTextField
+                value={maxAllocationBound}
+                onChange={(e) => setMaxAllocationBound(e.target.value)}
+                error={!validateAllocation(maxAllocationBound)}
+              />
+              {!validateAllocation(maxAllocationBound) && <FormHelperText error style={{marginLeft: '1vw', fontWeight: 'bolder', color:'palevioletred', fontSize: '1.8vh'}}>Value must be between 0 and 1</FormHelperText>}
+            </Box>
+          </CardComponent>
         </Grid>
       </Grid>
     </>
-);
-
+  );
 };
 
 export default InputPage;

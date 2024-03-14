@@ -17,11 +17,11 @@ const TopBar = ({ home }) => (
           <img src={Logo} alt="Logo" style={{ width: '5vw', height: '4vw', paddingLeft: '0.5vw', paddingTop: '0.5vw' }} />
         </IconButton>
         <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-          <TopBarButton color="inherit" component={RouterLink} to={home ? "/" : "/input"}>
+          <TopBarButton color="inherit" style={{fontSize: '1.2vw'}} component={RouterLink} to={home ? "/" : "/input"}>
             {home ? "Home" : "Begin"}
           </TopBarButton>
-          <TopBarButton color="inherit" component={RouterLink} to="/top5">Top 5 picks</TopBarButton>
-          <TopBarButton color="inherit" component={RouterLink} to="/about">About</TopBarButton>
+          <TopBarButton color="inherit" style={{fontSize: '1.2vw'}} component={RouterLink} to="/top5">Top 5 picks</TopBarButton>
+          <TopBarButton color="inherit" style={{fontSize: '1.2vw'}} component={RouterLink} to="/about">About</TopBarButton>
         </Box>
       </Toolbar>
     </AppBar>
