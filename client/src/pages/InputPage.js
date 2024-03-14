@@ -1,42 +1,48 @@
 import React, { useState } from 'react';
 import TopBar from '../components/TopBar';
-import { Box, TextField, Typography, Grid, InputAdornment, FormHelperText } from '@mui/material';
+import { Box, TextField, Typography, Grid, InputAdornment, FormHelperText, chipClasses } from '@mui/material';
 import { styled } from '@mui/system';
 import CardComponent from '../components/Card';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { MuiChipsInput } from 'mui-chips-input'
 
-const StyledTextField = styled(TextField)({
-  backgroundColor: 'white',
-  width: '25vw',
-  borderRadius: '20px',
-  border: 'none',
-  outline: 'none',
-  '& label.Mui-focused': {
-    color: 'transparent',
-  },
-  '& .MuiInput-underline:after': {
-    borderBottomColor: 'transparent',
-  },
-  '& .MuiOutlinedInput-root': {
-    // fontSize: '2.4vh',
-    '& fieldset': {
-      borderColor: 'transparent',
-    },
-    '&:hover fieldset': {
-      borderColor: 'transparent',
-    },
-    '&.Mui-focused fieldset': {
-      borderColor: 'transparent',
-    },
-    '&.Mui-error fieldset': {
-      borderColor: 'transparent',
-    },
-  },
-});
+const StyledTextField = styled(TextField)(({ transform }) => ({
+  backgroundColor: 'white', width: '25vw', borderRadius: '20px',
+  border: 'none', outline: 'none', 
+  '& label.Mui-focused': {color: 'transparent'},
+  '& .MuiInput-underline:after': {borderBottomColor: 'transparent'},
+  '& .MuiOutlinedInput-root': {textTransform: transform, fontWeight: 'bold',
+                               fontSize: '3vh',
+                               '& fieldset': {borderColor: 'transparent'},
+                               '&:hover fieldset': {borderColor: 'transparent'},
+                               '&.Mui-focused fieldset': {borderColor: 'transparent'},
+                               '&.Mui-error fieldset': {borderColor: 'transparent'},
+                              },
+  '& .MuiOutlinedInput-input': {paddingTop: '0.7vh', paddingBottom: '0.7vh'},
+}));
+
+const StyledMuiChipsInput = styled(MuiChipsInput)(({ theme }) => ({
+  backgroundColor: 'white', width: '25vw', height: '32.5vh', borderRadius: '20px',
+  border: 'none', outline: 'none', '& label.Mui-focused': {color: 'transparent'},
+  '& .MuiInput-underline:after': {borderBottomColor: 'transparent'},
+  '& .MuiOutlinedInput-root': {textTransform: 'uppercase', height: '10vh',
+                               '& fieldset': {borderColor: 'transparent'},
+                               '&:hover fieldset': {borderColor: 'transparent'},
+                               '&.Mui-focused fieldset': {borderColor: 'transparent'},
+                               '&.Mui-error fieldset': {borderColor: 'transparent'}
+                              },
+  '& .MuiChip-label': {fontSize: '2.8vh', fontWeight: 'bold', padding: '1.3vh'},
+  '& .MuiInputBase-root': {height: 'auto', overflowY: 'auto',
+                           '&::-webkit-scrollbar': {width: '0'},
+                           '&::-webkit-scrollbar-thumb': {backgroundColor: 'transparent'},
+                           '&::-webkit-scrollbar-track': {backgroundColor: 'transparent'},
+                           },
+  '& .MuiButtonBase-root': {marginTop: '1vh'},
+}));
 
 const InputPage = () => {
-  const [tickers, setTickers] = useState('');
+  const [tickers, setTickers] = React.useState([]);
   const [investmentAmount, setInvestmentAmount] = useState('');
   const [riskThreshold, setRiskThreshold] = useState('');
   const [lookBackDate, setLookBackDate] = useState(null);
@@ -52,15 +58,22 @@ const InputPage = () => {
       return true; // No error if the field is empty
     }
     const numValue = parseFloat(value);
-    return !isNaN(numValue) && numValue > 0 && numValue.toString() === value;
+    return !isNaN(numValue) && numValue > 0 && /^-?\d+(\.\d+)?$/.test(value);
   };
 
   const validateLookBackDate = (selectedDate) => {
+    if (!selectedDate) {
+      return true; // No error if the field is empty
+    }
     const oneWeekAgo = new Date();
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
     return selectedDate instanceof Date && selectedDate < oneWeekAgo;
   };
-
+  
+  const handleChipChange = (newChips) => {
+    setTickers(newChips.map(chip => chip.toUpperCase()));
+  };
+  
   return (
     <>
       <TopBar home/>
@@ -76,15 +89,15 @@ const InputPage = () => {
         </Grid>
         <Grid item xs={12} sm={6} md={8} style={{padding: 0}}>
           <CardComponent title="Inputs" height={'67.5vh'} hasButton={true} hasInputs={true}>
-            <Box sx={{ position: 'absolute', top: '10vh', left: '4vw'}}>
-              <Typography variant='h6' style={{ marginLeft: '0.5vw', fontWeight: 'bold', fontSize: '2vw'}} >Tickers</Typography>
-              <StyledTextField
+            <Box sx={{ position: 'absolute', top: '4.5vh', left: '4vw'}}>
+              <Typography variant='h6' style={{ marginLeft: '0.5vw', fontWeight: 'bold', fontSize: '1.7vw'}} >Tickers</Typography>
+              <StyledMuiChipsInput
                 value={tickers}
-                onChange={(e) => setTickers(e.target.value)}
+                onChange={handleChipChange}
               />
             </Box>
-            <Box sx={{ position: 'absolute', top: '25vh', left: '4vw' }}>
-              <Typography variant="h6" style={{ marginLeft: '0.5vw', fontWeight: 'bold', fontSize: '2vw'}} >Investment Amount</Typography>
+            <Box sx={{ position: 'absolute', top: '45vh', left: '4vw' }}>
+              <Typography variant="h6" style={{ marginLeft: '0.5vw', fontWeight: 'bold', fontSize: '1.7vw'}} >Investment Amount</Typography>
               <StyledTextField
                 value={investmentAmount}
                 onChange={(e) => setInvestmentAmount(e.target.value)}
@@ -97,10 +110,10 @@ const InputPage = () => {
                   ),
                 }}
               />
-              {!validateInvestAndRisk(investmentAmount) && <FormHelperText error style={{marginLeft: '1vw', fontWeight: 'bolder', color:'palevioletred', fontSize: '1.8vh'}}>Value must be a number greater than 0</FormHelperText>}
+              {!validateInvestAndRisk(investmentAmount) && <FormHelperText error style={{marginLeft: '1vw', fontWeight: 'bolder', color:'palevioletred', fontSize: '1.7vh'}}>Value must be a number greater than 0</FormHelperText>}
             </Box>
-            <Box sx={{ position: 'absolute', top: '40vh', left: '4vw' }}>
-              <Typography variant="h6" style={{ marginLeft: '0.5vw', fontWeight: 'bold', fontSize: '2vw'}} >Risk Threshold</Typography>
+            <Box sx={{ position: 'absolute', top: '4.5vh', left: '33.5vw' }}>
+              <Typography variant="h6" style={{ marginLeft: '0.5vw', fontWeight: 'bold', fontSize: '1.7vw'}} >Risk Threshold</Typography>
               <StyledTextField
                 value={riskThreshold}
                 onChange={(e) => setRiskThreshold(e.target.value)}
@@ -108,15 +121,15 @@ const InputPage = () => {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <Typography variant='h4' style={{fontWeight: 'bold', fontSize: '190%'}} >%</Typography>
+                      <Typography variant='h4' style={{fontWeight: 'bold', fontSize: '1.7vw'}} >%</Typography>
                     </InputAdornment>
                   ), 
                 }}
               />
-              {!validateInvestAndRisk(riskThreshold) && <FormHelperText error style={{marginLeft: '1vw', fontWeight: 'bolder', color:'palevioletred', fontSize: '1.8vh'}}>Value must be a number greater than 0</FormHelperText>}
+              {!validateInvestAndRisk(riskThreshold) && <FormHelperText error style={{marginLeft: '1vw', fontWeight: 'bolder', color:'palevioletred', fontSize: '1.7vh'}}>Value must be a number greater than 0</FormHelperText>}
             </Box>
-            <Box sx={{ position: 'absolute', top:'10vh', left: '33.5vw' }}>
-              <Typography variant="h6" style={{ marginLeft: '0.5vw', fontWeight: 'bold', fontSize: '2vw'}} >Look-Back Date</Typography>
+            <Box sx={{ position: 'absolute', top:'18vh', left: '33.5vw' }}>
+              <Typography variant="h6" style={{ marginLeft: '0.5vw', fontWeight: 'bold', fontSize: '1.7vw'}} >Look-Back Date</Typography>
               <DatePicker
                 selected={lookBackDate}
                 onChange={(date) => setLookBackDate(date)}
@@ -135,25 +148,25 @@ const InputPage = () => {
                   />
                 }
               />
-              {!validateLookBackDate(lookBackDate) && <FormHelperText error style={{marginLeft: '1vw', fontWeight: 'bolder', color:'palevioletred', fontSize: '1.8vh'}}>Date must be at least a week before today</FormHelperText>}
+              {!validateLookBackDate(lookBackDate) && <FormHelperText error style={{marginLeft: '1vw', fontWeight: 'bolder', color:'palevioletred', fontSize: '1.7vh'}}>Date must be at least a week before today</FormHelperText>}
             </Box>
-            <Box sx={{ position: 'absolute', top:'25vh', left: '33.5vw' }}>
-              <Typography variant="h6" style={{ marginLeft: '0.5vw', fontWeight: 'bold', fontSize: '2vw'}} >Min. Allocation Bound</Typography>
+            <Box sx={{ position: 'absolute', top:'31.5vh', left: '33.5vw' }}>
+              <Typography variant="h6" style={{ marginLeft: '0.5vw', fontWeight: 'bold', fontSize: '1.7vw'}} >Min. Allocation Bound</Typography>
               <StyledTextField
                 value={minAllocationBound}
                 onChange={(e) => setMinAllocationBound(e.target.value)}
                 error={!validateAllocation(minAllocationBound)}
               />
-              {!validateAllocation(minAllocationBound) && <FormHelperText error style={{marginLeft: '1vw', fontWeight: 'bolder', color:'palevioletred', fontSize: '1.8vh'}}>Value must be between 0 and 1</FormHelperText>}
+              {!validateAllocation(minAllocationBound) && <FormHelperText error style={{marginLeft: '1vw', fontWeight: 'bolder', color:'palevioletred', fontSize: '1.7vh'}}>Value must be between 0 and 1</FormHelperText>}
             </Box>
-            <Box sx={{ position: 'absolute', top: '40vh', left: '33.5vw' }}>
-              <Typography variant="h6" style={{ marginLeft: '0.5vw', fontWeight: 'bold', fontSize: '2vw'}} >Max. Allocation Bound</Typography>
+            <Box sx={{ position: 'absolute', top: '45vh', left: '33.5vw' }}>
+              <Typography variant="h6" style={{ marginLeft: '0.5vw', fontWeight: 'bold', fontSize: '1.7vw'}} >Max. Allocation Bound</Typography>
               <StyledTextField
                 value={maxAllocationBound}
                 onChange={(e) => setMaxAllocationBound(e.target.value)}
                 error={!validateAllocation(maxAllocationBound)}
               />
-              {!validateAllocation(maxAllocationBound) && <FormHelperText error style={{marginLeft: '1vw', fontWeight: 'bolder', color:'palevioletred', fontSize: '1.8vh'}}>Value must be between 0 and 1</FormHelperText>}
+              {!validateAllocation(maxAllocationBound) && <FormHelperText error style={{marginLeft: '1vw', fontWeight: 'bolder', color:'palevioletred', fontSize: '1.7vh'}}>Value must be between 0 and 1</FormHelperText>}
             </Box>
           </CardComponent>
         </Grid>
