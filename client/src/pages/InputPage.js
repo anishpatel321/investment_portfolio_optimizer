@@ -42,7 +42,7 @@ const StyledMuiChipsInput = styled(MuiChipsInput)(({ theme }) => ({
 }));
 
 const InputPage = () => {
-  const [tickers, setTickers] = React.useState([]);
+  const [tickers, setTickers] = useState([]);
   const [investmentAmount, setInvestmentAmount] = useState('');
   const [riskThreshold, setRiskThreshold] = useState('');
   const [lookBackDate, setLookBackDate] = useState(null);
@@ -74,6 +74,36 @@ const InputPage = () => {
     setTickers(newChips.map(chip => chip.toUpperCase()));
   };
   
+  const handleSubmit = async () => {
+    const data = {
+      tickers,
+      investmentAmount,
+      riskThreshold,
+      lookBackDate: lookBackDate.toISOString().split('T')[0],
+      minAllocationBound,
+      maxAllocationBound,
+    };
+  
+    console.log("Data being sent:", data);
+  
+    const response = await fetch('/process_data', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+  
+    if (!response.ok) {
+      const errorResponse = await response.json();
+      console.log("Error response:", errorResponse);
+      return;
+    }
+  
+    const result = await response.json();
+    // Do something with the result...
+  };  
+    
   return (
     <>
       <TopBar home/>
@@ -88,7 +118,7 @@ const InputPage = () => {
           <CardComponent title="Definitions" subtitle="Define your inputs" body="Pick your favorite stocks, and lookback period. Don’t worry you can also specify the amount of risk you are willing to take!" height={'67.5vh'} hasTransition={true}/>
         </Grid>
         <Grid item xs={12} sm={6} md={8} style={{padding: 0}}>
-          <CardComponent title="Inputs" height={'67.5vh'} hasButton={true} hasInputs={true}>
+          <CardComponent title="Inputs" height={'67.5vh'} hasButton={true} onClick={handleSubmit} hasInputs={true}>
             <Box sx={{ position: 'absolute', top: '4.5vh', left: '4vw'}}>
               <Typography variant='h6' style={{ marginLeft: '0.5vw', fontWeight: 'bold', fontSize: '1.7vw'}} >Tickers</Typography>
               <StyledMuiChipsInput

@@ -22,7 +22,7 @@ const StyledCardContent = styled(CardContent)({
     paddingTop: '15%', 
 });
 
-const CardComponent = ({ title, subtitle, body, height, hasButton, hasNumberPill, hasTransition, children }) => {
+const CardComponent = ({ title, subtitle, body, height, hasButton, hasNumberPill, hasTransition, onClick, children }) => {
   return (
     <StyledCard height={height} hasTransition={hasTransition}>
       {hasNumberPill && <NumberPill>{title}</NumberPill>}
@@ -34,7 +34,7 @@ const CardComponent = ({ title, subtitle, body, height, hasButton, hasNumberPill
           {body}
         </Typography>
         {children}
-        {hasButton && <Box sx={{ position: 'absolute', bottom: '3.1vh', right: '1vh' }}><ContinueButton /></Box>}
+        {hasButton && <Box sx={{ position: 'absolute', bottom: '3.1vh', right: '1vh' }}><ContinueButton onClick={onClick}/></Box>}
       </StyledCardContent>
     </StyledCard>
   );

@@ -1,13 +1,13 @@
 import numpy as np
 import pandas as pd
 from fredapi import Fred
-from data import get_data
+from data import get_all_data
 from scipy.optimize import minimize
 
 def run_algo(tickers, start_date, end_date, risk_tolerance, investment_amount, min_bound, max_bound):
 
     # Algo calls data to retrive data using apis
-    adj_close_prices_df = get_data(tickers, start_date, end_date)
+    adj_close_prices_df = get_all_data(tickers, start_date, end_date)
     risk_free_rate = get_risk_free_rate()
 
     if adj_close_prices_df is None or adj_close_prices_df.empty or adj_close_prices_df.shape[1] == 1:

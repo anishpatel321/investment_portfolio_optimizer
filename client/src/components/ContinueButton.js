@@ -29,12 +29,14 @@ const Circle = styled(Box)({
   background: '#163A5F',
 });
 
-const ContinueButton = () => (
+const ContinueButton = ({ onClick}) => (
   <StyledButton component={RouterLink} to="/input" variant="contained" endIcon={
     <Circle>
       <ArrowIcon />
     </Circle>
-  } style={{fontWeight: 'bold', fontSize:'120%', marginRight: '7px', top: '1vh'}}>
+  } style={{fontWeight: 'bold', fontSize:'120%', marginRight: '7px', top: '1vh'}}
+    onClick={onClick}
+  >
     Continue
   </StyledButton>
 );

@@ -4,7 +4,7 @@ from yahoo_fin.stock_info import get_data
 from tiingo import TiingoClient
 from tiingo.restclient import RestClientError
 
-def get_data(tickers, start_date, end_date):
+def get_all_data(tickers, start_date, end_date):
     
     df = pd.DataFrame()
     try: # try to get data from yfinance

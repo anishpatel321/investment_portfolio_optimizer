@@ -16,20 +16,11 @@ def hello_world():
 @app.route('/process_data', methods=['POST'])
 def process_data():
     data = request.get_json()
-    # Use dummy data
-    # data = {
-    #   "tickers": ["AAPL", "MSFT", "GOOG", "AMZN", "QQQ"],
-    #   "lookback_start": "2022-01-01",
-    #   "risk_tolerance": 0.5,
-    #   "investment_amount": 10000,
-    #   "min_bound": 0.1,
-    #   "max_bound": 0.7
-    # }
-    # print('\n\n\n\nDATA      ' + data["tickers"] + '     \n\n\n')
+    print(data)
     end_date = str(datetime.today().date())
-    df_result, _, _, _, _ = run_algo(data["tickers"], data["lookback_start"], end_date, 
-                                     data["risk_tolerance"], data["investment_amount"], 
-                                     data["min_bound"], data["max_bound"]) 
+    df_result, _, _, _, _ = run_algo(data["tickers"], data["lookBackDate"], end_date, 
+                                     data["riskThreshold"], data["investmentAmount"], 
+                                     data["minAllocationBound"], data["maxAllocationBound"]) 
     result = df_result.to_json(orient='records')
     return jsonify(result)
 
