@@ -1,7 +1,9 @@
+import { configureStore } from '@reduxjs/toolkit'
+import tickersReducer from "./tickers";
 
-import { createStore } from 'redux';
-import rootReducer from './reducers'; // Your combined reducers
+export const store = configureStore({
+  reducer: {
+    tickers: tickersReducer
 
-const store = createStore(rootReducer);
-
-export default store;
+  }
+});

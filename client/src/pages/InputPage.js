@@ -6,6 +6,8 @@ import CardComponent from '../components/Card';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { MuiChipsInput } from 'mui-chips-input'
+import { useDispatch } from 'react-redux';
+import { addTicker, removeTicker } from '../redux/tickers';
 
 const StyledTextField = styled(TextField)(({ transform }) => ({
   backgroundColor: 'white', width: '25vw', borderRadius: '20px',
@@ -48,7 +50,7 @@ const InputPage = () => {
   const [lookBackDate, setLookBackDate] = useState(null);
   const [minAllocationBound, setMinAllocationBound] = useState('');
   const [maxAllocationBound, setMaxAllocationBound] = useState('');
-
+  const dispatch = useDispatch(); //dispatch to add or remove tickers
   const validateAllocation = (value) => {
     return value >= 0 && value <= 1;
   };
@@ -70,10 +72,14 @@ const InputPage = () => {
     return selectedDate instanceof Date && selectedDate < oneWeekAgo;
   };
   
+
   const handleChipChange = (newChips) => {
-    setTickers(newChips.map(chip => chip.toUpperCase()));
+    const uppercaseChips = newChips.map(chip => chip.toUpperCase()); // Convert all tickers to uppercase
+    setTickers(uppercaseChips);
+    dispatch(addTicker(uppercaseChips[uppercaseChips.length - 1])); // add the last added ticker
   };
   
+
   const handleSubmit = async () => {
     const data = {
       tickers,
@@ -122,8 +128,14 @@ const InputPage = () => {
             <Box sx={{ position: 'absolute', top: '4.5vh', left: '4vw'}}>
               <Typography variant='h6' style={{ marginLeft: '0.5vw', fontWeight: 'bold', fontSize: '1.7vw'}} >Tickers</Typography>
               <StyledMuiChipsInput
-                value={tickers}
-                onChange={handleChipChange}
+                  value={tickers}
+                  onChange={handleChipChange}
+                  onDelete={(chip, index) => {
+                    const newChips = [...tickers];
+                    newChips.splice(index, 1); // Remove the ticker from the list
+                    setTickers(newChips);
+                    dispatch(removeTicker(chip.toUpperCase())); // Dispatch action to remove the ticker from the Redux store
+                  }}
               />
             </Box>
             <Box sx={{ position: 'absolute', top: '45vh', left: '4vw' }}>
