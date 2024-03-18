@@ -2,7 +2,7 @@ from datetime import datetime
 import pandas as pd
 
 try:
-    from algo import run_algo
+    from testalgo import run_algo
 except ImportError:
     print("Error: algo module not found. Make sure the module is in the same directory or in the Python path.")
     exit()
