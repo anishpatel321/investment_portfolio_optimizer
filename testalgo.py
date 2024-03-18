@@ -3,6 +3,7 @@ import pandas as pd
 from fredapi import Fred
 from data import get_all_data
 from scipy.optimize import minimize
+#for testing
 
 def run_algo(tickers, start_date, end_date, risk_tolerance, investment_amount, min_bound, max_bound):
 
