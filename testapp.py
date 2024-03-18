@@ -36,7 +36,7 @@ def main():
         print("covariance")
         print(cov)
         print("correlation")
-        print(corr)
+        print(cor)
 
 
  # Add algo into testalgo.py and print here.
