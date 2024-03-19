@@ -9,27 +9,27 @@ import yfinance as yf
 from datetime import datetime, timedelta
 from scipy.optimize import minimize
 from sklearn.linear_model import LinearRegression
+from testalgo import fetch_adj_close, calculate_log_returns, calculate_covariance_matrix, calculate_correlation_matrix, fetch_risk_free_rate, calculate_optimal_theoretical_portfolio_allocations, generate_random_portfolios, calculate_optimal_generated_portfolio_allocations, generate_MEF_curve, return_index_of_optimal_generated_portfolio_below_risk_threshold, optimal_theoretical_porfolio_allocations_as_df, optimal_generated_porfolio_allocations_as_df, optimal_generated_porfolio_allocations_below_risk_threshold_as_df, create_df_generated_portfolios, create_df_optimal_theoretical, create_df_optimal_generated, create_df_optimal_valid, create_df_MEF
+# try:
+#     from testalgo import run_algo
+# except ImportError:
+#     print("Error: algo module not found. Make sure the module is in the same directory or in the Python path.")
+#     exit()
 
-try:
-    from testalgo import run_algo
-except ImportError:
-    print("Error: algo module not found. Make sure the module is in the same directory or in the Python path.")
-    exit()
-
-def get_user_input():
-    try:
-        tickers = input("Enter tickers separated by commas (e.g., AAPL,MSFT,GOOG): ").split(',')
-        lookback_start = input("Enter lookback start date (YYYY-MM-DD): ")
-        lookback_end = str(datetime.today().date())  # Assumes end date is today
-        risk_tolerance = float(input("Enter your risk tolerance (0.0 to 1.0): "))
-        investment_amount = float(input("Enter your investment amount: "))
-        min_bound = float(input("Enter the Minimum bound for portfolio allocation (0.0-1.0): "))
-        max_bound = float(input("Enter the Maximum bound for portfolio allocation (0.0-1.0): "))
-    except ValueError as e:
-        print("Error:", e)
-        exit()
+# def get_user_input():
+#     try:
+#         tickers = input("Enter tickers separated by commas (e.g., AAPL,MSFT,GOOG): ").split(',')
+#         lookback_start = input("Enter lookback start date (YYYY-MM-DD): ")
+#         lookback_end = str(datetime.today().date())  # Assumes end date is today
+#         risk_tolerance = float(input("Enter your risk tolerance (0.0 to 1.0): "))
+#         investment_amount = float(input("Enter your investment amount: "))
+#         min_bound = float(input("Enter the Minimum bound for portfolio allocation (0.0-1.0): "))
+#         max_bound = float(input("Enter the Maximum bound for portfolio allocation (0.0-1.0): "))
+#     except ValueError as e:
+#         print("Error:", e)
+#         exit()
     
-    return tickers, lookback_start, lookback_end, risk_tolerance, investment_amount, min_bound, max_bound
+#     return tickers, lookback_start, lookback_end, risk_tolerance, investment_amount, min_bound, max_bound
 
 def main():
 #     try:
@@ -125,14 +125,14 @@ def main():
     df_MEF = create_df_MEF(volatility_opt, returns_range)
 
 
+    print(df_MEF)
 
 
 
 
 
-
-    except Exception as e:
-        print("An error occurred:", e)
+    # except Exception as e:
+    #     print("An error occurred:", e)
 
 if __name__ == "__main__":
     main()
