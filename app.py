@@ -72,44 +72,58 @@ def pie_chart_data():
     'Ticker': ['MSFT', 'AAPL', 'AMZN', 'NVDA', 'AVGO'],
     'Optimal Weights': [16.5788, 4.8821, 0.9022, 57.2737, 20.3633]
     }
-    try:
-        global df_max_sharpe_below_threshold_generated_portfolio  # Access the global variable
-        data = df_max_sharpe_below_threshold_generated_portfolio
-
-        return jsonify(data)
-    
-    except Exception as e:
-        print("Error:", e)
-        return jsonify({"error": str(e)}), 400  # Return a 400 status code for any errors
-
-@app.route('/MEF-data')
-def MEF_data():
-    
-    try:
-        global df_MEF  # Access the global variable
-        data = df_MEF
 
     formatted_data = [{'id': i, 'value': value, 'label': ticker} for i, (ticker, value) in enumerate(zip(data['Ticker'], data['Optimal Weights']))]
     return jsonify(formatted_data)
 
-        return jsonify(data)
-    
-    except Exception as e:
-        print("Error:", e)
-        return jsonify({"error": str(e)}), 400  # Return a 400 status code for any errors
 
-@app.route('/correlation-data')
-def correlation_data():
+# @app.route('/pie-chart-data2')
+# def pie_chart_data():
     
-    try:
-        global df_cor_matrix  # Access the global variable
-        data = df_cor_matrix
+#     # replace with function call to get data from algo team
+    
+#     data = {
+#     'Ticker': ['MSFT', 'AAPL', 'AMZN', 'NVDA', 'AVGO'],
+#     'Optimal Weights': [16.5788, 4.8821, 0.9022, 57.2737, 20.3633]
+#     }
+#     try:
+#         global df_max_sharpe_below_threshold_generated_portfolio  # Access the global variable
+#         data = df_max_sharpe_below_threshold_generated_portfolio
 
-        return jsonify(data)
+#         return jsonify(data)
     
-    except Exception as e:
-        print("Error:", e)
-        return jsonify({"error": str(e)}), 400  # Return a 400 status code for any errors
+#     except Exception as e:
+#         print("Error:", e)
+#         return jsonify({"error": str(e)}), 400  # Return a 400 status code for any errors
+
+# @app.route('/MEF-data')
+# def MEF_data():
+    
+#     try:
+#         global df_MEF  # Access the global variable
+#         data = df_MEF
+
+#     formatted_data = [{'id': i, 'value': value, 'label': ticker} for i, (ticker, value) in enumerate(zip(data['Ticker'], data['Optimal Weights']))]
+#     return jsonify(formatted_data)
+
+#         return jsonify(data)
+    
+#     except Exception as e:
+#         print("Error:", e)
+#         return jsonify({"error": str(e)}), 400  # Return a 400 status code for any errors
+
+# @app.route('/correlation-data')
+# def correlation_data():
+    
+#     try:
+#         global df_cor_matrix  # Access the global variable
+#         data = df_cor_matrix
+
+#         return jsonify(data)
+    
+#     except Exception as e:
+#         print("Error:", e)
+#         return jsonify({"error": str(e)}), 400  # Return a 400 status code for any errors
 
 
 if __name__ == '__main__':
