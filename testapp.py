@@ -74,9 +74,81 @@ min_hold = 0
 max_hold = 1
 
 def main():
-    run_algo(tickers, start_date, end_date, min_hold, max_hold)
-    print(cov_matrix_as_df)
-    print(testalgo.df_generated_portfolios)
+    (
+        df_adj_close,
+        risk_free_rate,
+        log_returns,
+        df_cov_matrix,
+        df_cor_matrix,
+        df_max_sharpe_below_threshold_generated_portfolio,
+        df_historical,
+        df_historical_trendline,
+        df_forecast_trendline,
+        df_generated_portfolios,
+        df_optimal_theoretical,
+        df_optimal_generated,
+        df_optimal_valid,
+        df_MEF,
+        df_CML,
+        df_CAL,
+        df_risk_threshold,
+        df_risk_free_rate
+    ) = run_algo(tickers, start_date, end_date, min_hold, max_hold)
+
+    # Print each returned item with description
+    print("Adjusted Close Prices for the tickers:")
+    print(df_adj_close)
+
+    print("\nRisk-free rate used in the analysis:")
+    print(risk_free_rate)
+
+    print("\nLog Returns for the tickers:")
+    print(log_returns)
+
+    print("\nCovariance Matrix for the log returns:")
+    print(df_cov_matrix)
+
+    print("\nCorrelation Matrix for the log returns:")
+    print(df_cor_matrix)
+
+    print("\nGenerated Portfolios maximizing Sharpe ratio below the risk threshold:")
+    print(df_max_sharpe_below_threshold_generated_portfolio)
+
+    print("\nHistorical Prices for the tickers:")
+    print(df_historical)
+
+    print("\nHistorical Trendline for the tickers:")
+    print(df_historical_trendline)
+
+    print("\nForecasted Trendline for the tickers:")
+    print(df_forecast_trendline)
+
+    print("\nAll Generated Portfolios:")
+    print(df_generated_portfolios)
+
+    print("\nTheoretically Optimal Portfolio:")
+    print(df_optimal_theoretical)
+
+    print("\nGenerated Optimal Portfolio:")
+    print(df_optimal_generated)
+
+    print("\nValid Optimal Portfolio:")
+    print(df_optimal_valid)
+
+    print("\nMean-Efficient Frontier (MEF):")
+    print(df_MEF)
+
+    print("\nCapital Market Line (CML):")
+    print(df_CML)
+
+    print("\nCapital Allocation Line (CAL):")
+    print(df_CAL)
+
+    print("\nRisk Thresholds DF:")
+    print(df_risk_threshold)
+
+    print("\nRisk-free Rate DF:")
+    print(df_risk_free_rate)
 #     try:
 #         tickers, start_date, end_date, risk_tolerance, investment_amount, min_bound, max_bound = get_user_input()
 #         adj_close_prices_df, risk_free_rate, log_ret, cov, corr = run_algo(tickers, start_date, end_date, risk_tolerance, investment_amount, min_bound, max_bound)
