@@ -135,37 +135,36 @@ def main():
     # Calculate Optimal Generated Portfolio Allocations
     optimal_generated = calculate_optimal_generated_portfolio_allocations(sharpeRatio, weight)
 
-    # Generate MEF (Markowitz Efficient Frontier) Curve
-    volatility_opt, returns_range = generate_MEF_curve(tickers, min_hold, max_hold, log_returns)
+    # # Generate MEF (Markowitz Efficient Frontier) Curve
+    # volatility_opt, returns_range = generate_MEF_curve(tickers, min_hold, max_hold, log_returns)
 
-    # Find Optimal Portfolio Below a Given Risk Threshold
-    validIndex, state = return_index_of_optimal_generated_portfolio_below_risk_threshold(0.3, sharpeRatio, expectedVolatility, expectedReturn, risk_free_rate)
-    if state == 1:
-        print("Found valid portfolio below risk threshold.")
-    elif state == 2:
-        print("Fallback to least volatile portfolio above risk-free rate.")
-    elif state == 3:
-        print("Fallback to portfolio with overall maximum Sharpe ratio.")
+    # # Find Optimal Portfolio Below a Given Risk Threshold
+    # validIndex, state = return_index_of_optimal_generated_portfolio_below_risk_threshold(0.3, sharpeRatio, expectedVolatility, expectedReturn, risk_free_rate)
+    # if state == 1:
+    #     print("Found valid portfolio below risk threshold.")
+    # elif state == 2:
+    #     print("Fallback to least volatile portfolio above risk-free rate.")
+    # elif state == 3:
+    #     print("Fallback to portfolio with overall maximum Sharpe ratio.")
 
-    # Get DataFrames for Various Outputs
+    # # Get DataFrames for Various Outputs
     df_max_sharpe_portfolio = optimal_theoretical_porfolio_allocations_as_df(tickers, optimal_weights)
-    df_max_sharpe_generated_portfolio = optimal_generated_porfolio_allocations_as_df(tickers, optimal_generated)
-    df_max_sharpe_below_threshold_generated_portfolio, optimal_valid = optimal_generated_porfolio_allocations_below_risk_threshold_as_df(tickers, weight, validIndex)
+    print(df_max_sharpe_portfolio)
+    # df_max_sharpe_generated_portfolio = optimal_generated_porfolio_allocations_as_df(tickers, optimal_generated)
+    # print(df_max_sharpe_generated_portfolio)
+    # df_max_sharpe_below_threshold_generated_portfolio, optimal_valid = optimal_generated_porfolio_allocations_below_risk_threshold_as_df(tickers, weight, validIndex)
 
-    # Calculate Portfolio Metrics
-    optimal_portfolio_return = calculate_optimal_theoretical_portfolio_return(optimal_weights, log_returns)
-    optimal_portfolio_volatility = calculate_optimal_theoretical_portfolio_volatility(optimal_weights, cov_matrix)
-    optimal_sharpe_ratio = calculate_optimal_theoretical_portfolio_sharpe(optimal_weights, log_returns, cov_matrix, risk_free_rate)
+    # # Calculate Portfolio Metrics
+    # optimal_portfolio_return = calculate_optimal_theoretical_portfolio_return(optimal_weights, log_returns)
+    # optimal_portfolio_volatility = calculate_optimal_theoretical_portfolio_volatility(optimal_weights, cov_matrix)
+    # optimal_sharpe_ratio = calculate_optimal_theoretical_portfolio_sharpe(optimal_weights, log_returns, cov_matrix, risk_free_rate)
 
-    # Create DataFrames for Various Graphical Outputs
-    df_generated_portfolios = create_df_generated_portfolios(expectedVolatility, expectedReturn, sharpeRatio)
-    df_optimal_theoretical = create_df_optimal_theoretical(optimal_portfolio_volatility, optimal_portfolio_return, optimal_sharpe_ratio)
-    df_optimal_generated = create_df_optimal_generated(expectedVolatility, expectedReturn, maxIndex, optimal_generated_sharpe_ratio)
-    df_optimal_valid = create_df_optimal_valid(expectedVolatility, expectedReturn, validIndex, optimal_below_threshold_sharpe_ratio)
-    df_MEF = create_df_MEF(volatility_opt, returns_range)
-
-
-    print(df_MEF)
+    # # Create DataFrames for Various Graphical Outputs
+    # df_generated_portfolios = create_df_generated_portfolios(expectedVolatility, expectedReturn, sharpeRatio)
+    # df_optimal_theoretical = create_df_optimal_theoretical(optimal_portfolio_volatility, optimal_portfolio_return, optimal_sharpe_ratio)
+    # # df_optimal_generated = create_df_optimal_generated(expectedVolatility, expectedReturn, maxIndex, optimal_generated_sharpe_ratio)
+    # # df_optimal_valid = create_df_optimal_valid(expectedVolatility, expectedReturn, validIndex, optimal_below_threshold_sharpe_ratio)
+    # df_MEF = create_df_MEF(volatility_opt, returns_range)
 
 
 
