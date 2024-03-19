@@ -24,19 +24,19 @@ export const inputSlice = createSlice({
       // find ticker to remove
       state.tickers = state.tickers.filter(ticker => ticker !== tickerToRemove);
     },
-    setRiskThreshold: (state, action) => {
+    setRisk: (state, action) => {
       state.riskThreshold = action.payload;
     },
-    setLookBackDate: (state, action) => {
+    setLookBack: (state, action) => {
       state.lookBackDate = action.payload;
     },
-    setMinAllocationBound: (state, action) => {
+    setMinAllocation: (state, action) => {
       state.minAllocationBound = action.payload;
     },
-    setMaxAllocationBound: (state, action) => {
+    setMaxAllocation: (state, action) => {
       state.maxAllocationBound = action.payload;
     },
-    setInvestmentAmount: (state, action) => {
+    setInvestment: (state, action) => {
       state.investmentAmount = action.payload;
     },
     packageData: (state) => {
@@ -57,11 +57,11 @@ export const inputSlice = createSlice({
 export const {
   addTicker,
   removeTicker,
-  setRiskThreshold,
-  setLookBackDate,
-  setMinAllocationBound,
-  setMaxAllocationBound,
-  setInvestmentAmount,
+  setRisk,
+  setLookBack,
+  setMinAllocation,
+  setMaxAllocation,
+  setInvestment,
   packageData,
 } = inputSlice.actions;
 
