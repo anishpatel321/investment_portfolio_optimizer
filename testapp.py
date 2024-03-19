@@ -155,10 +155,6 @@ def main():
     # # Get DataFrames for Various Outputs
     df_max_sharpe_portfolio = optimal_theoretical_porfolio_allocations_as_df(tickers, optimal_weights)
     print(df_max_sharpe_portfolio)
-    print("Length of tickers:", len(tickers))
-    print("Length of optimal_generated:", len(optimal_generated))
-    print(tickers)
-    print(optimal_generated)
 
     df_max_sharpe_generated_portfolio = optimal_generated_porfolio_allocations_as_df(tickers, optimal_generated)
     print(df_max_sharpe_generated_portfolio)
