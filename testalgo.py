@@ -395,7 +395,7 @@ def main():
     # Process and display the results
     print(optimized_portfolio)
 
-if __name == "__main":
+if __name__ == "__main__":
     main()
 
 
