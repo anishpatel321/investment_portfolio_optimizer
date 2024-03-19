@@ -174,7 +174,7 @@ def generate_random_portfolios(log_returns, risk_free_rate):
 def calculate_optimal_generated_portfolio_allocations(sharpeRatio, weight):
     maxIndex = sharpeRatio.argmax()
     optimal_generated = weight[maxIndex,:]
-    return optimal_generated
+    return optimal_generated, maxIndex
 
 def optimal_generated_porfolio_allocations_as_df(tickers, optimal_generated):
     data = {'Ticker': tickers, 'Optimal Weights': optimal_generated}
