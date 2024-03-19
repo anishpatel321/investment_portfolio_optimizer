@@ -6,8 +6,8 @@ import CardComponent from '../components/Card';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { MuiChipsInput } from 'mui-chips-input'
-import { useDispatch } from 'react-redux';
-import { addTicker, removeTicker } from '../redux/tickers';
+import { useDispatch, useSelector } from 'react-redux';
+import { addTicker, removeTicker, packageData, setInvestmentAmount, setLookBackDate, setMaxAllocationBound, setMinAllocationBound, setRiskThreshold } from '../redux/inputs';
 
 const StyledTextField = styled(TextField)(({ transform }) => ({
   backgroundColor: 'white', width: '25vw', borderRadius: '20px',
@@ -73,14 +73,36 @@ const InputPage = () => {
   };
   
 
-  const handleChipChange = (newChips) => {
-    const uppercaseChips = newChips.map(chip => chip.toUpperCase()); // Convert all tickers to uppercase
+  const handleChipChange = (newChips, removedChipIndex) => {
+    // Convert all tickers to uppercase
+    const uppercaseChips = newChips.map(chip => chip.toUpperCase());
+    
+    // Update the tickers state
     setTickers(uppercaseChips);
-    dispatch(addTicker(uppercaseChips[uppercaseChips.length - 1])); // add the last added ticker
-  };
   
+    // If a chip was removed, dispatch the removeTicker action
+    if (typeof removedChipIndex === 'number') {
+      const removedTicker = tickers[removedChipIndex];
+      dispatch(removeTicker(removedTicker));
+    } else {
+      // If no chip was removed, add the last added ticker
+      dispatch(addTicker(uppercaseChips[uppercaseChips.length - 1]));
+    }
+  };
+ 
 
   const handleSubmit = async () => {
+    //dispatch(setInvestmentAmount(investmentAmount));
+    //dispatch(setRiskThreshold(riskThreshold));
+    //dispatch(setLookBackDate(lookBackDate));
+    //dispatch(setMinAllocationBound(minAllocationBound));
+    //dispatch(setMaxAllocationBound(maxAllocationBound));
+    //dispatch(packageData());
+
+    // FFS const packagedData = useSelector(state => state.inputs.package);
+
+    
+
     const data = {
       tickers,
       investmentAmount,
@@ -89,9 +111,8 @@ const InputPage = () => {
       minAllocationBound,
       maxAllocationBound,
     };
-  
-    console.log("Data being sent:", data);
-  
+
+    console.log("datas ending:", data);
     const response = await fetch('/process_data', {
       method: 'POST',
       headers: {
@@ -99,15 +120,16 @@ const InputPage = () => {
       },
       body: JSON.stringify(data),
     });
-  
+
     if (!response.ok) {
       const errorResponse = await response.json();
       console.log("Error response:", errorResponse);
       return;
     }
-  
+
+    //console.log("Send successful. Packaged data:", packagedData);
     const result = await response.json();
-    // Do something with the result...
+    
   };  
     
   return (
@@ -218,3 +240,8 @@ const InputPage = () => {
 };
 
 export default InputPage;
+
+
+
+
+
