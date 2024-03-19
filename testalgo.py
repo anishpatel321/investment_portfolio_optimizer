@@ -39,7 +39,22 @@ end_date = today
 min_hold = 0
 max_hold = 1
 
-
+def run_algo(tickers, start_date, end_date, min_hold, max_hold):
+    fetch_adj_close
+    calculate_log_returns
+    calculate_covariance_matrix
+    fetch_risk_free_rate
+    calculate_optimal_theoretical_portfolio_allocations
+    calculate_optimal_theoretical_portfolio_return
+    calculate_optimal_theoretical_portfolio_volatility
+    calculate_optimal_theoretical_portfolio_sharpe
+    generate_random_portfolios
+    calculate_optimal_generated_portfolio_allocations
+    calculate_optimal_generated_portfolio_sharpe
+    generate_MEF_curve
+    return_index_of_optimal_generated_portfolio_below_risk_threshold
+    calculate_optimal_generated_porfolio_allocations_below_risk_threshold_sharpe
+    
 
 
 
