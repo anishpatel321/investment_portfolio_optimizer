@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import TopBar from '../components/TopBar';
-import { Box, TextField, Typography, Grid, InputAdornment, FormHelperText, chipClasses } from '@mui/material';
+import { Box, TextField, Typography, Grid, InputAdornment, FormHelperText } from '@mui/material';
 import { styled } from '@mui/system';
 import CardComponent from '../components/Card';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { MuiChipsInput } from 'mui-chips-input'
-import { useDispatch, useSelector } from 'react-redux';
-import { addTicker, removeTicker, packageData, setInvestmentAmount, setLookBackDate, setMaxAllocationBound, setMinAllocationBound, setRiskThreshold } from '../redux/inputs';
+import { useDispatch } from 'react-redux';
+import { addTicker, removeTicker, setInvestment,  setRisk,  setLookBack,  setMinAllocation,  setMaxAllocation, packageData, } from '../redux/inputs';
+import { Link as RouterLink } from 'react-router-dom'; // Import Link
+import OutputPage from './OutputPage'; // Import OutputPage
+import { useNavigate } from 'react-router-dom';
+
 
 const StyledTextField = styled(TextField)(({ transform }) => ({
   backgroundColor: 'white', width: '25vw', borderRadius: '20px',
@@ -50,7 +54,12 @@ const InputPage = () => {
   const [lookBackDate, setLookBackDate] = useState(null);
   const [minAllocationBound, setMinAllocationBound] = useState('');
   const [maxAllocationBound, setMaxAllocationBound] = useState('');
+ 
   const dispatch = useDispatch(); //dispatch to add or remove tickers
+  //const history = useHistory(); // Use useHistory hook to navigate
+  const navigate = useNavigate();
+
+
   const validateAllocation = (value) => {
     return value >= 0 && value <= 1;
   };
@@ -92,11 +101,15 @@ const InputPage = () => {
  
 
   const handleSubmit = async () => {
-    //dispatch(setInvestmentAmount(investmentAmount));
-    //dispatch(setRiskThreshold(riskThreshold));
-    //dispatch(setLookBackDate(lookBackDate));
-    //dispatch(setMinAllocationBound(minAllocationBound));
-    //dispatch(setMaxAllocationBound(maxAllocationBound));
+
+    //const setInvestmentAmountAction = setInvestmentAmount(investmentAmount);
+    //dispatch(setInvestmentAmountAction);
+    
+    dispatch(setInvestment(investmentAmount));
+    dispatch(setRisk(riskThreshold));
+    dispatch(setLookBack(lookBackDate));
+    dispatch(setMinAllocation(minAllocationBound));
+    dispatch(setMaxAllocation(maxAllocationBound));
     //dispatch(packageData());
 
     // FFS const packagedData = useSelector(state => state.inputs.package);
@@ -128,8 +141,10 @@ const InputPage = () => {
     }
 
     //console.log("Send successful. Packaged data:", packagedData);
+
     const result = await response.json();
-    
+    navigate('/output');
+
   };  
     
   return (
@@ -164,7 +179,7 @@ const InputPage = () => {
               <Typography variant="h6" style={{ marginLeft: '0.5vw', fontWeight: 'bold', fontSize: '1.7vw'}} >Investment Amount</Typography>
               <StyledTextField
                 value={investmentAmount}
-                onChange={(e) => setInvestmentAmount(e.target.value)}
+                onChange={(e) => (setInvestmentAmount(e.target.value))}
                 error={!validateInvestAndRisk(investmentAmount)}
                 InputProps={{
                   startAdornment: (

@@ -15,14 +15,23 @@ def hello_world():
 
 @app.route('/process_data', methods=['POST'])
 def process_data():
-    data = request.get_json()
-    print(data)
-    end_date = str(datetime.today().date())
-    df_result, _, _, _, _ = run_algo(data["tickers"], data["lookBackDate"], end_date, 
-                                     data["riskThreshold"], data["investmentAmount"], 
-                                     data["minAllocationBound"], data["maxAllocationBound"]) 
-    result = df_result.to_json(orient='records')
-    return jsonify(result)
+    try:
+        data = request.get_json()
+        print(data)
+        end_date = str(datetime.today().date())
+        df_result, _, _, _, _ = run_algo(data["tickers"], data["lookBackDate"], end_date, 
+                                         data["riskThreshold"], data["investmentAmount"], 
+                                         data["minAllocationBound"], data["maxAllocationBound"]) 
+        result = df_result.to_json(orient='records')
+        return jsonify(result), 200  # Returning 200 status code along with the result
+    except Exception as e:
+        print("Error:", e)
+        return jsonify({"error": str(e)}), 400  # Return a 400 status code for any errors
+
+
+
+#print mef_df
+
 
 # from algorithm import process_stock_data  # Ensure this function exists in algorithm.py
 # def get_user_input():
