@@ -1,11 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import TopBar from '../components/TopBar';
 import { Box, Typography, Grid } from '@mui/material';
 import { styled } from '@mui/system';
-
-// Placeholder for pie chart and correlation graph imports
-// import PieChart from './PieChart';
-// import CorrelationGraph from './CorrelationGraph';
+import { Pie } from 'react-chartjs-2';
 
 const StyledBox = styled(Box)(({ theme }) => ({
   backgroundColor: 'white',
@@ -16,6 +13,21 @@ const StyledBox = styled(Box)(({ theme }) => ({
 }));
 
 const OutputPage = () => {
+  const [pieChartData, setPieChartData] = useState(null);
+
+  useEffect(() => {
+    // Fetch pie chart data from the Flask server
+    fetchPieChartData();
+  }, []);
+
+  const fetchPieChartData = () => {
+    // Make API call to fetch pie chart data
+    fetch('http://localhost:5000/pie-chart-data')
+      .then(response => response.json())
+      .then(data => setPieChartData(data))
+      .catch(error => console.error('Error fetching pie chart data:', error));
+  };
+
   // Placeholder for initial investment amount and projected investment amount
   const initialInvestmentAmount = 10000; // Placeholder value
   const projectedInvestmentAmount = 15000; // Placeholder value
@@ -42,16 +54,26 @@ const OutputPage = () => {
         </Grid>
         <Grid item xs={12} md={8} style={{padding: '0 10px'}}>
           <StyledBox>
-            {/* Placeholder for Pie Chart */}
-            {/* <PieChart /> */}
-            <Typography variant="h6" style={{ fontWeight: 'bold' }}>Pie Chart</Typography>
-            {/* Placeholder for pie chart */}
+            {pieChartData && (
+              <>
+                <Typography variant="h6" style={{ fontWeight: 'bold' }}>Pie Chart</Typography>
+                <Pie
+                  data={{
+                    labels: Object.keys(pieChartData),
+                    datasets: [
+                      {
+                        data: Object.values(pieChartData),
+                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#66BB6A', '#FF5722'], // You can customize the colors
+                        hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#66BB6A', '#FF5722'], // You can customize the hover colors
+                      },
+                    ],
+                  }}
+                />
+              </>
+            )}
           </StyledBox>
           <StyledBox>
             {/* Placeholder for Correlation Graph */}
-            {/* <CorrelationGraph /> */}
-            <Typography variant="h6" style={{ fontWeight: 'bold' }}>Correlation Graph</Typography>
-            {/* Placeholder for correlation graph */}
           </StyledBox>
         </Grid>
       </Grid>
