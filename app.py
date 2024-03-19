@@ -7,17 +7,24 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from testalgo import run_algo
 
-
-
 app = Flask(__name__)
 CORS(app)
+
+# Global variables to store data
+df_max_sharpe_below_threshold_generated_portfolio = None
+df_MEF = None
+df_cor_matrix = None
 
 @app.route('/')
 def hello_world():
     return 'Hello, World!'
 
+
 @app.route('/process_data', methods=['POST'])
 def process_data():
+    
+    global df_max_sharpe_below_threshold_generated_portfolio, df_MEF, df_cor_matrix
+
     try:
         data = request.get_json()
         print(data)
@@ -45,8 +52,12 @@ def process_data():
         ) = run_algo(data["tickers"], data["lookBackDate"], end_date, 
                                          data["riskThreshold"], data["investmentAmount"], 
                                          data["minAllocationBound"], data["maxAllocationBound"]) 
-        result = df_result.to_json(orient='records')
-        return jsonify(result), 200  # Returning 200 status code along with the result
+        # Store the result in global variables for later use
+        df_max_sharpe_below_threshold_generated_portfolio = df_max_sharpe_below_threshold_generated_portfolio
+        df_MEF = df_MEF
+        df_cor_matrix = df_cor_matrix        
+        
+        return jsonify({"success": True}), 200  # Returning 200 status code along with the result
     except Exception as e:
         print("Error:", e)
         return jsonify({"error": str(e)}), 400  # Return a 400 status code for any errors
@@ -56,10 +67,8 @@ def process_data():
 def pie_chart_data():
     
     try:
-        # Call process_data to get the required data
-        result = process_data()
-        # Extract df_max_sharpe_below_threshold_generated_portfolio from the result
-        data = result.json['df_max_sharpe_below_threshold_generated_portfolio']
+        global df_max_sharpe_below_threshold_generated_portfolio  # Access the global variable
+        data = df_max_sharpe_below_threshold_generated_portfolio
 
         return jsonify(data)
     
@@ -71,10 +80,8 @@ def pie_chart_data():
 def MEF_data():
     
     try:
-        # Call process_data to get the required data
-        result = process_data()
-        # Extract df_max_sharpe_below_threshold_generated_portfolio from the result
-        data = result.json['df_MEF']
+        global df_MEF  # Access the global variable
+        data = df_MEF
 
         return jsonify(data)
     
@@ -86,10 +93,8 @@ def MEF_data():
 def correlation_data():
     
     try:
-        # Call process_data to get the required data
-        result = process_data()
-        # Extract df_max_sharpe_below_threshold_generated_portfolio from the result
-        data = result.json['df_cor_matrix']
+        global df_cor_matrix  # Access the global variable
+        data = df_cor_matrix
 
         return jsonify(data)
     
