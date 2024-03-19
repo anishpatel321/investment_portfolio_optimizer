@@ -97,7 +97,7 @@ def run_algo(tickers, start_date, end_date, min_hold, max_hold):
     volatility_opt, returns_range = generate_MEF_curve(tickers, min_hold, max_hold, log_returns)
 
     # Step 9: Identify Optimal Generated Portfolio Below Risk Threshold
-    validIndex, state = return_index_of_optimal_generated_portfolio_below_risk_threshold(risk_threshold, sharpeRatio, expectedVolatility, expectedReturn, risk_free_rate)
+    validIndex, threshold_state = return_index_of_optimal_generated_portfolio_below_risk_threshold(risk_threshold, sharpeRatio, expectedVolatility, expectedReturn, risk_free_rate)
     optimal_below_threshold_sharpe_ratio = calculate_optimal_generated_porfolio_allocations_below_risk_threshold_sharpe(weight, validIndex, log_returns, cov_matrix, risk_free_rate)
     df_max_sharpe_below_threshold_generated_portfolio, optimal_valid = optimal_generated_porfolio_allocations_below_risk_threshold_as_df(tickers, weight, validIndex)
 
@@ -132,6 +132,7 @@ def run_algo(tickers, start_date, end_date, min_hold, max_hold):
         df_cov_matrix,
         df_cor_matrix,
         df_max_sharpe_below_threshold_generated_portfolio,
+        threshold_state,
         df_historical,
         df_historical_trendline,
         df_forecast_trendline,
