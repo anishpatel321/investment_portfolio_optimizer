@@ -9,10 +9,10 @@ import yfinance as yf
 from datetime import datetime, timedelta
 from scipy.optimize import minimize
 from sklearn.linear_model import LinearRegression
+import testalgo
 from testalgo import (
     run_algo,
     cov_matrix_as_df,
-    calculate_correlation_matrix,
     cor_matrix_as_df,
     optimal_theoretical_porfolio_allocations_as_df,
     optimal_generated_porfolio_allocations_as_df,
@@ -76,6 +76,7 @@ max_hold = 1
 def main():
     run_algo(tickers, start_date, end_date, min_hold, max_hold)
     print(cov_matrix_as_df)
+    print(testalgo.df_generated_portfolios)
 #     try:
 #         tickers, start_date, end_date, risk_tolerance, investment_amount, min_bound, max_bound = get_user_input()
 #         adj_close_prices_df, risk_free_rate, log_ret, cov, corr = run_algo(tickers, start_date, end_date, risk_tolerance, investment_amount, min_bound, max_bound)
