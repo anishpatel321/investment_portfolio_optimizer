@@ -9,7 +9,47 @@ import yfinance as yf
 from datetime import datetime, timedelta
 from scipy.optimize import minimize
 from sklearn.linear_model import LinearRegression
-from testalgo import fetch_adj_close, calculate_log_returns, calculate_covariance_matrix, calculate_correlation_matrix, fetch_risk_free_rate, calculate_optimal_theoretical_portfolio_allocations, generate_random_portfolios, calculate_optimal_generated_portfolio_allocations, generate_MEF_curve, return_index_of_optimal_generated_portfolio_below_risk_threshold, optimal_theoretical_porfolio_allocations_as_df, optimal_generated_porfolio_allocations_as_df, optimal_generated_porfolio_allocations_below_risk_threshold_as_df, create_df_generated_portfolios, create_df_optimal_theoretical, create_df_optimal_generated, create_df_optimal_valid, create_df_MEF, calculate_optimal_theoretical_portfolio_return, calculate_optimal_theoretical_portfolio_volatility, calculate_optimal_theoretical_portfolio_sharpe
+from testalgo import (
+    fetch_adj_close,
+    calculate_log_returns,
+    calculate_covariance_matrix,
+    cov_matrix_as_df,
+    calculate_correlation_matrix,
+    cor_matrix_as_df,
+    standard_deviation,
+    expected_return,
+    sharpe_ratio,
+    fetch_risk_free_rate,
+    neg_sharpe_ratio,
+    calculate_optimal_theoretical_portfolio_allocations,
+    optimal_theoretical_porfolio_allocations_as_df,
+    calculate_optimal_theoretical_portfolio_return,
+    calculate_optimal_theoretical_portfolio_volatility,
+    calculate_optimal_theoretical_portfolio_sharpe,
+    generate_random_portfolios,
+    calculate_optimal_generated_portfolio_allocations,
+    optimal_generated_porfolio_allocations_as_df,
+    calculate_optimal_generated_portfolio_sharpe,
+    generate_MEF_curve,
+    return_index_of_optimal_generated_portfolio_below_risk_threshold,
+    optimal_generated_porfolio_allocations_below_risk_threshold_as_df,
+    calculate_optimal_generated_porfolio_allocations_below_risk_threshold_sharpe,
+    create_recommended_portfolio_historical_returns_df,
+    create_recommended_portfolio_historical_trendline_df,
+    create_recommended_portfolio_forecast_trendline_df,
+    define_volatility_range,
+    create_CML,
+    create_CAL,
+    create_df_generated_portfolios,
+    create_df_optimal_theoretical,
+    create_df_optimal_generated,
+    create_df_optimal_valid,
+    create_df_MEF,
+    create_df_CML,
+    create_df_CAL,
+    create_df_risk_threshold,
+    create_df_risk_free_rate
+)
 # try:
 #     from testalgo import run_algo
 # except ImportError:
