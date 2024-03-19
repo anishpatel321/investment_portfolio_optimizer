@@ -217,12 +217,159 @@ def optimal_generated_porfolio_allocations_below_risk_threshold_as_df(tickers, w
 
     data = {'Ticker': tickers, 'Optimal Weights': optimal_valid}
     df_max_sharpe_below_threshold_generated_portfolio = pd.DataFrame(data)
-    return df_max_sharpe_below_threshold_generated_portfolio
+    return df_max_sharpe_below_threshold_generated_portfolio, optimal_valid
 
 def calculate_optimal_generated_porfolio_allocations_below_risk_threshold_sharpe(weight, validIndex, log_returns, cov_matrix, risk_free_rate):
     # Sharpe Ratio of this Portfolio
     optimal_below_threshold_sharpe_ratio = sharpe_ratio(weight[validIndex], log_returns, cov_matrix, risk_free_rate)
     return optimal_below_threshold_sharpe_ratio
+
+def create_recommended_portfolio_historical_returns_df(optimal_valid, log_returns):
+    # Calculate Historical Portfolio Returns
+    allocations = optimal_valid / np.sum(optimal_valid)
+    historical_returns = (log_returns * allocations).sum(axis=1)
+
+    # Convert log returns to simple returns for plotting
+    historical_simple_returns = np.exp(historical_returns.cumsum())
+
+    # Create DataFrames for Historical and Projected Returns
+    df_historical = pd.DataFrame(historical_simple_returns, columns=['Historical Returns'])
+
+    return df_historical
+
+def create_recommended_portfolio_historical_trendline_df(df_historical):
+    # Convert historical dates to a numeric format for the regression model
+    df_historical['NumericDate'] = (df_historical.index - df_historical.index[0]).days
+
+    # Prepare data for linear regression
+    X_historical = df_historical[['NumericDate']].values
+    y_historical = df_historical['Historical Returns'].values
+
+    # Fit the linear regression model to the historical data
+    model = LinearRegression()
+    model.fit(X_historical, y_historical)
+
+    # Predict across the historical range
+    y_historical_pred = model.predict(X_historical)
+
+    # Create a DataFrame for the linear trend
+    df_linear_trend = pd.DataFrame(y_historical_pred, index=df_historical.index, columns=['Historical Linear Trend'])
+
+    # Display the DataFrame
+    return df_linear_trend
+
+def create_recommended_portfolio_forecast_trendline_df(df_historical, end_date, start_date):
+    forecast_period = end_date - start_date
+
+    # Convert index to a numeric value for regression analysis (e.g., days)
+    df_historical['NumericDate'] = (df_historical.index - df_historical.index[0]).days
+
+    # Historical dates and returns
+    historic_dates = df_historical[['NumericDate']].values
+    historic_returns = df_historical['Historical Returns'].values
+
+    # Initialize and fit the linear regression model
+    model = LinearRegression()
+    model.fit(historic_dates, historic_returns)
+
+    # Define future dates for which we want to predict returns
+    # Predict for the next 30 days
+    future_dates = np.array([[historic_dates[-1][0] + i] for i in range(1, forecast_period.days)])
+
+    # Predict future returns
+    future_returns = model.predict(future_dates)
+
+    # Convert future_dates back to datetime for plotting and analysis
+    forecast_start = df_historical.index[0]
+    future_dates_datetime = [forecast_start + pd.Timedelta(days=int(x[0])) for x in future_dates]
+
+    # Create a DataFrame for future returns
+    df_future_returns = pd.DataFrame(future_returns, index=future_dates_datetime, columns=['Projected Returns'])
+
+    # Display the future returns DataFrame
+    return df_future_returns
+
+def define_volatility_range(expectedVolatility):
+    # Define the range for the CML & CAL to cover, extending from 0 to a bit beyond the max expected volatility
+    volatility_range = np.linspace(0, max(expectedVolatility) * 1.1, 50)
+    return volatility_range
+
+def create_CML(risk_free_rate, optimal_sharpe_ratio, volatility_range):
+    # Calculate the CML returns for the range
+    cml_returns = risk_free_rate + optimal_sharpe_ratio * volatility_range
+    return volatility_range, cml_returns
+
+def create_CAL(risk_free_rate, optimal_below_threshold_sharpe_ratio, volatility_range):
+    # Calculate the CAL returns for the range
+    cal_returns = risk_free_rate + optimal_below_threshold_sharpe_ratio * volatility_range
+    return cal_returns
+
+
+# Converting Existing Data into DataFrames
+def create_df_generated_portfolios(expectedVolatility, expectedReturn, sharpeRatio):
+    return pd.DataFrame({
+        'Volatility': expectedVolatility,
+        'Returns': expectedReturn,
+        'Sharpe Ratio': sharpeRatio
+    })
+
+def create_df_optimal_theoretical(optimal_portfolio_volatility, optimal_portfolio_return, optimal_sharpe_ratio):
+    return pd.DataFrame({
+        'Volatility': [optimal_portfolio_volatility],
+        'Returns': [optimal_portfolio_return],
+        'Sharpe Ratio': optimal_sharpe_ratio
+    }, index=['Optimal Theoretical Portfolio'])
+
+def create_df_optimal_generated(expectedVolatility, expectedReturn, maxIndex, optimal_generated_sharpe_ratio):
+    return pd.DataFrame({
+        'Volatility': [expectedVolatility[maxIndex]],
+        'Returns': [expectedReturn[maxIndex]],
+        'Sharpe Ratio': optimal_generated_sharpe_ratio
+    }, index=['Optimal Generated Portfolio'])
+
+def create_df_optimal_valid(expectedVolatility, expectedReturn, validIndex, optimal_below_threshold_sharpe_ratio):
+    return pd.DataFrame({
+        'Volatility': expectedVolatility[validIndex],
+        'Returns': expectedReturn[validIndex],
+        'Sharpe Ratio': optimal_below_threshold_sharpe_ratio
+    }, index=['Optimal Below Threshold'])
+
+def create_df_MEF(volatility_opt, returns_range):
+    return pd.DataFrame({
+        'Volatility': volatility_opt,
+        'Returns': returns_range
+    })
+
+def create_df_CML(volatility_range, cml_returns):
+    return pd.DataFrame({
+        'Volatility': volatility_range,
+        'Returns': cml_returns
+    })
+
+def create_df_CAL(volatility_range, cal_returns):
+    return pd.DataFrame({
+        'Volatility': volatility_range,
+        'Returns': cal_returns
+    })
+
+def create_df_risk_threshold(returns_range, risk_threshold):
+    return pd.DataFrame({
+        'Volatility': np.full(len(returns_range), risk_threshold),
+        'Returns': returns_range
+    })
+
+def create_df_risk_free_rate(volatility_range, risk_free_rate):
+    return pd.DataFrame({
+        'Volatility': volatility_range,
+        'Returns': np.full(len(volatility_range), risk_free_rate)
+    })
+
+
+
+
+
+
+
 
 def optimize_portfolio(log_returns, cov_matrix, tickers, risk_free_rate=0.02):
     """
