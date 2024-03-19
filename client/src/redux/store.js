@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
-import tickersReducer from "./tickers";
+import inputsReducer from "./inputs";
 
 export const store = configureStore({
   reducer: {
-    tickers: tickersReducer
+    inputs: inputsReducer
 
   }
 });
