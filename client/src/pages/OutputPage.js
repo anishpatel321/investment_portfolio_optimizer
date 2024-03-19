@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import TopBar from '../components/TopBar';
 import { Box, Typography, Grid } from '@mui/material';
 import { styled } from '@mui/system';
-import * as d3 from 'd3';
+import PieChartGraph from '../components/PieChartGraph';
 
 const StyledBox = styled(Box)(({ theme }) => ({
   backgroundColor: 'white',
@@ -14,18 +14,11 @@ const StyledBox = styled(Box)(({ theme }) => ({
 
 const OutputPage = () => {
   const [pieChartData, setPieChartData] = useState(null);
-  const svgRef = useRef(null);
 
   useEffect(() => {
     // Fetch pie chart data from the Flask server
     fetchPieChartData();
   }, []);
-
-  useEffect(() => {
-    if (pieChartData) {
-      drawPieChart();
-    }
-  }, [pieChartData]);
 
   const fetchPieChartData = () => {
     // Make API call to fetch pie chart data
@@ -41,51 +34,6 @@ const OutputPage = () => {
         setPieChartData(data);
       })
       .catch(error => console.error('Error fetching pie chart data:', error));
-};
-
-const drawPieChart = () => {
-  const width = 400;
-  const height = 400;
-  const radius = Math.min(width, height) / 2;
-
-  const color = d3.scaleOrdinal()
-    .range(['#FF6384', '#36A2EB', '#FFCE56', '#66BB6A', '#FF5722']);
-
-  const arc = d3.arc()
-    .outerRadius(radius - 10)
-    .innerRadius(0);
-
-  const pie = d3.pie()
-    .sort(null)
-    .value(d => d.percentage);
-
-  const data = Object.keys(pieChartData).map(ticker => ({
-    ticker,
-    percentage: pieChartData[ticker]
-  }));
-
-  // Clear previous SVG content
-  d3.select(svgRef.current).selectAll("*").remove();
-
-  const svg = d3.select(svgRef.current)
-    .attr('width', width)
-    .attr('height', height)
-    .append('g')
-    .attr('transform', `translate(${width / 2},${height / 2})`); // Corrected string interpolation syntax
-
-  const g = svg.selectAll('.arc')
-    .data(pie(data))
-    .enter().append('g')
-    .attr('class', 'arc');
-
-  g.append('path')
-    .attr('d', arc)
-    .style('fill', d => color(d.data.ticker));
-
-  g.append('text')
-    .attr('transform', d => `translate(${arc.centroid(d)})`) // Corrected string interpolation syntax
-    .attr('dy', '.35em')
-    .text(d => d.data.ticker); 
 };
 
   // Placeholder for initial investment amount and projected investment amount
@@ -113,11 +61,11 @@ const drawPieChart = () => {
           </StyledBox>
         </Grid>
         <Grid item xs={12} md={8} style={{ padding: '0 10px' }}>
+          
           <StyledBox>
-            <svg ref={svgRef}></svg>
-          </StyledBox>
-          <StyledBox>
-            {/* Placeholder for Correlation Graph */}
+            <div>
+              <PieChartGraph pieChartData = {pieChartData}/>
+            </div>
           </StyledBox>
         </Grid>
       </Grid>

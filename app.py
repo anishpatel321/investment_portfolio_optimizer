@@ -78,10 +78,11 @@ def pie_chart_data():
     
     data = {
     'Ticker': ['MSFT', 'AAPL', 'AMZN', 'NVDA', 'AVGO'],
-    'Optimal Weights': [0.165788, 0.048821, 0.009022, 0.572737, 0.203633]
+    'Optimal Weights': [16.5788, 4.8821, 0.9022, 57.2737, 20.3633]
     }
 
-    return jsonify(data)
+    formatted_data = [{'id': i, 'value': value, 'label': ticker} for i, (ticker, value) in enumerate(zip(data['Ticker'], data['Optimal Weights']))]
+    return jsonify(formatted_data)
 
 
 
