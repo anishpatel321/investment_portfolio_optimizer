@@ -10,26 +10,7 @@ from datetime import datetime, timedelta
 from scipy.optimize import minimize
 from sklearn.linear_model import LinearRegression
 import testalgo
-from testalgo import (
-    run_algo,
-    cov_matrix_as_df,
-    cor_matrix_as_df,
-    optimal_theoretical_porfolio_allocations_as_df,
-    optimal_generated_porfolio_allocations_as_df,
-    optimal_generated_porfolio_allocations_below_risk_threshold_as_df,
-    create_recommended_portfolio_historical_returns_df,
-    create_recommended_portfolio_historical_trendline_df,
-    create_recommended_portfolio_forecast_trendline_df,
-    create_df_generated_portfolios,
-    create_df_optimal_theoretical,
-    create_df_optimal_generated,
-    create_df_optimal_valid,
-    create_df_MEF,
-    create_df_CML,
-    create_df_CAL,
-    create_df_risk_threshold,
-    create_df_risk_free_rate
-)
+from testalgo import run_algo
 # try:
 #     from testalgo import run_algo
 # except ImportError:
@@ -81,6 +62,7 @@ def main():
         df_cov_matrix,
         df_cor_matrix,
         df_max_sharpe_below_threshold_generated_portfolio,
+        threshold_state,
         df_historical,
         df_historical_trendline,
         df_forecast_trendline,
@@ -113,6 +95,9 @@ def main():
 
     print("\nGenerated Portfolios maximizing Sharpe ratio below the risk threshold:")
     print(df_max_sharpe_below_threshold_generated_portfolio)
+
+    print("\nThreshold State (1=OK, 2=Fallback to min volatility, 3=Fallback to max sharpe)")
+    print(threshold_state)
 
     print("\nHistorical Prices for the tickers:")
     print(df_historical)
