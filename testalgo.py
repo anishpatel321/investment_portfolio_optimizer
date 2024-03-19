@@ -12,6 +12,39 @@ import numpy as np
 from scipy.optimize import minimize
 from sklearn.linear_model import LinearRegression
 
+
+
+
+ # Add algo into testalgo.py and print here.
+    # tickers
+etf_5 = ['SPY','BND','GLD','QQQ','VTI']
+nasdaq_100 = ['MSFT', 'AAPL', 'AMZN', 'NVDA', 'AVGO', 'META', 'TSLA', 'GOOGL', 'GOOG', 'COST', 'ADBE', 'AMD', 'NFLX', 'PEP', 'CSCO', 'TMUS', 'CMCSA', 'INTC', 'INTU', 'AMGN', 'QCOM', 'TXN', 'AMAT', 'ISRG', 'HON', 'BKNG', 'VRTX', 'LRCX', 'PANW', 'SBUX', 'MDLZ', 'REGN', 'ADP', 'GILD', 'ADI', 'MU', 'MELI', 'PDD', 'SNPS', 'KLAC', 'CDNS', 'ASML', 'CSX', 'MAR', 'CRWD', 'PYPL', 'ABNB', 'CTAS', 'ORLY', 'WDAY', 'ROP', 'MNST', 'MRVL', 'CHTR', 'LULU', 'NXPI', 'ADSK', 'PCAR', 'FTNT', 'ROST', 'DXCM', 'CPRT', 'MCHP', 'KHC', 'KDP', 'IDXX', 'PAYX', 'ODFL', 'AEP', 'CEG', 'FAST', 'DASH', 'TEAM', 'CTSH', 'AZN', 'DDOG', 'MRNA', 'EA', 'BIIB', 'VRSK', 'ZS', 'EXC', 'CSGP', 'GEHC', 'XEL', 'CCEP', 'CDW', 'ON', 'TTD', 'GFS', 'DLTR', 'MDB', 'ANSS', 'BKR', 'TTWO', 'FANG', 'SPLK', 'WBD', 'ILMN', 'SIRI', 'WBA']
+nasdaq_10 = ['MSFT', 'AAPL', 'AMZN', 'NVDA', 'AVGO', 'META', 'TSLA', 'GOOGL', 'GOOG', 'COST']
+nasdaq_5 = ['MSFT', 'AAPL', 'AMZN', 'NVDA', 'AVGO']
+stocks_ex2 = ['CEVA', 'GOOGL', 'TSLA', 'ZOM']
+
+    # dates
+today = datetime.today()
+thirty_days_ago = today - timedelta(days = 30)
+one_year_ago = today - timedelta(days = 365)
+five_years_ago = today - timedelta(days = 5*365)
+ten_years_ago = today - timedelta(days = 10*365)
+jan_01_2021 = datetime(2021,1,1)
+jan_22_2021 = datetime(2021,1,22)
+    
+    # Initialize variables and settings
+tickers = nasdaq_5  # As an example, using 'nasdaq_5' tickers list
+start_date = ten_years_ago
+end_date = today
+min_hold = 0
+max_hold = 1
+
+
+
+
+
+
+
 def fetch_adj_close(tickers, start_date, end_date):
     """
     Fetch adjusted close prices for given tickers between startdate and end_date.
