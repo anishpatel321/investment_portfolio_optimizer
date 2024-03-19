@@ -132,7 +132,6 @@ def main():
 
     # Calculate Optimal Theoretical Portfolio Allocations
     optimal_weights = calculate_optimal_theoretical_portfolio_allocations(tickers, min_hold, max_hold, log_returns, cov_matrix, risk_free_rate)
-    print(optimal_weights)
 
     # Generate Random Portfolios
     sharpeRatio, expectedVolatility, expectedReturn, weight = generate_random_portfolios(log_returns, risk_free_rate)
