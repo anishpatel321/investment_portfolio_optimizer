@@ -70,7 +70,7 @@ def run_algo(tickers, start_date, end_date, min_hold, max_hold):
     optimal_generated_sharpe_ratio = calculate_optimal_generated_portfolio_sharpe(optimal_generated, log_returns, cov_matrix, risk_free_rate)
 
     # Step 8: Generate MEF Curve
-    volatility_opt, returns_range = generate_MEF_curve(log_returns, cov_matrix)
+    volatility_opt, returns_range = generate_MEF_curve((tickers, min_hold, max_hold, log_returns))
 
     # Step 9: Identify Optimal Generated Portfolio Below Risk Threshold
     validIndex, state = return_index_of_optimal_generated_portfolio_below_risk_threshold(risk_threshold, sharpeRatio, expectedVolatility, expectedReturn, risk_free_rate)
