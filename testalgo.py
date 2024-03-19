@@ -10,6 +10,7 @@ import pandas as pd
 from datetime import datetime, timedelta
 import numpy as np
 from scipy.optimize import minimize
+from sklearn.linear_model import LinearRegression
 
 def fetch_adj_close(tickers, start_date, end_date):
     """
