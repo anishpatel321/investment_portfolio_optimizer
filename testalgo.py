@@ -43,6 +43,30 @@ risk_threshold = 0.2
 
 
 def run_algo(tickers, start_date, end_date, min_hold, max_hold):
+    """
+    Run algorithm and return relevant data and DataFrames.
+
+    Returns:
+        df_adj_close (DataFrame): DataFrame of adjusted close prices for the tickers.
+        risk_free_rate (float): Risk-free rate used in the analysis.
+        log_returns (DataFrame): DataFrame of log returns for the tickers.
+        df_cov_matrix (DataFrame): DataFrame of covariance matrix for the log returns.
+        df_cor_matrix (DataFrame): DataFrame of correlation matrix for the log returns.
+        df_max_sharpe_below_threshold_generated_portfolio (DataFrame): DataFrame of generated portfolios maximizing Sharpe ratio below a certain threshold.
+        df_historical (DataFrame): DataFrame of historical prices for the tickers.
+        df_historical_trendline (DataFrame): DataFrame of historical trendline for the tickers.
+        df_forecast_trendline (DataFrame): DataFrame of forecasted trendline for the tickers.
+        df_generated_portfolios (DataFrame): DataFrame of generated portfolios.
+        df_optimal_theoretical (DataFrame): DataFrame of theoretically optimal portfolio.
+        df_optimal_generated (DataFrame): DataFrame of generated optimal portfolio.
+        df_optimal_valid (DataFrame): DataFrame of valid optimal portfolio.
+        df_MEF (DataFrame): DataFrame of mean-efficient frontier.
+        df_CML (DataFrame): DataFrame of capital market line.
+        df_CAL (DataFrame): DataFrame of capital allocation line.
+        df_risk_threshold (DataFrame): DataFrame of risk thresholds.
+        df_risk_free_rate (DataFrame): DataFrame of risk-free rate.
+    """
+
     # Step 1: Fetch Adjusted Close Prices
     df_adj_close = fetch_adj_close(tickers, start_date, end_date)
 
@@ -70,7 +94,7 @@ def run_algo(tickers, start_date, end_date, min_hold, max_hold):
     optimal_generated_sharpe_ratio = calculate_optimal_generated_portfolio_sharpe(optimal_generated, log_returns, cov_matrix, risk_free_rate)
 
     # Step 8: Generate MEF Curve
-    volatility_opt, returns_range = generate_MEF_curve((tickers, min_hold, max_hold, log_returns))
+    volatility_opt, returns_range = generate_MEF_curve(tickers, min_hold, max_hold, log_returns)
 
     # Step 9: Identify Optimal Generated Portfolio Below Risk Threshold
     validIndex, state = return_index_of_optimal_generated_portfolio_below_risk_threshold(risk_threshold, sharpeRatio, expectedVolatility, expectedReturn, risk_free_rate)
@@ -88,6 +112,8 @@ def run_algo(tickers, start_date, end_date, min_hold, max_hold):
     df_forecast_trendline = create_recommended_portfolio_forecast_trendline_df(df_historical, end_date, start_date)
     
     # Step 12: Calculate Portfolio Metrics for Various Portfolios and Curves
+    df_cov_matrix = cov_matrix_as_df(cov_matrix, log_returns)
+    df_cor_matrix = cor_matrix_as_df(cor_matrix, log_returns)
     df_generated_portfolios = create_df_generated_portfolios(expectedVolatility, expectedReturn, sharpeRatio)
     df_optimal_theoretical = create_df_optimal_theoretical(optimal_portfolio_volatility, optimal_portfolio_return, optimal_sharpe_ratio)
     df_optimal_generated = create_df_optimal_generated(expectedVolatility, expectedReturn, maxIndex, optimal_generated_sharpe_ratio)
@@ -98,6 +124,27 @@ def run_algo(tickers, start_date, end_date, min_hold, max_hold):
     df_risk_threshold = create_df_risk_threshold(returns_range, risk_threshold)
     df_risk_free_rate = create_df_risk_free_rate(volatility_range, risk_free_rate)
 
+    # Return relevant data and DataFrames
+    return (
+        df_adj_close,
+        risk_free_rate,
+        log_returns,
+        df_cov_matrix,
+        df_cor_matrix,
+        df_max_sharpe_below_threshold_generated_portfolio,
+        df_historical,
+        df_historical_trendline,
+        df_forecast_trendline,
+        df_generated_portfolios,
+        df_optimal_theoretical,
+        df_optimal_generated,
+        df_optimal_valid,
+        df_MEF,
+        df_CML,
+        df_CAL,
+        df_risk_threshold,
+        df_risk_free_rate
+    )
 
 
 
