@@ -38,6 +38,7 @@ start_date = ten_years_ago
 end_date = today
 min_hold = 0
 max_hold = 1
+risk_threshold = 0.2
 
 
 
@@ -56,42 +57,46 @@ def run_algo(tickers, start_date, end_date, min_hold, max_hold):
     risk_free_rate = fetch_risk_free_rate()
 
     # Step 5: Calculate Optimal Theoretical Portfolio Allocations
-    optimal_theoretical_allocations = calculate_optimal_theoretical_portfolio_allocations(log_returns, cov_matrix, risk_free_rate, min_hold, max_hold)
-    optimal_theoretical_return = calculate_optimal_theoretical_portfolio_return
-    optimal_theoretical_volatility = calculate_optimal_theoretical_portfolio_volatility
-    optimal_theretical_sharpe = calculate_optimal_theoretical_portfolio_sharpe
+    optimal_weights = calculate_optimal_theoretical_portfolio_allocations(tickers, min_hold, max_hold, log_returns, cov_matrix, risk_free_rate)
+    optimal_portfolio_return = calculate_optimal_theoretical_portfolio_return (optimal_weights, log_returns)
+    optimal_portfolio_volatility = calculate_optimal_theoretical_portfolio_volatility (optimal_weights, cov_matrix)
+    optimal_sharpe_ratio = calculate_optimal_theoretical_portfolio_sharpe (optimal_weights, log_returns, cov_matrix, risk_free_rate)
 
     # Step 6: Generate Random Portfolios
-    random_portfolios = generate_random_portfolios(log_returns, cov_matrix, risk_free_rate, no_of_portfolios=10000)
+    sharpeRatio, expectedVolatility, expectedReturn, weight = generate_random_portfolios(log_returns, risk_free_rate)
 
     # Step 7: Calculate Optimal Generated Portfolio Allocations
-    optimal_generated_allocations = calculate_optimal_generated_portfolio_allocations(random_portfolios)
-    optimal_generated_sharpe = calculate_optimal_generated_portfolio_sharpe(random_portfolios)
+    optimal_generated, maxIndex = calculate_optimal_generated_portfolio_allocations(sharpeRatio, weight)
+    optimal_generated_sharpe_ratio = calculate_optimal_generated_portfolio_sharpe(optimal_generated, log_returns, cov_matrix, risk_free_rate)
 
     # Step 8: Generate MEF Curve
-    mef_curve = generate_MEF_curve(log_returns, cov_matrix)
+    volatility_opt, returns_range = generate_MEF_curve(log_returns, cov_matrix)
 
     # Step 9: Identify Optimal Generated Portfolio Below Risk Threshold
-    optimal_valid_index = return_index_of_optimal_generated_portfolio_below_risk_threshold(random_portfolios)
-    optimal_valid_sharpe = calculate_optimal_generated_porfolio_allocations_below_risk_threshold_sharpe(random_portfolios)
+    validIndex, state = return_index_of_optimal_generated_portfolio_below_risk_threshold(risk_threshold, sharpeRatio, expectedVolatility, expectedReturn, risk_free_rate)
+    optimal_below_threshold_sharpe_ratio = calculate_optimal_generated_porfolio_allocations_below_risk_threshold_sharpe(weight, validIndex, log_returns, cov_matrix, risk_free_rate)
+    df_max_sharpe_below_threshold_generated_portfolio, optimal_valid = optimal_generated_porfolio_allocations_below_risk_threshold_as_df(tickers, weight, validIndex)
 
-    # Step 10: Calculate Portfolio Metrics for Various Portfolios and Curves
-    df_generated_portfolios = create_df_generated_portfolios(random_portfolios)
-    df_optimal_theoretical = create_df_optimal_theoretical(optimal_theoretical_allocations)
-    df_optimal_generated = create_df_optimal_generated(optimal_generated_allocations)
-    df_optimal_valid = create_df_optimal_valid(optimal_valid_index, random_portfolios)
-    df_MEF = create_df_MEF(mef_curve)
-    df_CML = create_df_CML(optimal_theoretical_allocations, risk_free_rate)
-    df_CAL = create_df_CAL(optimal_valid_index, random_portfolios, risk_free_rate)
-    df_risk_threshold = create_df_risk_threshold(optimal_valid_index, random_portfolios)
-    df_risk_free_rate = create_df_risk_free_rate(risk_free_rate)
+    # Step 10: Create CML & CAL lines
+    volatility_range = define_volatility_range(expectedVolatility)
+    volatility_range, cml_returns = create_CML(risk_free_rate, optimal_sharpe_ratio, volatility_range)
+    cal_returns = create_CAL(risk_free_rate, optimal_below_threshold_sharpe_ratio, volatility_range)
 
     # Step 11: Historical and Forecast Returns Analysis
-    df_historical_returns = create_recommended_portfolio_historical_returns_df(df_adj_close, optimal_valid_index, random_portfolios)
-    df_historical_trendline = create_recommended_portfolio_historical_trendline_df(df_historical_returns)
-    df_forecast_trendline = create_recommended_portfolio_forecast_trendline_df(df_historical_returns)
+    df_historical = create_recommended_portfolio_historical_returns_df(optimal_valid, log_returns)
+    df_historical_trendline = create_recommended_portfolio_historical_trendline_df(df_historical)
+    df_forecast_trendline = create_recommended_portfolio_forecast_trendline_df(df_historical, end_date, start_date)
     
-
+    # Step 12: Calculate Portfolio Metrics for Various Portfolios and Curves
+    df_generated_portfolios = create_df_generated_portfolios(expectedVolatility, expectedReturn, sharpeRatio)
+    df_optimal_theoretical = create_df_optimal_theoretical(optimal_portfolio_volatility, optimal_portfolio_return, optimal_sharpe_ratio)
+    df_optimal_generated = create_df_optimal_generated(expectedVolatility, expectedReturn, maxIndex, optimal_generated_sharpe_ratio)
+    df_optimal_valid = create_df_optimal_valid(expectedVolatility, expectedReturn, validIndex, optimal_below_threshold_sharpe_ratio)
+    df_MEF = create_df_MEF(volatility_opt, returns_range)
+    df_CML = create_df_CML(volatility_range, cml_returns)
+    df_CAL = create_df_CAL(volatility_range, cal_returns)
+    df_risk_threshold = create_df_risk_threshold(returns_range, risk_threshold)
+    df_risk_free_rate = create_df_risk_free_rate(volatility_range, risk_free_rate)
 
 
 
