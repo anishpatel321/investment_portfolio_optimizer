@@ -112,22 +112,27 @@ def main():
     min_hold = 0
     max_hold = 1
 
+
+
     # Fetch Adjusted Close Prices
     df_adj_close = fetch_adj_close(tickers, start_date, end_date)
-    
-
+    print(df_adj_close)
     # Calculate Log Returns
     log_returns = calculate_log_returns(df_adj_close)
-
+    print(log_returns)
     # Calculate Covariance and Correlation Matrices
     cov_matrix = calculate_covariance_matrix(log_returns)
+    print(cov_matrix)
     cor_matrix = calculate_correlation_matrix(log_returns)
+    print(cor_matrix)
 
     # Get Risk-Free Rate
     risk_free_rate = fetch_risk_free_rate()
+    print(risk_free_rate)
 
     # Calculate Optimal Theoretical Portfolio Allocations
     optimal_weights = calculate_optimal_theoretical_portfolio_allocations(tickers, min_hold, max_hold, log_returns, cov_matrix, risk_free_rate)
+    print(optimal_weights)
 
     # Generate Random Portfolios
     sharpeRatio, expectedVolatility, expectedReturn, weight = generate_random_portfolios(log_returns, risk_free_rate)
