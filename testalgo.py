@@ -172,14 +172,19 @@ def generate_random_portfolios(log_returns, risk_free_rate):
     return sharpeRatio, expectedVolatility, expectedReturn, weight
 
 def calculate_optimal_generated_portfolio_allocations(sharpeRatio, weight):
-    maxIndex = sharpeRatio.argmax()
-    optimal_generated = weight[maxIndex,:]
+    maxIndex = sharpeRatio.argmax() 
+    optimal_weights = weight[maxIndex,:]
+    optimal_generated = optimal_weights
     return optimal_generated, maxIndex
 
+
 def optimal_generated_porfolio_allocations_as_df(tickers, optimal_generated):
-    data = {'Ticker': tickers, 'Optimal Weights': optimal_generated}
+    # Extract the weights array from the tuple
+    optimal_weights = optimal_generated[0]
+    data = {'Ticker': tickers, 'Optimal Weights': optimal_weights}
     df_max_sharpe_generated_portfolio = pd.DataFrame(data)
     return df_max_sharpe_generated_portfolio
+
 
 def calculate_optimal_generated_portfolio_sharpe(optimal_generated, log_returns, cov_matrix, risk_free_rate):
     optimal_generated_sharpe_ratio = sharpe_ratio(optimal_generated, log_returns, cov_matrix, risk_free_rate)

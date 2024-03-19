@@ -43,42 +43,50 @@ const OutputPage = () => {
       .catch(error => console.error('Error fetching pie chart data:', error));
 };
 
-  const drawPieChart = () => {
-    const width = 400;
-    const height = 400;
-    const radius = Math.min(width, height) / 2;
+const drawPieChart = () => {
+  const width = 400;
+  const height = 400;
+  const radius = Math.min(width, height) / 2;
 
-    const color = d3.scaleOrdinal()
-      .range(['#FF6384', '#36A2EB', '#FFCE56', '#66BB6A', '#FF5722']);
+  const color = d3.scaleOrdinal()
+    .range(['#FF6384', '#36A2EB', '#FFCE56', '#66BB6A', '#FF5722']);
 
-    const arc = d3.arc()
-      .outerRadius(radius - 10)
-      .innerRadius(0);
+  const arc = d3.arc()
+    .outerRadius(radius - 10)
+    .innerRadius(0);
 
-    const pie = d3.pie()
-      .sort(null)
-      .value(d => d.value);
+  const pie = d3.pie()
+    .sort(null)
+    .value(d => d.percentage);
 
-    const svg = d3.select(svgRef.current)
-      .attr('width', width)
-      .attr('height', height)
-      .append('g')
-      .attr('transform', `translate(${width / 2},${height / 2})`);
+  const data = Object.keys(pieChartData).map(ticker => ({
+    ticker,
+    percentage: pieChartData[ticker]
+  }));
 
-    const g = svg.selectAll('.arc')
-      .data(pie(Object.entries(pieChartData)))
-      .enter().append('g')
-      .attr('class', 'arc');
+  // Clear previous SVG content
+  d3.select(svgRef.current).selectAll("*").remove();
 
-    g.append('path')
-      .attr('d', arc)
-      .style('fill', d => color(d.data[0]));
+  const svg = d3.select(svgRef.current)
+    .attr('width', width)
+    .attr('height', height)
+    .append('g')
+    .attr('transform', `translate(${width / 2},${height / 2})`); // Corrected string interpolation syntax
 
-    g.append('text')
-      .attr('transform', d => `translate(${arc.centroid(d)})`)
-      .attr('dy', '.35em')
-      .text(d => d.data[0]);
-  };
+  const g = svg.selectAll('.arc')
+    .data(pie(data))
+    .enter().append('g')
+    .attr('class', 'arc');
+
+  g.append('path')
+    .attr('d', arc)
+    .style('fill', d => color(d.data.ticker));
+
+  g.append('text')
+    .attr('transform', d => `translate(${arc.centroid(d)})`) // Corrected string interpolation syntax
+    .attr('dy', '.35em')
+    .text(d => d.data.ticker); 
+};
 
   // Placeholder for initial investment amount and projected investment amount
   const initialInvestmentAmount = 10000; // Placeholder value
