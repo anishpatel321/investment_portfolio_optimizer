@@ -107,7 +107,7 @@ const InputPage = () => {
     
     dispatch(setInvestment(investmentAmount));
     dispatch(setRisk(riskThreshold));
-    dispatch(setLookBack(lookBackDate));
+    dispatch(setLookBack(new Date().toISOString())); // convert to string
     dispatch(setMinAllocation(minAllocationBound));
     dispatch(setMaxAllocation(maxAllocationBound));
     //dispatch(packageData());
