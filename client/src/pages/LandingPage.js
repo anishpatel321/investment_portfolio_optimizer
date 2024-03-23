@@ -30,13 +30,13 @@ const LandingPage = () => {
       </Grid>
       <Grid container spacing={1} justifyContent="center" sx={{ width: '95%', mx: 'auto' }}>
         <Grid item xs={12} sm={6} md={4} style={{padding: 0}}>
-          <Card title="#one" subtitle="Define your inputs" body="Pick your favorite stocks, and lookback period. Don’t worry you can also specify the amount of risk you are willing to take!" height={'60vh'} hasNumberPill={true} hasTransition={true}/>
+          <Card title="#one" subtitle="Define your inputs" body="Pick your favorite stocks, and lookback period. Don’t worry you can also specify the amount of risk you are willing to take!" height={'60vh'} hasNumberPill={true} hastransition={true}/>
         </Grid>
         <Grid item xs={12} sm={6} md={4} style={{padding: 0}}>
-          <Card title="#two" subtitle="Review your results" body="Go to the dashboard to view the most optimal portfolio distribution, based on your inputs." height={'60vh'} hasNumberPill={true} hasTransition={true}/>
+          <Card title="#two" subtitle="Review your results" body="Go to the dashboard to view the most optimal portfolio distribution, based on your inputs." height={'60vh'} hasNumberPill={true} hastransition={true}/>
         </Grid>
         <Grid item xs={12} sm={6} md={4} style={{padding: 0}}>
-          <Card title="#three" subtitle="Invest in your future" body="Implement the White Whale portfolio recommendations to see your wallet grow" height={'60vh'} hasNumberPill={true} hasTransition={true}/>
+          <Card title="#three" subtitle="Invest in your future" body="Implement the White Whale portfolio recommendations to see your wallet grow" height={'60vh'} hasNumberPill={true} hastransition={true}/>
         </Grid>
       </Grid>
       <Grid sx={{ display: 'flex', width: '95%', mx: 'auto', justifyContent: 'flex-end', marginTop: '0%'}}>

@@ -158,7 +158,7 @@ const InputPage = () => {
       </Grid>
       <Grid container spacing={1} justifyContent="center" sx={{ width: '95%', mx: 'auto' }}>
         <Grid item xs={12} sm={6} md={4} style={{padding: 0}}>
-          <CardComponent title="Definitions" subtitle="Define your inputs" body="Pick your favorite stocks, and lookback period. Don’t worry you can also specify the amount of risk you are willing to take!" height={'67.5vh'} hasTransition={true}/>
+          <CardComponent title="Definitions" subtitle="Define your inputs" body="Pick your favorite stocks, and lookback period. Don’t worry you can also specify the amount of risk you are willing to take!" height={'67.5vh'} hastransition={true}/>
         </Grid>
         <Grid item xs={12} sm={6} md={8} style={{padding: 0}}>
           <CardComponent title="Inputs" height={'67.5vh'} hasButton={true} onClick={handleSubmit} hasInputs={true}>

@@ -4,7 +4,7 @@ import { styled } from '@mui/system';
 import NumberPill from './NumberPill'; 
 import ContinueButton from './ContinueButton';
 
-const StyledCard = styled(Card)(({ height, hasTransition }) => ({
+const StyledCard = styled(Card)(({ height, hastransition }) => ({
   background: '#163A5F',
   color: 'white',
   borderRadius: '33px',
@@ -12,9 +12,9 @@ const StyledCard = styled(Card)(({ height, hasTransition }) => ({
   margin: '7px',
   height: height, 
   position: 'relative', // Added to position the NumberPill component
-  transition: hasTransition ? 'background' : 'none',
+  transition: hastransition ? 'background' : 'none',
   '&:hover': {
-    background: hasTransition ? 'linear-gradient(40deg, #163A5F, #1D566E, #21ABA5)' : '#163A5F', // Gradient on hover
+    background: hastransition ? 'linear-gradient(40deg, #163A5F, #1D566E, #21ABA5)' : '#163A5F', // Gradient on hover
   },
 }));
 
@@ -22,9 +22,9 @@ const StyledCardContent = styled(CardContent)({
     paddingTop: '15%', 
 });
 
-const CardComponent = ({ title, subtitle, body, height, hasButton, hasNumberPill, hasTransition, onClick, children }) => {
+const CardComponent = ({ title, subtitle, body, height, hasButton, hasNumberPill, hastransition, onClick, children }) => {
   return (
-    <StyledCard height={height} hasTransition={hasTransition}>
+    <StyledCard height={height} hastransition={hastransition}>
       {hasNumberPill && <NumberPill>{title}</NumberPill>}
       <StyledCardContent>
         <Typography variant="h1" component="p" style={{fontSize: '350%', fontWeight: 'bold', paddingTop: '10%',paddingBottom: '3%', margin: '4%'}}>

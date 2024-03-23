@@ -5,7 +5,7 @@ export const inputSlice = createSlice({
   initialState: {
     tickers: [], // initialize array for storing tickers
     riskThreshold: 0.05, // default risk threshold
-    lookBackDate: new Date(), // default lookback date
+    lookBackDate: new Date().toISOString(), // default lookback date
     minAllocationBound: 0.1, // default minimum allocation bound
     maxAllocationBound: 0.9, // default maximum allocation bound
     investmentAmount: 1000, // default investment amount
@@ -28,7 +28,7 @@ export const inputSlice = createSlice({
       state.riskThreshold = action.payload;
     },
     setLookBack: (state, action) => {
-      state.lookBackDate = action.payload;
+      state.lookBackDate = new Date(action.payload).toISOString(); // convert to string format
     },
     setMinAllocation: (state, action) => {
       state.minAllocationBound = action.payload;
