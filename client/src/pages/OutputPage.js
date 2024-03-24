@@ -43,6 +43,31 @@ const OutputPage = () => {
             </div>
           </StyledBox>
         </Grid>
+        <Grid item xs={12} md={8} style={{ padding: '0 10px' }}>
+          <StyledBox>
+            <PieChartGraph /> 
+            {/* this is the box under the invest and porj amounts, has another pie chart for now */}
+          </StyledBox>
+          <StyledBox style={{height: '40vh'}}>
+            {/* another box under 2nd pie chart */}
+
+          </StyledBox>
+        </Grid>
+        <Grid item xs={12} md={4} style={{ padding: '0 10px' }}>
+          <StyledBox>
+            <Typography variant="h6" style={{ fontWeight: 'bold' }}>Initial Investment Amount</Typography>
+            <Typography variant="h4">${initialInvestmentAmount}</Typography>
+            {/* This box has just 2 typography (text) elements, can also add more than just text */}
+          </StyledBox>
+          <StyledBox style={{height: '30vh', alignItems: 'center'}}>
+            {/* another box with mismatched height, change as needed */}
+            <PieChartGraph /> 
+          </StyledBox>
+          <StyledBox style={{height: '17vh'}}>
+            {/* another box under 3nd pie chart */}
+
+          </StyledBox>
+        </Grid>
       </Grid>
     </>
   );
