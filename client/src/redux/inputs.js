@@ -11,6 +11,7 @@ export const inputSlice = createSlice({
     investmentAmount: 1000, // default investment amount
     package: null, // initialize package property as null
   },
+  
   reducers: {
     addTicker: (state, action) => {
       const newTicker = action.payload;

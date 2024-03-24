@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import TopBar from '../components/TopBar';
 import { Box, Typography, Grid } from '@mui/material';
 import { styled } from '@mui/system';
@@ -13,30 +13,6 @@ const StyledBox = styled(Box)(({ theme }) => ({
 }));
 
 const OutputPage = () => {
-  const [pieChartData, setPieChartData] = useState(null);
-
-  useEffect(() => {
-    // Fetch pie chart data from the Flask server
-    fetchPieChartData();
-  }, []);
-
-  const fetchPieChartData = () => {
-    // Make API call to fetch pie chart data
-    fetch('http://localhost:5000/pie-chart-data')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log('Pie chart data:', data);
-        setPieChartData(data);
-      })
-      .catch(error => console.error('Error fetching pie chart data:', error));
-};
-
-  // Placeholder for initial investment amount and projected investment amount
   const initialInvestmentAmount = 10000; // Placeholder value
   const projectedInvestmentAmount = 15000; // Placeholder value
 
@@ -61,10 +37,9 @@ const OutputPage = () => {
           </StyledBox>
         </Grid>
         <Grid item xs={12} md={8} style={{ padding: '0 10px' }}>
-          
           <StyledBox>
             <div>
-              <PieChartGraph pieChartData = {pieChartData}/>
+              <PieChartGraph />
             </div>
           </StyledBox>
         </Grid>

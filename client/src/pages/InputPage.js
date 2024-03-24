@@ -8,8 +8,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import { MuiChipsInput } from 'mui-chips-input'
 import { useDispatch } from 'react-redux';
 import { addTicker, removeTicker, setInvestment,  setRisk,  setLookBack,  setMinAllocation,  setMaxAllocation, packageData, } from '../redux/inputs';
+import { setData } from '../redux/outputs';
 import { Link as RouterLink } from 'react-router-dom'; // Import Link
 import OutputPage from './OutputPage'; // Import OutputPage
+
 import { useNavigate } from 'react-router-dom';
 
 
@@ -82,21 +84,30 @@ const InputPage = () => {
   };
   
 
-  const handleChipChange = (newChips, removedChipIndex) => {
-    // Convert all tickers to uppercase
-    const uppercaseChips = newChips.map(chip => chip.toUpperCase());
-    
-    // Update the tickers state
-    setTickers(uppercaseChips);
+  const handleChipChange = (newChips) => {
+    // Convert all new chips to uppercase
+    const uppercaseNewChips = newChips.map(chip => chip.toUpperCase());
   
-    // If a chip was removed, dispatch the removeTicker action
-    if (typeof removedChipIndex === 'number') {
-      const removedTicker = tickers[removedChipIndex];
-      dispatch(removeTicker(removedTicker));
+    // Determine if a chip was added or removed by comparing lengths
+    if (newChips.length < tickers.length) {
+      // A chip was removed
+      const removedChips = tickers.filter(ticker => !uppercaseNewChips.includes(ticker));
+      if (removedChips.length > 0) {
+        const removedTicker = removedChips[0]; // Assuming only one chip is removed at a time
+        dispatch(removeTicker(removedTicker));
+        console.log("Chip removed:", removedTicker);
+      }
     } else {
-      // If no chip was removed, add the last added ticker
-      dispatch(addTicker(uppercaseChips[uppercaseChips.length - 1]));
+      // A chip was added
+      const addedTicker = uppercaseNewChips.find(chip => !tickers.includes(chip));
+      if (addedTicker) {
+        dispatch(addTicker(addedTicker));
+        console.log("Chip added:", addedTicker);
+      }
     }
+  
+    // Update the tickers state
+    setTickers(uppercaseNewChips);
   };
  
 
@@ -126,6 +137,8 @@ const InputPage = () => {
     };
 
     console.log("datas ending:", data);
+
+
     const response = await fetch('/process_data', {
       method: 'POST',
       headers: {
@@ -139,10 +152,19 @@ const InputPage = () => {
       console.log("Error response:", errorResponse);
       return;
     }
-
-    //console.log("Send successful. Packaged data:", packagedData);
+    
+    console.log("Send successful. Packaged data:", data);
 
     const result = await response.json();
+
+    console.log('Algorithm results:', result);  // Log the raw data to the console
+
+      // Dispatch an action to update the Redux store with the fetched data
+      //dispatch(updateAlgoResults(data));
+    
+
+    dispatch(setData(result)); //set the data that comes from algo
+
     navigate('/output');
 
   };  
@@ -167,12 +189,12 @@ const InputPage = () => {
               <StyledMuiChipsInput
                   value={tickers}
                   onChange={handleChipChange}
-                  onDelete={(chip, index) => {
-                    const newChips = [...tickers];
-                    newChips.splice(index, 1); // Remove the ticker from the list
-                    setTickers(newChips);
-                    dispatch(removeTicker(chip.toUpperCase())); // Dispatch action to remove the ticker from the Redux store
-                  }}
+                  // onDelete={(chip, index) => {
+                  //   const newChips = [...tickers];
+                  //   newChips.splice(index, 1); // Remove the ticker from the list
+                  //   setTickers(newChips);
+                  //   dispatch(removeTicker(chip.toUpperCase())); // Dispatch action to remove the ticker from the Redux store
+                  // }}
               />
             </Box>
             <Box sx={{ position: 'absolute', top: '45vh', left: '4vw' }}>

@@ -12,37 +12,42 @@ import numpy as np
 from scipy.optimize import minimize
 from sklearn.linear_model import LinearRegression
 
+import json
+
 
 
 
  # Add algo into testalgo.py and print here.
     # tickers
-etf_5 = ['SPY','BND','GLD','QQQ','VTI']
-nasdaq_100 = ['MSFT', 'AAPL', 'AMZN', 'NVDA', 'AVGO', 'META', 'TSLA', 'GOOGL', 'GOOG', 'COST', 'ADBE', 'AMD', 'NFLX', 'PEP', 'CSCO', 'TMUS', 'CMCSA', 'INTC', 'INTU', 'AMGN', 'QCOM', 'TXN', 'AMAT', 'ISRG', 'HON', 'BKNG', 'VRTX', 'LRCX', 'PANW', 'SBUX', 'MDLZ', 'REGN', 'ADP', 'GILD', 'ADI', 'MU', 'MELI', 'PDD', 'SNPS', 'KLAC', 'CDNS', 'ASML', 'CSX', 'MAR', 'CRWD', 'PYPL', 'ABNB', 'CTAS', 'ORLY', 'WDAY', 'ROP', 'MNST', 'MRVL', 'CHTR', 'LULU', 'NXPI', 'ADSK', 'PCAR', 'FTNT', 'ROST', 'DXCM', 'CPRT', 'MCHP', 'KHC', 'KDP', 'IDXX', 'PAYX', 'ODFL', 'AEP', 'CEG', 'FAST', 'DASH', 'TEAM', 'CTSH', 'AZN', 'DDOG', 'MRNA', 'EA', 'BIIB', 'VRSK', 'ZS', 'EXC', 'CSGP', 'GEHC', 'XEL', 'CCEP', 'CDW', 'ON', 'TTD', 'GFS', 'DLTR', 'MDB', 'ANSS', 'BKR', 'TTWO', 'FANG', 'SPLK', 'WBD', 'ILMN', 'SIRI', 'WBA']
-nasdaq_10 = ['MSFT', 'AAPL', 'AMZN', 'NVDA', 'AVGO', 'META', 'TSLA', 'GOOGL', 'GOOG', 'COST']
-nasdaq_5 = ['MSFT', 'AAPL', 'AMZN', 'NVDA', 'AVGO']
-stocks_ex2 = ['CEVA', 'GOOGL', 'TSLA', 'ZOM']
+# etf_5 = ['SPY','BND','GLD','QQQ','VTI']
+# nasdaq_100 = ['MSFT', 'AAPL', 'AMZN', 'NVDA', 'AVGO', 'META', 'TSLA', 'GOOGL', 'GOOG', 'COST', 'ADBE', 'AMD', 'NFLX', 'PEP', 'CSCO', 'TMUS', 'CMCSA', 'INTC', 'INTU', 'AMGN', 'QCOM', 'TXN', 'AMAT', 'ISRG', 'HON', 'BKNG', 'VRTX', 'LRCX', 'PANW', 'SBUX', 'MDLZ', 'REGN', 'ADP', 'GILD', 'ADI', 'MU', 'MELI', 'PDD', 'SNPS', 'KLAC', 'CDNS', 'ASML', 'CSX', 'MAR', 'CRWD', 'PYPL', 'ABNB', 'CTAS', 'ORLY', 'WDAY', 'ROP', 'MNST', 'MRVL', 'CHTR', 'LULU', 'NXPI', 'ADSK', 'PCAR', 'FTNT', 'ROST', 'DXCM', 'CPRT', 'MCHP', 'KHC', 'KDP', 'IDXX', 'PAYX', 'ODFL', 'AEP', 'CEG', 'FAST', 'DASH', 'TEAM', 'CTSH', 'AZN', 'DDOG', 'MRNA', 'EA', 'BIIB', 'VRSK', 'ZS', 'EXC', 'CSGP', 'GEHC', 'XEL', 'CCEP', 'CDW', 'ON', 'TTD', 'GFS', 'DLTR', 'MDB', 'ANSS', 'BKR', 'TTWO', 'FANG', 'SPLK', 'WBD', 'ILMN', 'SIRI', 'WBA']
+# nasdaq_10 = ['MSFT', 'AAPL', 'AMZN', 'NVDA', 'AVGO', 'META', 'TSLA', 'GOOGL', 'GOOG', 'COST']
+# nasdaq_5 = ['MSFT', 'AAPL', 'AMZN', 'NVDA', 'AVGO']
+# stocks_ex2 = ['CEVA', 'GOOGL', 'TSLA', 'ZOM']
 
     # dates
-today = datetime.today()
-thirty_days_ago = today - timedelta(days = 30)
-one_year_ago = today - timedelta(days = 365)
-five_years_ago = today - timedelta(days = 5*365)
-ten_years_ago = today - timedelta(days = 10*365)
-jan_01_2021 = datetime(2021,1,1)
-jan_22_2021 = datetime(2021,1,22)
+# today = datetime.today()
+# thirty_days_ago = today - timedelta(days = 30)
+# one_year_ago = today - timedelta(days = 365)
+# five_years_ago = today - timedelta(days = 5*365)
+# ten_years_ago = today - timedelta(days = 10*365)
+# jan_01_2021 = datetime(2021,1,1)
+# jan_22_2021 = datetime(2021,1,22)
     
     # Initialize variables and settings
-tickers = nasdaq_5  # As an example, using 'nasdaq_5' tickers list
-start_date = ten_years_ago
-end_date = today
-min_hold = 0
-max_hold = 1
-risk_threshold = 0.2
+#tickers = nasdaq_5  # As an example, using 'nasdaq_5' tickers list
+#start_date = ten_years_ago
+#end_date = today
+#min_hold = 0
+#max_hold = 1
+#risk_threshold = 0.2
+#investment_amount = 500000
 
 
 
-def run_algo(tickers, start_date, end_date, min_hold, max_hold):
+def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, min_hold, max_hold):
+
+    
     """
     Run algorithm and return relevant data and DataFrames.
 
@@ -66,51 +71,67 @@ def run_algo(tickers, start_date, end_date, min_hold, max_hold):
         df_risk_threshold (DataFrame): DataFrame of risk thresholds.
         df_risk_free_rate (DataFrame): DataFrame of risk-free rate.
     """
-
+    
+    print("1")
     # Step 1: Fetch Adjusted Close Prices
+    
     df_adj_close = fetch_adj_close(tickers, start_date, end_date)
 
+    print("2")
     # Step 2: Calculate Log Returns
     log_returns = calculate_log_returns(df_adj_close)
 
+    print("3")
     # Step 3: Calculate Covariance and Correlation Matrices
     cov_matrix = calculate_covariance_matrix(log_returns)
     cor_matrix = calculate_correlation_matrix(log_returns)
 
+    print("4")
     # Step 4: Fetch the Risk-Free Rate
     risk_free_rate = fetch_risk_free_rate()
 
+    print("5")
     # Step 5: Calculate Optimal Theoretical Portfolio Allocations
     optimal_weights = calculate_optimal_theoretical_portfolio_allocations(tickers, min_hold, max_hold, log_returns, cov_matrix, risk_free_rate)
     optimal_portfolio_return = calculate_optimal_theoretical_portfolio_return (optimal_weights, log_returns)
     optimal_portfolio_volatility = calculate_optimal_theoretical_portfolio_volatility (optimal_weights, cov_matrix)
     optimal_sharpe_ratio = calculate_optimal_theoretical_portfolio_sharpe (optimal_weights, log_returns, cov_matrix, risk_free_rate)
 
+    print("6")
     # Step 6: Generate Random Portfolios
-    sharpeRatio, expectedVolatility, expectedReturn, weight = generate_random_portfolios(log_returns, risk_free_rate)
+    sharpeRatio, expectedVolatility, expectedReturn, weight = generate_random_portfolios(log_returns, risk_free_rate, tickers)
 
+    print("7")
     # Step 7: Calculate Optimal Generated Portfolio Allocations
     optimal_generated, maxIndex = calculate_optimal_generated_portfolio_allocations(sharpeRatio, weight)
     optimal_generated_sharpe_ratio = calculate_optimal_generated_portfolio_sharpe(optimal_generated, log_returns, cov_matrix, risk_free_rate)
 
+    print("8")
     # Step 8: Generate MEF Curve
     volatility_opt, returns_range = generate_MEF_curve(tickers, min_hold, max_hold, log_returns)
 
+    print("9")
     # Step 9: Identify Optimal Generated Portfolio Below Risk Threshold
     validIndex, threshold_state = return_index_of_optimal_generated_portfolio_below_risk_threshold(risk_threshold, sharpeRatio, expectedVolatility, expectedReturn, risk_free_rate)
     optimal_below_threshold_sharpe_ratio = calculate_optimal_generated_porfolio_allocations_below_risk_threshold_sharpe(weight, validIndex, log_returns, cov_matrix, risk_free_rate)
     df_max_sharpe_below_threshold_generated_portfolio, optimal_valid = optimal_generated_porfolio_allocations_below_risk_threshold_as_df(tickers, weight, validIndex)
 
+    print("10")
     # Step 10: Create CML & CAL lines
     volatility_range = define_volatility_range(expectedVolatility)
     volatility_range, cml_returns = create_CML(risk_free_rate, optimal_sharpe_ratio, volatility_range)
     cal_returns = create_CAL(risk_free_rate, optimal_below_threshold_sharpe_ratio, volatility_range)
 
+    print("11")
     # Step 11: Historical and Forecast Returns Analysis
     df_historical = create_recommended_portfolio_historical_returns_df(optimal_valid, log_returns)
     df_historical_trendline = create_recommended_portfolio_historical_trendline_df(df_historical)
-    df_forecast_trendline = create_recommended_portfolio_forecast_trendline_df(df_historical, end_date, start_date)
+
+    end_date2 = datetime.strptime(end_date, '%Y-%m-%d').date()
+    start_date2 = datetime.strptime(start_date, '%Y-%m-%d').date()
+    df_forecast_trendline = create_recommended_portfolio_forecast_trendline_df(df_historical, end_date2, start_date2)
     
+    print("12")
     # Step 12: Calculate Portfolio Metrics for Various Portfolios and Curves
     df_cov_matrix = cov_matrix_as_df(cov_matrix, log_returns)
     df_cor_matrix = cor_matrix_as_df(cor_matrix, log_returns)
@@ -125,29 +146,98 @@ def run_algo(tickers, start_date, end_date, min_hold, max_hold):
     df_risk_free_rate = create_df_risk_free_rate(volatility_range, risk_free_rate)
 
     # Return relevant data and DataFrames
-    return (
-        df_adj_close,
-        risk_free_rate,
-        log_returns,
-        df_cov_matrix,
-        df_cor_matrix,
-        df_max_sharpe_below_threshold_generated_portfolio,
-        threshold_state,
-        df_historical,
-        df_historical_trendline,
-        df_forecast_trendline,
-        df_generated_portfolios,
-        df_optimal_theoretical,
-        df_optimal_generated,
-        df_optimal_valid,
-        df_MEF,
-        df_CML,
-        df_CAL,
-        df_risk_threshold,
-        df_risk_free_rate
-    )
+    global algo_results
+    
+    algo_results = {
+    'df_adj_close': df_adj_close.to_json(),
+    'risk_free_rate': risk_free_rate,  # Assuming this is a scalar value
+    'log_returns': log_returns.to_json(),
+    'df_cov_matrix': df_cov_matrix.to_json(),
+    'df_cor_matrix': df_cor_matrix.to_json(),
+    'df_max_sharpe_below_threshold_generated_portfolio': df_max_sharpe_below_threshold_generated_portfolio.to_json(),
+    'threshold_state': threshold_state,  # Assuming this is a scalar or serializable object
+    'df_historical': df_historical.to_json(),
+    'df_historical_trendline': df_historical_trendline.to_json(),
+    'df_forecast_trendline': df_forecast_trendline.to_json(),
+    'df_generated_portfolios': df_generated_portfolios.to_json(),
+    'df_optimal_theoretical': df_optimal_theoretical.to_json(),
+    'df_optimal_generated': df_optimal_generated.to_json(),
+    'df_optimal_valid': df_optimal_valid.to_json(),
+    'df_MEF': df_MEF.to_json(),
+    'df_CML': df_CML.to_json(),
+    'df_CAL': df_CAL.to_json(),
+    'df_risk_threshold': df_risk_threshold.to_json(),
+    'df_risk_free_rate': df_risk_free_rate.to_json(),  # Assuming this is a DataFrame; if it's a scalar, leave as is
+    }
+
+    # Convert the entire dictionary to a JSON string
+    algo_results_json = json.dumps(algo_results)
+
+    return algo_results
+
+#All of the getters for the app
+#----------------------------------------------------------------------------------------------------------------------#
+
+def get_df_adj_close():
+    return algo_results.get('df_adj_close', None)
+
+def get_risk_free_rate():
+    return algo_results.get('risk_free_rate', None)
+
+def get_log_returns():
+    return algo_results.get('log_returns', None)
+
+def get_df_cov_matrix():
+    return algo_results.get('df_cov_matrix', None)
+
+def get_df_cor_matrix():
+    return algo_results.get('df_cor_matrix', None)
+
+def get_df_max_sharpe_below_threshold_generated_portfolio():
+    return algo_results.get('df_max_sharpe_below_threshold_generated_portfolio', None)
+
+def get_threshold_state():
+    return algo_results.get('threshold_state', None)
+
+def get_df_historical():
+    return algo_results.get('df_historical', None)
+
+def get_df_historical_trendline():
+    return algo_results.get('df_historical_trendline', None)
+
+def get_df_forecast_trendline():
+    return algo_results.get('df_forecast_trendline', None)
+
+def get_df_generated_portfolios():
+    return algo_results.get('df_generated_portfolios', None)
+
+def get_df_optimal_theoretical():
+    return algo_results.get('df_optimal_theoretical', None)
+
+def get_df_optimal_generated():
+    return algo_results.get('df_optimal_generated', None)
+
+def get_df_optimal_valid():
+    return algo_results.get('df_optimal_valid', None)
+
+def get_df_MEF():
+    return algo_results.get('df_MEF', None)
+
+def get_df_CML():
+    return algo_results.get('df_CML', None)
+
+def get_df_CAL():
+    return algo_results.get('df_CAL', None)
+
+def get_df_risk_threshold():
+    return algo_results.get('df_risk_threshold', None)
+
+def get_df_risk_free_rate():
+    return algo_results.get('df_risk_free_rate', None)
 
 
+#All of the functions for the data processing
+#----------------------------------------------------------------------------------------------------------------------#
 
 def fetch_adj_close(tickers, start_date, end_date):
     """
@@ -248,31 +338,45 @@ def calculate_optimal_theoretical_portfolio_sharpe (optimal_weights, log_returns
     optimal_sharpe_ratio = sharpe_ratio(optimal_weights, log_returns, cov_matrix, risk_free_rate)
     return optimal_sharpe_ratio
 
-def generate_random_portfolios(log_returns, risk_free_rate):
+def generate_random_portfolios(log_returns, risk_free_rate, tickers):
+    print("6.1")
     noOfPortfolios = 10000
     noOfTickers = len(tickers)
 
+    print("6.2")
     meanLogRet = log_returns.mean() * 252
     Sigma = log_returns.cov() * 252
 
+    print("6.3")
     # initialize
     weight = np.zeros((noOfPortfolios, noOfTickers))
     expectedReturn = np.zeros(noOfPortfolios)
     expectedVolatility = np.zeros(noOfPortfolios)
     sharpeRatio = np.zeros(noOfPortfolios)
 
+    print("6.4")
+
     for k in range(noOfPortfolios):
         # generate random weight vector
+        print("6.4.1")
         w = np.array(np.random.random(noOfTickers))
         # Normalize so sums to 1
+        print("6.4.2")
         w = w / np.sum(w)
+        print("6.4.3")
         weight[k,:] = w
         # Expected log return
-        expectedReturn[k] = np.sum(meanLogRet * w)
+        print("6.4.4")
+        print("meanLogRet shape:", meanLogRet.shape, "w shape:", w.shape)
+        expectedReturn[k] = np.sum(meanLogRet.values * w)
         # Ecpected volatility
+        print("6.4.5")
         expectedVolatility[k] = np.sqrt(np.dot(w.T, np.dot(Sigma,w)))
         # Sharpe Ratio
+        print("6.4.6")
         sharpeRatio[k] = (expectedReturn[k] - risk_free_rate)/expectedVolatility[k]
+
+
     return sharpeRatio, expectedVolatility, expectedReturn, weight
 
 def calculate_optimal_generated_portfolio_allocations(sharpeRatio, weight):
@@ -369,12 +473,14 @@ def calculate_optimal_generated_porfolio_allocations_below_risk_threshold_sharpe
 
 def create_recommended_portfolio_historical_returns_df(optimal_valid, log_returns):
     # Calculate Historical Portfolio Returns
+    print("11.1")
     allocations = optimal_valid / np.sum(optimal_valid)
+    print("11.2")
     historical_returns = (log_returns * allocations).sum(axis=1)
-
+    print("11.3")
     # Convert log returns to simple returns for plotting
     historical_simple_returns = np.exp(historical_returns.cumsum())
-
+    print("11.4")
     # Create DataFrames for Historical and Projected Returns
     df_historical = pd.DataFrame(historical_simple_returns, columns=['Historical Returns'])
 
@@ -382,19 +488,24 @@ def create_recommended_portfolio_historical_returns_df(optimal_valid, log_return
 
 def create_recommended_portfolio_historical_trendline_df(df_historical):
     # Convert historical dates to a numeric format for the regression model
+    print("11.5")
     df_historical['NumericDate'] = (df_historical.index - df_historical.index[0]).days
 
+    print("11.6")
     # Prepare data for linear regression
     X_historical = df_historical[['NumericDate']].values
     y_historical = df_historical['Historical Returns'].values
 
+    print("11.7")
     # Fit the linear regression model to the historical data
     model = LinearRegression()
     model.fit(X_historical, y_historical)
 
+    print("11.8")       
     # Predict across the historical range
     y_historical_pred = model.predict(X_historical)
 
+    print("11.9") 
     # Create a DataFrame for the linear trend
     df_linear_trend = pd.DataFrame(y_historical_pred, index=df_historical.index, columns=['Historical Linear Trend'])
 
@@ -402,30 +513,39 @@ def create_recommended_portfolio_historical_trendline_df(df_historical):
     return df_linear_trend
 
 def create_recommended_portfolio_forecast_trendline_df(df_historical, end_date, start_date):
+    
+    print("11.10") 
     forecast_period = end_date - start_date
 
+    print("11.11")
     # Convert index to a numeric value for regression analysis (e.g., days)
     df_historical['NumericDate'] = (df_historical.index - df_historical.index[0]).days
 
+    print("11.12")
     # Historical dates and returns
     historic_dates = df_historical[['NumericDate']].values
     historic_returns = df_historical['Historical Returns'].values
 
+    print("11.13")
     # Initialize and fit the linear regression model
     model = LinearRegression()
     model.fit(historic_dates, historic_returns)
 
+    print("11.14")
     # Define future dates for which we want to predict returns
     # Predict for the next 30 days
     future_dates = np.array([[historic_dates[-1][0] + i] for i in range(1, forecast_period.days)])
 
+    print("11.15")
     # Predict future returns
     future_returns = model.predict(future_dates)
 
+    print("11.16")
     # Convert future_dates back to datetime for plotting and analysis
     forecast_start = df_historical.index[0]
     future_dates_datetime = [forecast_start + pd.Timedelta(days=int(x[0])) for x in future_dates]
 
+    print("11.17")
     # Create a DataFrame for future returns
     df_future_returns = pd.DataFrame(future_returns, index=future_dates_datetime, columns=['Projected Returns'])
 
