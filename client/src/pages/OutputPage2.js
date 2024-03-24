@@ -2,12 +2,7 @@ import React from 'react';
 import TopBar from '../components/TopBar';
 import { Box, Typography, Grid } from '@mui/material';
 import { styled } from '@mui/system';
-//piechart inputs
 import PieChartGraph from '../components/PieChartGraph';
-//heatmap inputs
-import ReactDOM from 'react-dom';
-import HeatmapChart from '../components/HeatmapChart';
-import { Heatmap } from '../components/Heatmap';
 
 const StyledBox = styled(Box)(({ theme }) => ({
   backgroundColor: 'white',
@@ -50,12 +45,12 @@ const OutputPage = () => {
         </Grid>
         <Grid item xs={12} md={8} style={{ padding: '0 10px' }}>
           <StyledBox>
-          {/* bad one <HeatmapChart /> */}
+            <PieChartGraph /> 
             {/* this is the box under the invest and porj amounts, has another pie chart for now */}
           </StyledBox>
           <StyledBox style={{height: '40vh'}}>
             {/* another box under 2nd pie chart */}
-            <Heatmap width={600} height={400}/>
+
           </StyledBox>
         </Grid>
         <Grid item xs={12} md={4} style={{ padding: '0 10px' }}>
@@ -66,11 +61,11 @@ const OutputPage = () => {
           </StyledBox>
           <StyledBox style={{height: '30vh', alignItems: 'center'}}>
             {/* another box with mismatched height, change as needed */}
-             
+            <PieChartGraph /> 
           </StyledBox>
           <StyledBox style={{height: '17vh'}}>
             {/* another box under 3nd pie chart */}
-            
+
           </StyledBox>
         </Grid>
       </Grid>
