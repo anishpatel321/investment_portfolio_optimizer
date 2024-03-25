@@ -212,7 +212,7 @@ def get_df_forecast_trendline():
     return algo_results.get('df_forecast_trendline', None)
 
 def get_df_6month_trendline():
-    return algo_results.get('get_df_6month_trendline', None)
+    return algo_results.get('df_6month_trendline', None)
 
 def get_df_generated_portfolios():
     return algo_results.get('df_generated_portfolios', None)
