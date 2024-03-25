@@ -56,11 +56,22 @@ const InputPage = () => {
   const [lookBackDate, setLookBackDate] = useState(null);
   const [minAllocationBound, setMinAllocationBound] = useState('');
   const [maxAllocationBound, setMaxAllocationBound] = useState('');
- 
+  const [description, setDescription] = useState("");
+  const [title_desc, setTitleDesc] = useState("");
+
   const dispatch = useDispatch(); //dispatch to add or remove tickers
   //const history = useHistory(); // Use useHistory hook to navigate
   const navigate = useNavigate();
 
+  function handleMouseEnter(subtitle, description) {
+    setTitleDesc(subtitle)
+    setDescription(description);
+  }
+
+  function handleMouseLeave() {
+    setDescription("");
+    setTitleDesc("");
+  }
 
   const validateAllocation = (value) => {
     return value >= 0 && value <= 1;
@@ -180,25 +191,30 @@ const InputPage = () => {
       </Grid>
       <Grid container spacing={1} justifyContent="center" sx={{ width: '95%', mx: 'auto' }}>
         <Grid item xs={12} sm={6} md={4} style={{padding: 0}}>
-          <CardComponent title="Definitions" subtitle="Define your inputs" body="Pick your favorite stocks, and lookback period. Don’t worry you can also specify the amount of risk you are willing to take!" height={'67.5vh'} hastransition={true}/>
+          <CardComponent title="Definitions" subtitle={title_desc || "Input Definitions"} body={description || "Hover over each input item to find out more about what each input means!"} height={'67.5vh'} hastransition={true}/>
         </Grid>
         <Grid item xs={12} sm={6} md={8} style={{padding: 0}}>
           <CardComponent title="Inputs" height={'67.5vh'} hasButton={true} onClick={handleSubmit} hasInputs={true}>
-            <Box sx={{ position: 'absolute', top: '4.5vh', left: '4vw'}}>
+            <Box sx={{ position: 'absolute', top: '4.5vh', left: '4vw'}}
+              onMouseEnter={() => handleMouseEnter("Tickers", "The Tickers field is where the identifier for each stock is inputted. Type in any stock and press enter to add it to the list. The calculations will be done only on the tickers specified here.")}
+              onMouseLeave={() => handleMouseLeave()}
+            >
               <Typography variant='h6' style={{ marginLeft: '0.5vw', fontWeight: 'bold', fontSize: '1.7vw'}} >Tickers</Typography>
               <StyledMuiChipsInput
                   value={tickers}
                   onChange={handleChipChange}
-                  // onDelete={(chip, index) => {
-                  //   const newChips = [...tickers];
-                  //   newChips.splice(index, 1); // Remove the ticker from the list
-                  //   setTickers(newChips);
-                  //   dispatch(removeTicker(chip.toUpperCase())); // Dispatch action to remove the ticker from the Redux store
-                  // }}
               />
             </Box>
-            <Box sx={{ position: 'absolute', top: '45vh', left: '4vw' }}>
-              <Typography variant="h6" style={{ marginLeft: '0.5vw', fontWeight: 'bold', fontSize: '1.7vw'}} >Investment Amount</Typography>
+            <Box sx={{ position: 'absolute', top: '45vh', left: '4vw' }}
+              onMouseEnter={() => handleMouseEnter("Investment Amount", "This is the total capital amount you want to invest, please specify a number greater than 0!")}
+              onMouseLeave={() => handleMouseLeave()}
+            >
+              <Typography 
+                variant="h6" 
+                style={{ marginLeft: '0.5vw', fontWeight: 'bold', fontSize: '1.7vw'}} 
+              >
+                Investment Amount
+              </Typography>
               <StyledTextField
                 value={investmentAmount}
                 onChange={(e) => (setInvestmentAmount(e.target.value))}
@@ -213,7 +229,10 @@ const InputPage = () => {
               />
               {!validateInvestAndRisk(investmentAmount) && <FormHelperText error style={{marginLeft: '1vw', fontWeight: 'bolder', color:'palevioletred', fontSize: '1.7vh'}}>Value must be a number greater than 0</FormHelperText>}
             </Box>
-            <Box sx={{ position: 'absolute', top: '4.5vh', left: '33.5vw' }}>
+            <Box sx={{ position: 'absolute', top: '4.5vh', left: '33.5vw' }}
+              onMouseEnter={() => handleMouseEnter("Risk Threshold", "This is the amount of risk you are willing to take! Please enter a positive percentage amount. The Optimal portfolio weights will take this value into account.")}
+              onMouseLeave={() => handleMouseLeave()}
+            >
               <Typography variant="h6" style={{ marginLeft: '0.5vw', fontWeight: 'bold', fontSize: '1.7vw'}} >Risk Threshold</Typography>
               <StyledTextField
                 value={riskThreshold}
@@ -229,7 +248,10 @@ const InputPage = () => {
               />
               {!validateInvestAndRisk(riskThreshold) && <FormHelperText error style={{marginLeft: '1vw', fontWeight: 'bolder', color:'palevioletred', fontSize: '1.7vh'}}>Value must be a number greater than 0</FormHelperText>}
             </Box>
-            <Box sx={{ position: 'absolute', top:'18vh', left: '33.5vw' }}>
+            <Box sx={{ position: 'absolute', top:'18vh', left: '33.5vw' }}
+              onMouseEnter={() => handleMouseEnter("Look-Back Date", "The Look-Back Date is the cutoff date for how far back the algorithm pulls the raw adjusted closing prices. This will determine, how much historical data affects the calculation and how far you want to look back.")}
+              onMouseLeave={() => handleMouseLeave()}
+            >
               <Typography variant="h6" style={{ marginLeft: '0.5vw', fontWeight: 'bold', fontSize: '1.7vw'}} >Look-Back Date</Typography>
               <DatePicker
                 selected={lookBackDate}
@@ -251,7 +273,10 @@ const InputPage = () => {
               />
               {!validateLookBackDate(lookBackDate) && <FormHelperText error style={{marginLeft: '1vw', fontWeight: 'bolder', color:'palevioletred', fontSize: '1.7vh'}}>Date must be at least a week before today</FormHelperText>}
             </Box>
-            <Box sx={{ position: 'absolute', top:'31.5vh', left: '33.5vw' }}>
+            <Box sx={{ position: 'absolute', top:'31.5vh', left: '33.5vw' }}
+              onMouseEnter={() => handleMouseEnter("Minimum Allocation Bound", "This is the Minimum allocation each stock must take. Make sure to pick a valid minimum amount. For example, if you have 5 stocks, the minimum amount cannot be 0.3 (30%) as we cannot assign each stock a 0.3 of the allocation as the total allocation cannot exceed 1 (100%)")}
+              onMouseLeave={() => handleMouseLeave()}
+            >
               <Typography variant="h6" style={{ marginLeft: '0.5vw', fontWeight: 'bold', fontSize: '1.7vw'}} >Min. Allocation Bound</Typography>
               <StyledTextField
                 value={minAllocationBound}
@@ -260,7 +285,10 @@ const InputPage = () => {
               />
               {!validateAllocation(minAllocationBound) && <FormHelperText error style={{marginLeft: '1vw', fontWeight: 'bolder', color:'palevioletred', fontSize: '1.7vh'}}>Value must be between 0 and 1</FormHelperText>}
             </Box>
-            <Box sx={{ position: 'absolute', top: '45vh', left: '33.5vw' }}>
+            <Box sx={{ position: 'absolute', top: '45vh', left: '33.5vw' }}
+              onMouseEnter={() => handleMouseEnter("Maximum Allocation Bound", "This is the Maximum allocation a stock can have. This number can be whatever you choose, but it cannot me less than or equal to the Minimum amount.")}
+              onMouseLeave={() => handleMouseLeave()}
+            >
               <Typography variant="h6" style={{ marginLeft: '0.5vw', fontWeight: 'bold', fontSize: '1.7vw'}} >Max. Allocation Bound</Typography>
               <StyledTextField
                 value={maxAllocationBound}

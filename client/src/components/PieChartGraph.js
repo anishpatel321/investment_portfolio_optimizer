@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux'; // Import useSelector from react-redux
 import { PieChart } from '@mui/x-charts/PieChart';
+import '../index.css'
 
 function PieChartGraph() {
   const selectorData = useSelector(state => state.outputs.df_max_sharpe_below_threshold_generated_portfolio);
@@ -25,16 +26,18 @@ function PieChartGraph() {
   }, [selectorData]);
 
   return (
-    <PieChart 
-      series={[{
-        data: pieChartData,
-        highlightScope: { faded: 'global', highlighted: 'item' },
-        faded: { innerRadius: 110, additionalRadius: -30, color: 'gray' },
-        innerRadius: 80,
-      }]}
-      height={450}
-      colors={palette}
-    />
+    <div style={{ color: 'white' }}>
+      <PieChart 
+        series={[{
+          data: pieChartData,
+          highlightScope: { faded: 'global', highlighted: 'item' },
+          faded: { innerRadius: 110, additionalRadius: -30, color: 'gray' },
+          innerRadius: 80,
+        }]}
+        height={450}
+        colors={palette}
+      />
+    </div>
   );
 }
 
