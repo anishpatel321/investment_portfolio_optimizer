@@ -32,73 +32,32 @@ const OutputPage = () => {
       <Grid sx={{ width: '95%', mx: 'auto', color: 'white' }}>
         <Typography variant="h3" component="h1" gutterBottom align="left"
                     style={{ marginLeft: '7px', marginRight: '7px', marginTop: '30px', fontWeight: 'bold', fontSize: '350%' }}>
-          The Optimal Portfolio!
+          Your Optimal Portfolio!
         </Typography>
       </Grid>
       <Grid container spacing={1} justifyContent="center" sx={{ width: '95%', mx: 'auto' }}>
+        <Grid item xs={12} sm={6} md={4} style={{padding: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
+          <StyledBox style={{background: '#163A5F', borderRadius: '33px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)', margin: '7px', flex: 1}}>
+            <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white'}}>Initial Investment Amount</Typography>
+            <Typography variant="h1" style={{ marginTop: '1vh', fontSize: '7vh', fontWeight: 'bold', color: 'white'}}>${initialInvestmentAmount}</Typography>
+            <Typography variant="body1" style={{ marginTop: '2vh', fontSize: '1.5vh',color: 'white' }}>filler text to explain this metric</Typography>
+          </StyledBox>
+          <StyledBox style={{background: '#163A5F', borderRadius: '33px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)', margin: '7px', flex: 1}}>
+            <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white' }}>Projected Investment Amount</Typography>
+            <Typography variant="h1" style={{ marginTop: '1vh', fontSize: '7vh', fontWeight: 'bold', color: 'white' }}>${projectedInvestmentAmount}</Typography>
+            <Typography variant="body1" style={{ marginTop: '2vh', fontSize: '1.5vh',color: 'white' }}>filler text to explain this metric</Typography>
+          </StyledBox>
+        </Grid>
+        <Grid item xs={12} sm={6} md={8} style={{ padding: 0}}>
+          <StyledBox style={{background: '#163A5F', borderRadius: '33px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)', margin: '7px'}}>
+            <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white'}}>Optimal Allocation</Typography>
+            <PieChartGraph />
+          </StyledBox>
+        </Grid>
         <Grid item xs={12} sm={6} md={12} style={{ padding: 0}}>
-          <CardComponent height={'100vh'}>
-            {/* Card component covers the whole page and everything is bound within it for
-                consistency, this will make graphs smaller but should be fine */}
-            <StyledBox sx={{position: 'absolute', width: '47vh', height: '39vh', top: '3vh', right: '3vh', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-              <PieChartGraph />
-            </StyledBox>
-            <Typography variant='h6' style={{ position: 'absolute', left: '3vh', top: '3vh', fontWeight: 'bold', fontSize: '1.7vw'}} >Initial Investment Amount</Typography>
-            <StyledBox sx={{position: 'absolute', width: '40vh', height: '7vh', top: '8vh', left: '3vh', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                {/*  */}
-            </StyledBox>
-            <Typography variant='h6' style={{ position: 'absolute', left: '3vh', top: '22vh', fontWeight: 'bold', fontSize: '1.7vw'}} >Projected Investment Amount</Typography>
-            <StyledBox sx={{position: 'absolute', width: '40vh', height: '7vh', top: '27vh', left: '3vh', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                {/*  */}
-            </StyledBox>
-            {/* <Typography variant="h6" style={{ position: 'absolute', fontWeight: 'bold', top: '2vh', color: 'black' }}>Initial Investment Amount</Typography>
-            <Typography variant="h4" style={{position: 'absolute', top: '3vh', color: 'black'}} >${initialInvestmentAmount}</Typography> */}
-
-          
-          </CardComponent>
-
-          <StyledBox>
-            <Typography variant="h6" style={{ fontWeight: 'bold' }}>Initial Investment Amount</Typography>
-            <Typography variant="h4">${initialInvestmentAmount}</Typography>
-          </StyledBox>
-          <StyledBox>
-            <Typography variant="h6" style={{ fontWeight: 'bold' }}>Projected Investment Amount</Typography>
-            <Typography variant="h4">${projectedInvestmentAmount}</Typography>
-          </StyledBox>
-        </Grid>
-        <Grid item xs={12} md={8} style={{ padding: '0 10px' }}>
-          <StyledBox>
-            <div>
-              <PieChartGraph />
-            </div>
-          </StyledBox>
-        </Grid>
-        <Grid item xs={12} md={8} style={{ padding: '0 10px' }}>
-          <StyledBox>
-          {/* bad one <HeatmapChart /> */}
-            {/* this is the box under the invest and porj amounts, has another pie chart for now */}
-          </StyledBox>
-          <StyledBox style={{height: '40vh'}}>
-            {/* another box under 2nd pie chart */}
-            <Heatmap width={600} height={350}/>
-          </StyledBox>
-        </Grid>
-        <Grid item xs={12} md={4} style={{ padding: '0 10px' }}>
-          
-          {/* -----------------------use investment amount from redux ------------------------------------------------------------------------------------------------- */}
-
-          <StyledBox>
-            <Typography variant="h6" style={{ fontWeight: 'bold' }}>Initial Investment Amount</Typography>
-            <Typography variant="h4">${investmentAmount}</Typography>  {/* Use investmentAmount here */}
-          </StyledBox>
-
-          <StyledBox style={{height: '30vh', alignItems: 'center'}}>
-            {/* another box with mismatched height, change as needed */}
-             
-          </StyledBox>
-          <StyledBox style={{height: '17vh'}}>
-            {/* another box under 3nd pie chart */}
-            
+          <StyledBox style={{background: '#163A5F', borderRadius: '33px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)', margin: '7px'}}>
+            <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white'}}>Correlation Matrix</Typography>
+            <Heatmap width={900} height={600}/>
           </StyledBox>
         </Grid>
       </Grid>

@@ -4,7 +4,7 @@ import { PieChart } from '@mui/x-charts/PieChart';
 
 function PieChartGraph() {
   const selectorData = useSelector(state => state.outputs.df_max_sharpe_below_threshold_generated_portfolio);
-
+  const palette = ["#d73771", "#7bf9ce", "#b96f74", "#def8d3", "#682dbd", "#86fe2d", "#ae79e0", "#5c8142", "#e4ccf1", "#b6600f", "#1b4dab", "#f8ba7c", "#088490", "#fb5a3b"];
   console.log('unFormatted pie chart data:', selectorData);
   
   const [pieChartData, setPieChartData] = useState([]);
@@ -16,7 +16,7 @@ function PieChartGraph() {
       const formattedData = Object.entries(selectorData.Ticker).map(([index, ticker]) => ({
         id: index, // Use the index as the id
         value: selectorData['Optimal Weights'][index] * 100, // Lookup the weight by index and convert to percentage
-        label: ticker // Use the ticker as the label
+        label: ticker, // Use the ticker as the label
       }));
 
       console.log('Formatted pie chart data:', formattedData);
@@ -29,10 +29,11 @@ function PieChartGraph() {
       series={[{
         data: pieChartData,
         highlightScope: { faded: 'global', highlighted: 'item' },
-        faded: { innerRadius: 75, additionalRadius: -20, color: 'gray' },
-        innerRadius: 60,
+        faded: { innerRadius: 110, additionalRadius: -30, color: 'gray' },
+        innerRadius: 80,
       }]}
-      height={300}
+      height={450}
+      colors={palette}
     />
   );
 }
