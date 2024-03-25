@@ -1,5 +1,6 @@
 import React from 'react';
 import TopBar from '../components/TopBar';
+import CardComponent from '../components/Card';
 import { Box, Typography, Grid } from '@mui/material';
 import { styled } from '@mui/system';
 //piechart inputs
@@ -27,11 +28,31 @@ const OutputPage = () => {
       <Grid sx={{ width: '95%', mx: 'auto', color: 'white' }}>
         <Typography variant="h3" component="h1" gutterBottom align="left"
                     style={{ marginLeft: '7px', marginRight: '7px', marginTop: '30px', fontWeight: 'bold', fontSize: '350%' }}>
-          Your Portfolio Overview
+          The Optimal Portfolio!
         </Typography>
       </Grid>
-      <Grid container spacing={2} justifyContent="center" sx={{ width: '95%', mx: 'auto' }}>
-        <Grid item xs={12} md={4} style={{ padding: '0 10px' }}>
+      <Grid container spacing={1} justifyContent="center" sx={{ width: '95%', mx: 'auto' }}>
+        <Grid item xs={12} sm={6} md={12} style={{ padding: 0}}>
+          <CardComponent height={'100vh'}>
+            {/* Card component covers the whole page and everything is bound within it for
+                consistency, this will make graphs smaller but should be fine */}
+            <StyledBox sx={{position: 'absolute', width: '47vh', height: '39vh', top: '3vh', right: '3vh', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+              <PieChartGraph />
+            </StyledBox>
+            <Typography variant='h6' style={{ position: 'absolute', left: '3vh', top: '3vh', fontWeight: 'bold', fontSize: '1.7vw'}} >Initial Investment Amount</Typography>
+            <StyledBox sx={{position: 'absolute', width: '40vh', height: '7vh', top: '8vh', left: '3vh', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                {/*  */}
+            </StyledBox>
+            <Typography variant='h6' style={{ position: 'absolute', left: '3vh', top: '22vh', fontWeight: 'bold', fontSize: '1.7vw'}} >Projected Investment Amount</Typography>
+            <StyledBox sx={{position: 'absolute', width: '40vh', height: '7vh', top: '27vh', left: '3vh', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                {/*  */}
+            </StyledBox>
+            {/* <Typography variant="h6" style={{ position: 'absolute', fontWeight: 'bold', top: '2vh', color: 'black' }}>Initial Investment Amount</Typography>
+            <Typography variant="h4" style={{position: 'absolute', top: '3vh', color: 'black'}} >${initialInvestmentAmount}</Typography> */}
+
+          
+          </CardComponent>
+
           <StyledBox>
             <Typography variant="h6" style={{ fontWeight: 'bold' }}>Initial Investment Amount</Typography>
             <Typography variant="h4">${initialInvestmentAmount}</Typography>
