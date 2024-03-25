@@ -11,17 +11,34 @@ export const outputSlice = createSlice({
     risk_free_rate: null,
     log_returns: null,
     df_cov_matrix: null,
-    df_cor_matrix: {
-      'MSFT': [1.0, 0.8, 0.5, 0.3, 1.0],
-      'AAPL': [0.8, 1.0, 0.4, 0.3, 0.2],
-      'AMZN': [0.5, 0.4, 1.0, 0.2, 0.1],
-      'NVDA': [0.3, 0.3, 0.2, 1.0, 0.5],
-      'AVGO': [1.0, 0.2, 0.1, 0.5, 1.0]
-    },
+    df_cor_matrix : {
+      
+    MSFT: { MSFT: 1.0, AAPL: 0.8, AMZN: 0.5, NVDA: 0.3, AVGO: 0.2 },
+    AAPL: { MSFT: 0.8, AAPL: 1.0, AMZN: 0.4, NVDA: 0.3, AVGO: 0.2 },
+    AMZN: { MSFT: 0.5, AAPL: 0.4, AMZN: 1.0, NVDA: 0.2, AVGO: 0.1 },
+    NVDA: { MSFT: 0.3, AAPL: 0.3, AMZN: 0.2, NVDA: 1.0, AVGO: 0.5 },
+    AVGO: { MSFT: 0.2, AAPL: 0.2, AMZN: 0.1, NVDA: 0.5, AVGO: 1.0 }
+    
+  },
+  
     df_max_sharpe_below_threshold_generated_portfolio: {
-      'Ticker': ['MSFT', 'AAPL', 'AMZN', 'NVDA', 'AVGO'],
-      'Optimal Weights': [16.5788, 4.8821, 0.9022, 57.2737, 20.3633]
+      'Ticker': {
+        0: 'MSFT',
+        1: 'AAPL',
+        2: 'AMZN',
+        3: 'NVDA',
+        4: 'AVGO'
+      },
+      'Optimal Weights': {
+        0: 0.165788,
+        1: 0.048821,
+        2: 0.009022,
+        3: 0.572737,
+        4: 0.203633
+      }
     },
+
+
     threshold_state: null,
     df_historical: null,
     df_historical_trendline: null,

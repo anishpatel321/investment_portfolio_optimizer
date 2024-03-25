@@ -3,25 +3,26 @@ import { useSelector } from 'react-redux'; // Import useSelector from react-redu
 import { PieChart } from '@mui/x-charts/PieChart';
 
 function PieChartGraph() {
-  // Use useSelector to access the df_max_sharpe_below_threshold_generated_portfolio from the Redux store
   const selectorData = useSelector(state => state.outputs.df_max_sharpe_below_threshold_generated_portfolio);
 
+  console.log('unFormatted pie chart data:', selectorData);
+  
   const [pieChartData, setPieChartData] = useState([]);
 
   useEffect(() => {
-    // Check if dfMaxSharpe is not null
-    if (selectorData) {
-      // Reformat the data for the PieChart
-      const formattedData = selectorData.Ticker.map((ticker, i) => ({
-        id: i,  // Use the index as the id
-        value: selectorData['Optimal Weights'][i],  // Match the ticker with its corresponding weight
-        label: ticker  // Use the ticker as the label
+    // Ensure selectorData is defined and both Tickers and Optimal Weights are objects
+    if (selectorData && typeof selectorData.Ticker === 'object' && typeof selectorData['Optimal Weights'] === 'object') {
+      // Use Object.entries to iterate over Tickers and Optimal Weights objects
+      const formattedData = Object.entries(selectorData.Ticker).map(([index, ticker]) => ({
+        id: index, // Use the index as the id
+        value: selectorData['Optimal Weights'][index] * 100, // Lookup the weight by index and convert to percentage
+        label: ticker // Use the ticker as the label
       }));
 
-      console.log('Formatted pie chart data:', formattedData);  // Log the formatted data to the console
+      console.log('Formatted pie chart data:', formattedData);
       setPieChartData(formattedData);
     }
-  }, [selectorData]); // Dependency array to trigger effect when dfMaxSharpe changes
+  }, [selectorData]);
 
   return (
     <PieChart 

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import * as d3 from 'd3';
+import { CorrLegend } from './CorrLegend';
 
 
 export const Heatmap = ({ width, height }) => {
@@ -16,32 +17,31 @@ export const Heatmap = ({ width, height }) => {
   
 
   useEffect(() => {
-
     console.log('selector data:', selectorData);
-    
-
+  
     if (selectorData) {
-      const formattedData = Object.entries(selectorData).flatMap(([x, values], i) => 
-        values.map((value, j) => ({
-          x,
-          y: Object.keys(selectorData)[j], // Assuming the same order for y-axis labels
-          value
-    })));
-
-    console.log('Formatted matrix data:', formattedData);  // Log the formatted data to the console
+      const formattedData = Object.entries(selectorData).flatMap(([x, values]) =>
+        Object.entries(values).map(([y, value]) => ({
+          x,   // The 'x' label
+          y,   // The 'y' label, corresponding to each key within the nested objects
+          value // The correlation value between 'x' and 'y'
+        }))
+      );
+  
+      console.log('Formatted matrix data:', formattedData); // Log the formatted data to the console
       setHeatmapData(formattedData);
+    }
+  
+  }, [selectorData]); // The dependency array should include only selectorData since that's the only external variable this effect depends on
+  
 
-
-  }
-
-    
-    
-  }, [selectorData]); // The dependency array is set to height and width to re-render the heatmap when these props change
-
-
+  const colorScale = d3.scaleSequential()
+  .interpolator(d3.interpolateRgb.gamma(2.2)("blue", "red"))
+  .domain([0, d3.max(heatmapData, d => d.value)]);
   
 
   const svg = d3.select(svgRef.current);
+
   svg.selectAll("*").remove(); // Clear SVG content before rendering new heatmap
 
   // Setup margins and graph width/height
@@ -53,18 +53,16 @@ export const Heatmap = ({ width, height }) => {
   const xScale = d3.scaleBand()
     .domain(Object.keys(selectorData))
     .range([0, graphWidth])
-    .padding(0.01);
+    .padding(0.07);
   
   const yScale = d3.scaleBand()
     .domain(Object.keys(selectorData))
     .range([0, graphHeight])
-    .padding(0.01);
+    .padding(0.07);
 
-  const colorScale = d3.scaleSequential()
-    .interpolator(d3.interpolateInferno)
-    .domain([0, d3.max(heatmapData, d => d.value)]);
+  
 
-  // Create and append rectangles for the heatmap
+  // Create and append rectangles for the heatmap with rounded corners
   svg.append('g')
     .attr('transform', `translate(${margin.left},${margin.top})`)
     .selectAll()
@@ -75,22 +73,36 @@ export const Heatmap = ({ width, height }) => {
     .attr('y', d => yScale(d.y))
     .attr('width', xScale.bandwidth())
     .attr('height', yScale.bandwidth())
+    .attr('rx', 10) // Rounded corners
+    .attr('ry', 10) // Rounded corners
     .style('fill', d => colorScale(d.value));
-
-  // Add the X Axis
+    
+      // Add the X Axis and remove the axis line and tick marks, keeping the labels
   svg.append("g")
-    .attr("transform", `translate(${margin.left},${graphHeight + margin.top})`)
-    .call(d3.axisBottom(xScale));
+  .attr("class", "x-axis")
+  .attr("transform", `translate(${margin.left},${graphHeight + margin.top})`)
+  .call(d3.axisBottom(xScale))
+  .select(".domain").remove(); // Remove the axis line
 
-  // Add the Y Axis
+  d3.selectAll(".x-axis .tick line").remove(); // Remove the tick marks
+
+// Add the Y Axis and remove the axis line and tick marks, keeping the labels
   svg.append("g")
+    .attr("class", "y-axis")
     .attr("transform", `translate(${margin.left},${margin.top})`)
-    .call(d3.axisLeft(yScale));
+    .call(d3.axisLeft(yScale))
+    .select(".domain").remove(); // Remove the axis line
 
+  d3.selectAll(".y-axis .tick line").remove(); // Remove the tick marks
 
   return (
     <div>
-      <svg ref={svgRef} width={width} height={height} />
+      <div>
+        <svg ref={svgRef} width={width} height={height} />
+      </div>
+      <div >
+        <CorrLegend heatmapData={heatmapData} colorScale={colorScale}/>
+      </div>
     </div>
   );
 

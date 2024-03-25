@@ -9,6 +9,8 @@ import PieChartGraph from '../components/PieChartGraph';
 import ReactDOM from 'react-dom';
 import HeatmapChart from '../components/HeatmapChart';
 import { Heatmap } from '../components/Heatmap';
+//get values for investment amount
+import { useSelector } from 'react-redux';
 
 const StyledBox = styled(Box)(({ theme }) => ({
   backgroundColor: 'white',
@@ -19,6 +21,8 @@ const StyledBox = styled(Box)(({ theme }) => ({
 }));
 
 const OutputPage = () => {
+
+  const investmentAmount = useSelector(state => state.inputs.investmentAmount);
   const initialInvestmentAmount = 10000; // Placeholder value
   const projectedInvestmentAmount = 15000; // Placeholder value
 
@@ -76,15 +80,18 @@ const OutputPage = () => {
           </StyledBox>
           <StyledBox style={{height: '40vh'}}>
             {/* another box under 2nd pie chart */}
-            <Heatmap width={600} height={400}/>
+            <Heatmap width={600} height={350}/>
           </StyledBox>
         </Grid>
         <Grid item xs={12} md={4} style={{ padding: '0 10px' }}>
+          
+          {/* -----------------------use investment amount from redux ------------------------------------------------------------------------------------------------- */}
+
           <StyledBox>
             <Typography variant="h6" style={{ fontWeight: 'bold' }}>Initial Investment Amount</Typography>
-            <Typography variant="h4">${initialInvestmentAmount}</Typography>
-            {/* This box has just 2 typography (text) elements, can also add more than just text */}
+            <Typography variant="h4">${investmentAmount}</Typography>  {/* Use investmentAmount here */}
           </StyledBox>
+
           <StyledBox style={{height: '30vh', alignItems: 'center'}}>
             {/* another box with mismatched height, change as needed */}
              
