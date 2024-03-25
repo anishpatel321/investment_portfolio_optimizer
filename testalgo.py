@@ -363,12 +363,22 @@ def generate_random_portfolios(log_returns, risk_free_rate, tickers):
     print("6.4")
 
     for k in range(noOfPortfolios):
-        # generate random weight vector
         print("6.4.1")
-        w = np.array(np.random.random(noOfTickers))
-        # Normalize so sums to 1
+        # Initialize flag for whether the portfolio meets constraints
+        meets_constraints = False
         print("6.4.2")
-        w = w / np.sum(w)
+        while not meets_constraints:
+            print("6.4.2.1")
+            # Generate random weight vector
+            w = np.array(np.random.random(noOfTickers))
+            print("6.4.2.2")
+            # Normalize so sums to 1
+            w = w / np.sum(w)
+            print("6.4.2.3")
+            # Check if weights meet constraints
+            if np.all(w >= min_hold) and np.all(w <= max_hold):
+                meets_constraints = True
+                
         print("6.4.3")
         weight[k,:] = w
         # Expected log return
