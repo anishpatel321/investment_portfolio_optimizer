@@ -61,6 +61,7 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
         df_historical (DataFrame): DataFrame of historical prices for the tickers.
         df_historical_trendline (DataFrame): DataFrame of historical trendline for the tickers.
         df_forecast_trendline (DataFrame): DataFrame of forecasted trendline for the tickers.
+        df_6month_trendline (DataFrame): DataFrame of 6 month forecasted trendline for the tickers.
         df_generated_portfolios (DataFrame): DataFrame of generated portfolios.
         df_optimal_theoretical (DataFrame): DataFrame of theoretically optimal portfolio.
         df_optimal_generated (DataFrame): DataFrame of generated optimal portfolio.
@@ -130,6 +131,7 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
     end_date2 = datetime.strptime(end_date, '%Y-%m-%d').date()
     start_date2 = datetime.strptime(start_date, '%Y-%m-%d').date()
     df_forecast_trendline = create_recommended_portfolio_forecast_trendline_df(df_historical, end_date2, start_date2)
+    df_6month_trendline = create_recommended_portfolio_6month_trendline_df(df_historical)
     
     print("12")
     # Step 12: Calculate Portfolio Metrics for Various Portfolios and Curves
@@ -159,6 +161,7 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
     'df_historical': df_historical.to_json(),
     'df_historical_trendline': df_historical_trendline.to_json(),
     'df_forecast_trendline': df_forecast_trendline.to_json(),
+    'df_6month_trendline': df_6month_trendline.to_json(),
     'df_generated_portfolios': df_generated_portfolios.to_json(),
     'df_optimal_theoretical': df_optimal_theoretical.to_json(),
     'df_optimal_generated': df_optimal_generated.to_json(),
@@ -207,6 +210,9 @@ def get_df_historical_trendline():
 
 def get_df_forecast_trendline():
     return algo_results.get('df_forecast_trendline', None)
+
+def get_df_6month_trendline():
+    return algo_results.get('get_df_6month_trendline', None)
 
 def get_df_generated_portfolios():
     return algo_results.get('df_generated_portfolios', None)
