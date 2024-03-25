@@ -552,6 +552,46 @@ def create_recommended_portfolio_forecast_trendline_df(df_historical, end_date, 
     # Display the future returns DataFrame
     return df_future_returns
 
+def create_recommended_portfolio_6month_trendline_df(df_historical):
+    
+    print("11.18") 
+    forecast_period = timedelta(0.5*365)
+
+    print("11.19")
+    # Convert index to a numeric value for regression analysis (e.g., days)
+    df_historical['NumericDate'] = (df_historical.index - df_historical.index[0]).days
+
+    print("11.20")
+    # Historical dates and returns
+    historic_dates = df_historical[['NumericDate']].values
+    historic_returns = df_historical['Historical Returns'].values
+
+    print("11.21")
+    # Initialize and fit the linear regression model
+    model = LinearRegression()
+    model.fit(historic_dates, historic_returns)
+
+    print("11.22")
+    # Define future dates for which we want to predict returns
+    # Predict for the next 30 days
+    future_dates = np.array([[historic_dates[-1][0] + i] for i in range(1, forecast_period.days)])
+
+    print("11.23")
+    # Predict future returns
+    future_returns = model.predict(future_dates)
+
+    print("11.24")
+    # Convert future_dates back to datetime for plotting and analysis
+    forecast_start = df_historical.index[0]
+    future_dates_datetime = [forecast_start + pd.Timedelta(days=int(x[0])) for x in future_dates]
+
+    print("11.25")
+    # Create a DataFrame for future returns
+    df_6month_returns = pd.DataFrame(future_returns, index=future_dates_datetime, columns=['Projected Returns'])
+
+    # Display the future returns DataFrame
+    return df_6month_returns
+
 def define_volatility_range(expectedVolatility):
     # Define the range for the CML & CAL to cover, extending from 0 to a bit beyond the max expected volatility
     volatility_range = np.linspace(0, max(expectedVolatility) * 1.1, 50)
