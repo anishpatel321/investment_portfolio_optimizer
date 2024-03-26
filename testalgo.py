@@ -125,7 +125,7 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
 
     print("11")
     # Step 11: Historical and Forecast Returns Analysis
-    df_historical = create_recommended_portfolio_historical_returns_df(optimal_valid, log_returns) * investment_amount
+    df_historical = create_recommended_portfolio_historical_returns_df(optimal_valid, log_returns) * float(investment_amount)
     df_historical_trendline = create_recommended_portfolio_historical_trendline_df(df_historical)
 
     # end_date2 = datetime.strptime(end_date, '%Y-%m-%d').date()
@@ -350,6 +350,8 @@ def calculate_optimal_theoretical_portfolio_sharpe (optimal_weights, log_returns
 
 def generate_random_portfolios(log_returns, risk_free_rate, tickers, min_hold, max_hold):
     print("6.1")
+    min_hold = float(min_hold)
+    max_hold = float(max_hold)
     noOfPortfolios = 10000
     noOfTickers = len(tickers)
 
@@ -372,13 +374,10 @@ def generate_random_portfolios(log_returns, risk_free_rate, tickers, min_hold, m
         meets_constraints = False
         print("6.4.2")
         while not meets_constraints:
-            print("6.4.2.1")
             # Generate random weight vector
             w = np.array(np.random.random(noOfTickers))
-            print("6.4.2.2")
             # Normalize so sums to 1
             w = w / np.sum(w)
-            print("6.4.2.3")
             # Check if weights meet constraints
             if np.all(w >= min_hold) and np.all(w <= max_hold):
                 meets_constraints = True
@@ -533,9 +532,12 @@ def create_recommended_portfolio_historical_trendline_df(df_historical):
     return df_linear_trend
 
 def create_recommended_portfolio_forecast_trendline_df(df_historical, end_date, start_date):
+    # Convert string dates to datetime objects
+    end_date_dt = datetime.strptime(end_date, '%Y-%m-%d')
+    start_date_dt = datetime.strptime(start_date, '%Y-%m-%d')
     
     print("11.10") 
-    forecast_period = end_date - start_date
+    forecast_period = end_date_dt - start_date_dt
 
     print("11.11")
     # Convert index to a numeric value for regression analysis (e.g., days)
