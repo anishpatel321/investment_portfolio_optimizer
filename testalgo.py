@@ -125,7 +125,7 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
 
     print("11")
     # Step 11: Historical and Forecast Returns Analysis
-    df_historical = create_recommended_portfolio_historical_returns_df(optimal_valid, log_returns)
+    df_historical = create_recommended_portfolio_historical_returns_df(optimal_valid, log_returns) * investment_amount
     df_historical_trendline = create_recommended_portfolio_historical_trendline_df(df_historical)
 
     # end_date2 = datetime.strptime(end_date, '%Y-%m-%d').date()
