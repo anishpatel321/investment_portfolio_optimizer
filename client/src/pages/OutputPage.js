@@ -25,9 +25,10 @@ const StyledBox = styled(Box)(({ theme }) => ({
 const OutputPage = () => {
 
   const investmentAmount = useSelector(state => state.inputs.investmentAmount);
-  
+  const projectedAmount = useSelector(state => state.outputs.sixmonth_projected_amount);
+
   //const initialInvestmentAmount = 10000; // Placeholder value
-  const projectedInvestmentAmount = 15000; // Placeholder value
+  //const projectedInvestmentAmount = 15000; // Placeholder value
 
   return (
     <>
@@ -47,7 +48,7 @@ const OutputPage = () => {
           </StyledBox>
           <StyledBox style={{background: '#163A5F', borderRadius: '33px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)', margin: '7px', flex: 1}}>
             <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white' }}>Projected Investment Amount</Typography>
-            <Typography variant="h1" style={{ marginTop: '1vh', fontSize: '7vh', fontWeight: 'bold', color: 'white' }}>${projectedInvestmentAmount}</Typography>
+            <Typography variant="h1" style={{ marginTop: '1vh', fontSize: '7vh', fontWeight: 'bold', color: 'white' }}>${projectedAmount}</Typography>
             <Typography variant="body1" style={{ marginTop: '2vh', fontSize: '1.5vh',color: 'white' }}>filler text to explain this metric</Typography>
           </StyledBox>
         </Grid>

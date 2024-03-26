@@ -44,7 +44,7 @@ export const outputSlice = createSlice({
     df_historical_trendline: null,
     df_forecast_trendline: null,
     df_6month_trendline: null,
-    sixmonth_projected_amount: null,
+    sixmonth_projected_amount: 3,
     df_generated_portfolios: null,
     df_optimal_theoretical: null,
     df_optimal_generated: null,
