@@ -47,9 +47,54 @@ export const outputSlice = createSlice({
     df_optimal_theoretical: null,
     df_optimal_generated: null,
     df_optimal_valid: null,
-    df_MEF: null,
-    df_CML: null,
-    df_CAL: null,
+    df_MEF: {
+      'Volatility': {
+        0: 0.378981,
+        1: 0.3562235249,
+        2: 0.3562235249,
+        3: 0.3615221217,
+        4: 0.3789815938
+      },
+      'Returns': {
+        0: -0.3351217079,
+        1: -0.2962401502,
+        2: -0.2573585925,
+        3: 0.007036,
+        4: 0.0225886231
+      }
+    },
+    df_CML:  {
+      'Volatility': {
+        0: 0.378981,
+        1: 0.3562235249,
+        2: 0.3562235249,
+        3: 0.3615221217,
+        4: 0.3789815938
+      },
+      'Returns': {
+        0: -0.4351217079,
+        1: -0.5962401502,
+        2: -0.45573585925,
+        3: 0.017036,
+        4: 0.6225886231
+      }
+    },
+    df_CAL: {
+      'Volatility': {
+        0: 0.578981,
+        1: 0.2562235249,
+        2: 0.1562235249,
+        3: 0.7615221217,
+        4: 0.2789815938
+      },
+      'Returns': {
+        0: -0.3351217079,
+        1: -0.2962401502,
+        2: -0.2573585925,
+        3: 0.007036,
+        4: 0.0225886231
+      }
+    },
     df_risk_threshold: null,
     df_risk_free_rate: null
     // for now this is all from algo

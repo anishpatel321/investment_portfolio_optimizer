@@ -11,6 +11,8 @@ import HeatmapChart from '../components/HeatmapChart';
 import { Heatmap } from '../components/Heatmap';
 //get values for investment amount
 import { useSelector } from 'react-redux';
+import ScatterChartGraph from '../components/ScatterChartGraph';
+
 
 const StyledBox = styled(Box)(({ theme }) => ({
   backgroundColor: 'white',
@@ -23,7 +25,8 @@ const StyledBox = styled(Box)(({ theme }) => ({
 const OutputPage = () => {
 
   const investmentAmount = useSelector(state => state.inputs.investmentAmount);
-  const initialInvestmentAmount = 10000; // Placeholder value
+  
+  //const initialInvestmentAmount = 10000; // Placeholder value
   const projectedInvestmentAmount = 15000; // Placeholder value
 
   return (
@@ -39,7 +42,7 @@ const OutputPage = () => {
         <Grid item xs={12} sm={6} md={4} style={{padding: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
           <StyledBox style={{background: '#163A5F', borderRadius: '33px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)', margin: '7px', flex: 1}}>
             <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white'}}>Initial Investment Amount</Typography>
-            <Typography variant="h1" style={{ marginTop: '1vh', fontSize: '7vh', fontWeight: 'bold', color: 'white'}}>${initialInvestmentAmount}</Typography>
+            <Typography variant="h1" style={{ marginTop: '1vh', fontSize: '7vh', fontWeight: 'bold', color: 'white'}}>${investmentAmount}</Typography>
             <Typography variant="body1" style={{ marginTop: '2vh', fontSize: '1.5vh',color: 'white' }}>filler text to explain this metric</Typography>
           </StyledBox>
           <StyledBox style={{background: '#163A5F', borderRadius: '33px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)', margin: '7px', flex: 1}}>
@@ -64,6 +67,8 @@ const OutputPage = () => {
           <StyledBox style={{background: '#163A5F', borderRadius: '33px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)', margin: '7px'}}>
             <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white'}}>Markowitz Efficient Frontier (MEF)</Typography>
             {/* add MEF plot */}
+            <h2>Markowitz Efficient Frontier</h2>
+              <ScatterChartGraph />
           </StyledBox>
         </Grid>
         <Grid item xs={12} sm={6} md={12} style={{ padding: 0}}>
