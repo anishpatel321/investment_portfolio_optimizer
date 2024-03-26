@@ -53,6 +53,8 @@ start_date = ten_years_ago
 end_date = today
 min_hold = 0
 max_hold = 1
+investment_amount = 1000
+risk_threshold = 0.3
 
 def main():
     (
@@ -66,6 +68,7 @@ def main():
         df_historical,
         df_historical_trendline,
         df_forecast_trendline,
+        df_6month_trendline,
         df_generated_portfolios,
         df_optimal_theoretical,
         df_optimal_generated,
@@ -75,7 +78,7 @@ def main():
         df_CAL,
         df_risk_threshold,
         df_risk_free_rate
-    ) = run_algo(tickers, start_date, end_date, min_hold, max_hold)
+    ) = run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, min_hold, max_hold)
 
     # Print each returned item with description
     print("Adjusted Close Prices for the tickers:")
@@ -107,6 +110,9 @@ def main():
 
     print("\nForecasted Trendline for the tickers:")
     print(df_forecast_trendline)
+
+    print("\nForecasted 6 month Trendline for the tickers:")
+    print(df_6month_trendline)
 
     print("\nAll Generated Portfolios:")
     print(df_generated_portfolios)
