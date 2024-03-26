@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { ScatterChart } from '@mui/x-charts/ScatterChart';
+import { ScatterPlot, ChartsXAxis, ChartsYAxis, ResponsiveChartContainer } from '@mui/x-charts';
+
 
 function ScatterChartGraph() {
   const dfMEF = useSelector(state => state.outputs.df_MEF);
@@ -38,11 +40,13 @@ function ScatterChartGraph() {
         name: dataset.name,
         color: dataset.color, // Ensure your chart library supports these properties
       }))}
-    //   bottomAxis={{
-    //     label: "my axis",
-    //   }}
+       //bottomAxis={{
+        // label: "my axis",
+      // }}
       height={300}
     />
+    
+    
   );
 }
 
