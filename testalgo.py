@@ -147,6 +147,9 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
     df_risk_threshold = create_df_risk_threshold(returns_range, risk_threshold)
     df_risk_free_rate = create_df_risk_free_rate(volatility_range, risk_free_rate)
 
+
+    projected_amount = 12345 #replace ----------------------------------------------------------------------------------------------------------------
+
     # Return relevant data and DataFrames
     global algo_results
     
@@ -162,6 +165,7 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
     'df_historical_trendline': df_historical_trendline.to_json(),
     'df_forecast_trendline': df_forecast_trendline.to_json(),
     'df_6month_trendline': df_6month_trendline.to_json(),
+    'sixmonth_projected_amount': projected_amount,                #currently a dummy value ----------------------------------------------------------------
     'df_generated_portfolios': df_generated_portfolios.to_json(),
     'df_optimal_theoretical': df_optimal_theoretical.to_json(),
     'df_optimal_generated': df_optimal_generated.to_json(),

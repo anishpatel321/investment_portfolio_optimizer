@@ -43,6 +43,8 @@ export const outputSlice = createSlice({
     df_historical: null,
     df_historical_trendline: null,
     df_forecast_trendline: null,
+    df_6month_trendline: null,
+    sixmonth_projected_amount: null,
     df_generated_portfolios: null,
     df_optimal_theoretical: null,
     df_optimal_generated: null,
@@ -115,6 +117,7 @@ export const outputSlice = createSlice({
       state.df_historical_trendline = JSON.parse(action.payload.df_historical_trendline);
       state.df_forecast_trendline = JSON.parse(action.payload.df_forecast_trendline);
       state.df_generated_portfolios = JSON.parse(action.payload.df_generated_portfolios);
+      state.df_6month_trendline = JSON.parse(action.payload.df_6month_trendline);
       state.df_optimal_theoretical = JSON.parse(action.payload.df_optimal_theoretical);
       state.df_optimal_generated = JSON.parse(action.payload.df_optimal_generated);
       state.df_optimal_valid = JSON.parse(action.payload.df_optimal_valid);
@@ -125,6 +128,7 @@ export const outputSlice = createSlice({
       state.df_risk_free_rate = JSON.parse(action.payload.df_risk_free_rate);
 
       // Assign numerical values values directly
+      state.sixmonth_projected_amount = action.payload.sixmonth_projected_amount;
       state.risk_free_rate = action.payload.risk_free_rate;
       state.threshold_state = action.payload.threshold_state;
       
