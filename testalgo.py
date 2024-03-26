@@ -128,9 +128,9 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
     df_historical = create_recommended_portfolio_historical_returns_df(optimal_valid, log_returns)
     df_historical_trendline = create_recommended_portfolio_historical_trendline_df(df_historical)
 
-    end_date2 = datetime.strptime(end_date, '%Y-%m-%d').date()
-    start_date2 = datetime.strptime(start_date, '%Y-%m-%d').date()
-    df_forecast_trendline = create_recommended_portfolio_forecast_trendline_df(df_historical, end_date2, start_date2)
+    # end_date2 = datetime.strptime(end_date, '%Y-%m-%d').date()
+    # start_date2 = datetime.strptime(start_date, '%Y-%m-%d').date()
+    df_forecast_trendline = create_recommended_portfolio_forecast_trendline_df(df_historical, end_date, start_date)
     df_6month_trendline = create_recommended_portfolio_6month_trendline_df(df_historical)
     
     print("12")
