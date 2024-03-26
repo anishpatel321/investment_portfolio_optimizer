@@ -62,6 +62,7 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
         df_historical_trendline (DataFrame): DataFrame of historical trendline for the tickers.
         df_forecast_trendline (DataFrame): DataFrame of forecasted trendline for the tickers.
         df_6month_trendline (DataFrame): DataFrame of 6 month forecasted trendline for the tickers.
+        month6_return: Projected return after 6 months
         df_generated_portfolios (DataFrame): DataFrame of generated portfolios.
         df_optimal_theoretical (DataFrame): DataFrame of theoretically optimal portfolio.
         df_optimal_generated (DataFrame): DataFrame of generated optimal portfolio.
@@ -131,7 +132,7 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
     # end_date2 = datetime.strptime(end_date, '%Y-%m-%d').date()
     # start_date2 = datetime.strptime(start_date, '%Y-%m-%d').date()
     df_forecast_trendline = create_recommended_portfolio_forecast_trendline_df(df_historical, end_date, start_date)
-    df_6month_trendline = create_recommended_portfolio_6month_trendline_df(df_historical)
+    df_6month_trendline, month6_return = create_recommended_portfolio_6month_trendline_df(df_historical)
     
     print("12")
     # Step 12: Calculate Portfolio Metrics for Various Portfolios and Curves
@@ -165,7 +166,7 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
     'df_historical_trendline': df_historical_trendline.to_json(),
     'df_forecast_trendline': df_forecast_trendline.to_json(),
     'df_6month_trendline': df_6month_trendline.to_json(),
-    'sixmonth_projected_amount': projected_amount,                #currently a dummy value ----------------------------------------------------------------
+    'sixmonth_projected_amount': month6_return,
     'df_generated_portfolios': df_generated_portfolios.to_json(),
     'df_optimal_theoretical': df_optimal_theoretical.to_json(),
     'df_optimal_generated': df_optimal_generated.to_json(),
@@ -217,6 +218,9 @@ def get_df_forecast_trendline():
 
 def get_df_6month_trendline():
     return algo_results.get('df_6month_trendline', None)
+
+def get_month6_return():
+    return algo_results.get('month6_return', None)
 
 def get_df_generated_portfolios():
     return algo_results.get('df_generated_portfolios', None)
@@ -619,10 +623,13 @@ def create_recommended_portfolio_6month_trendline_df(df_historical):
 
     print("11.25")
     # Create a DataFrame for future returns
-    df_6month_returns = pd.DataFrame(future_returns, index=future_dates_datetime, columns=['Projected Returns'])
+    df_6month_trendline = pd.DataFrame(future_returns, index=future_dates_datetime, columns=['Projected Returns'])
+    
+    # Get the last return value
+    month6_return = df_6month_trendline.iloc[-1]['Projected Returns']
 
-    # Display the future returns DataFrame
-    return df_6month_returns
+    # Return both the DataFrame and the last return value
+    return df_6month_trendline, month6_return
 
 def define_volatility_range(min_volatility, max_volatility):
     # Define the range for the CML & CAL to cover, extending from 0 to a bit beyond the max expected volatility
