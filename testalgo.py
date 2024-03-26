@@ -100,7 +100,7 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
 
     print("6")
     # Step 6: Generate Random Portfolios
-    sharpeRatio, expectedVolatility, expectedReturn, weight = generate_random_portfolios(log_returns, risk_free_rate, tickers, min_hold, max_hold)
+    sharpeRatio, expectedVolatility, expectedReturn, weight, min_volatility, min_return, max_volatility, max_return = generate_random_portfolios(log_returns, risk_free_rate, tickers, min_hold, max_hold)
 
     print("7")
     # Step 7: Calculate Optimal Generated Portfolio Allocations
@@ -109,7 +109,7 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
 
     print("8")
     # Step 8: Generate MEF Curve
-    volatility_opt, returns_range = generate_MEF_curve(tickers, min_hold, max_hold, log_returns)
+    volatility_opt, returns_range = generate_MEF_curve(tickers, min_hold, max_hold, log_returns, min_return, max_return)
 
     print("9")
     # Step 9: Identify Optimal Generated Portfolio Below Risk Threshold
@@ -119,7 +119,7 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
 
     print("10")
     # Step 10: Create CML & CAL lines
-    volatility_range = define_volatility_range(expectedVolatility)
+    volatility_range = define_volatility_range(min_volatility, max_volatility)
     volatility_range, cml_returns = create_CML(risk_free_rate, optimal_sharpe_ratio, volatility_range)
     cal_returns = create_CAL(risk_free_rate, optimal_below_threshold_sharpe_ratio, volatility_range)
 
@@ -366,6 +366,11 @@ def generate_random_portfolios(log_returns, risk_free_rate, tickers, min_hold, m
     expectedVolatility = np.zeros(noOfPortfolios)
     sharpeRatio = np.zeros(noOfPortfolios)
 
+    min_volatility = float('inf')
+    max_volatility = float('-inf')
+    min_return = float('inf')
+    max_return = float('-inf')
+
     print("6.4")
 
     for k in range(noOfPortfolios):
@@ -395,8 +400,13 @@ def generate_random_portfolios(log_returns, risk_free_rate, tickers, min_hold, m
         print("6.4.6")
         sharpeRatio[k] = (expectedReturn[k] - risk_free_rate)/expectedVolatility[k]
 
+        # Update min and max volatility and returns
+        min_volatility = min(min_volatility, expectedVolatility[k])
+        max_volatility = max(max_volatility, expectedVolatility[k])
+        min_return = min(min_return, expectedReturn[k])
+        max_return = max(max_return, expectedReturn[k])
 
-    return sharpeRatio, expectedVolatility, expectedReturn, weight
+    return sharpeRatio, expectedVolatility, expectedReturn, weight, min_volatility, min_return, max_volatility, max_return
 
 def calculate_optimal_generated_portfolio_allocations(sharpeRatio, weight):
     maxIndex = sharpeRatio.argmax() 
@@ -417,15 +427,15 @@ def calculate_optimal_generated_portfolio_sharpe(optimal_generated, log_returns,
     optimal_generated_sharpe_ratio = sharpe_ratio(optimal_generated, log_returns, cov_matrix, risk_free_rate)
     return optimal_generated_sharpe_ratio
 
-def generate_MEF_curve(tickers, min_hold, max_hold, log_returns):
+def generate_MEF_curve(tickers, min_hold, max_hold, log_returns, min_return, max_return):
     # initializes weights so all tickers in portfolio are equal to begin
     initial_weights = np.array([1/len(tickers)]*len(tickers))
     bounds = [(min_hold, max_hold) for _ in range(len(tickers))]
     Sigma = log_returns.cov() * 252
     meanLogRet = log_returns.mean() * 252
 
-    min_return = np.min(meanLogRet)
-    max_return = np.max(meanLogRet)
+    # min_return = np.min(meanLogRet)
+    # max_return = np.max(meanLogRet)
 
     # Dynamically adjust the range of returns based on min and max points
     returns_range = np.linspace(min_return, max_return, 50)
@@ -614,9 +624,9 @@ def create_recommended_portfolio_6month_trendline_df(df_historical):
     # Display the future returns DataFrame
     return df_6month_returns
 
-def define_volatility_range(expectedVolatility):
+def define_volatility_range(min_volatility, max_volatility):
     # Define the range for the CML & CAL to cover, extending from 0 to a bit beyond the max expected volatility
-    volatility_range = np.linspace(0, max(expectedVolatility) * 1.1, 50)
+    volatility_range = np.linspace(min_volatility, max_volatility, 50)
     return volatility_range
 
 def create_CML(risk_free_rate, optimal_sharpe_ratio, volatility_range):
