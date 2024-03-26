@@ -100,7 +100,7 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
 
     print("6")
     # Step 6: Generate Random Portfolios
-    sharpeRatio, expectedVolatility, expectedReturn, weight = generate_random_portfolios(log_returns, risk_free_rate, tickers)
+    sharpeRatio, expectedVolatility, expectedReturn, weight = generate_random_portfolios(log_returns, risk_free_rate, tickers, min_hold, max_hold)
 
     print("7")
     # Step 7: Calculate Optimal Generated Portfolio Allocations
@@ -348,7 +348,7 @@ def calculate_optimal_theoretical_portfolio_sharpe (optimal_weights, log_returns
     optimal_sharpe_ratio = sharpe_ratio(optimal_weights, log_returns, cov_matrix, risk_free_rate)
     return optimal_sharpe_ratio
 
-def generate_random_portfolios(log_returns, risk_free_rate, tickers):
+def generate_random_portfolios(log_returns, risk_free_rate, tickers, min_hold, max_hold):
     print("6.1")
     noOfPortfolios = 10000
     noOfTickers = len(tickers)
@@ -382,7 +382,7 @@ def generate_random_portfolios(log_returns, risk_free_rate, tickers):
             # Check if weights meet constraints
             if np.all(w >= min_hold) and np.all(w <= max_hold):
                 meets_constraints = True
-                
+
         print("6.4.3")
         weight[k,:] = w
         # Expected log return
