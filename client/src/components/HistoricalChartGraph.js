@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { ScatterChart } from '@mui/x-charts/ScatterChart';
-import { ScatterPlot, ChartsXAxis, ChartsYAxis, ResponsiveChartContainer } from '@mui/x-charts';
+import ScatterGraph from './ScatterGraph';
 
 
-function ScatterChartGraph() {
+function HistoricalChartGraph() {
   const dfMEF = useSelector(state => state.outputs.df_MEF);
   const dfCML = useSelector(state => state.outputs.df_CML);
   const dfCAL = useSelector(state => state.outputs.df_CAL);
+  const dfgeneratedportfolios = useSelector(state => state.outputs.df_generated_portfolios);
 
   const [chartData, setChartData] = useState([]);
 
@@ -19,37 +19,31 @@ function ScatterChartGraph() {
         y: data.Returns[index],
       }));
 
-    if (dfMEF && dfCML && dfCAL) {
+    if (dfMEF && dfCML && dfCAL && dfgeneratedportfolios) {
       const mefData = formatData(dfMEF);
       const cmlData = formatData(dfCML);
       const calData = formatData(dfCAL);
+      const genData = formatData(dfgeneratedportfolios);
 
       setChartData([
-        { name: 'MEF', data: mefData, color: 'blue' }, // Example color, adjust as needed
         { name: 'CML', data: cmlData, color: 'green' }, // Example color, adjust as needed
-        { name: 'CAL', data: calData, color: 'red' } // Example color, adjust as needed
-      ]);
+        { name: 'CAL', data: calData, color: 'red' }, // Example color, adjust as needed
+        { name: 'Generated', data: genData, color: 'yellow' }, // Example color, adjust as needed
+        { name: 'MEF', data: mefData, color: 'blue'} // Example color, adjust as needed
+      
+    ]);
     }
-  }, [dfMEF, dfCML, dfCAL]);
+  }, [dfMEF, dfCML, dfCAL, dfgeneratedportfolios]);
 
   return (
-    <ScatterChart 
-      series={chartData.map(dataset => ({
-        data: dataset.data,
-        type: 'scatter',
-        name: dataset.name,
-        color: dataset.color, // Ensure your chart library supports these properties
-      }))}
-       //bottomAxis={{
-        // label: "my axis",
-      // }}
-      height={300}
+    <ScatterGraph
+      chartData={chartData} 
+      xAxisLabel={"volatility"}
+      yAxisLabel={"something I forgot"}
     />
-    
-    
   );
 }
 
 
 
-export default ScatterChartGraph;
+export default HistoricalChartGraph;

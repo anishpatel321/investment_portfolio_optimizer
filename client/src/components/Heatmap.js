@@ -85,7 +85,7 @@ export const Heatmap = ({ width, height }) => {
             <stop offset="100%" style={{stopColor: "red", stopOpacity: 1}} />
           </linearGradient>
         </defs>
-        <rect fill="url(#legendGradient)" width={'3vw'} height={height*0.8} y={height*0.1} />
+        <rect fill="url(#legendGradient)" width={'3vw'} height={height*0.8} y={height*0.1} rx="10" ry="10" />
         <text x="50%" y="15%" textAnchor="middle" fill="white" fontWeight={'bold'}>High</text>
         <text x="50%" y="86%" textAnchor="middle" fill="white" fontWeight={'bold'}>Low</text>
       </svg>

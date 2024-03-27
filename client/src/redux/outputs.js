@@ -45,9 +45,47 @@ export const outputSlice = createSlice({
     df_forecast_trendline: null,
     df_6month_trendline: null,
     sixmonth_projected_amount: 3,
-    df_generated_portfolios: null,
-    df_optimal_theoretical: null,
-    df_optimal_generated: null,
+    df_generated_portfolios: {
+      'Volatility': {
+        0: 0.778981,
+        1: 0.7562235249,
+        2: 0.7562235249,
+        3: 0.7615221217,
+        4: 0.7789815938
+      },
+      'Returns': {
+        0: -0.3351217079,
+        1: -0.2962401502,
+        2: -0.2573585925,
+        3: 0.007036,
+        4: 0.0225886231
+      }
+    },
+    df_optimal_theoretical: {
+      'Volatility': {
+        0: 0.178981
+        
+      },
+      'Returns': {
+        0: -0.3351217079
+      }
+    },
+    df_optimal_generated: {
+      'Volatility': {
+        0: 0.178981,
+        1: 0.1562235249,
+        2: 0.1562235249,
+        3: 0.1615221217,
+        4: 0.1789815938
+      },
+      'Returns': {
+        0: -0.3351217079,
+        1: -0.2962401502,
+        2: -0.2573585925,
+        3: 0.007036,
+        4: 0.0225886231
+      }
+    },
     df_optimal_valid: null,
     df_MEF: {
       'Volatility': {
