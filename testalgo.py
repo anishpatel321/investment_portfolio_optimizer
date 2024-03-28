@@ -409,7 +409,7 @@ def generate_random_portfolios(log_returns, risk_free_rate, tickers, min_hold, m
         # Expected log return
         print("6.4.4")
         print("meanLogRet shape:", meanLogRet.shape, "w shape:", w.shape)
-        expectedReturn[k] = np.sum(meanLogRet.values * w)
+        expectedReturn[k] = np.sum(meanLogRet * w)
         # Ecpected volatility
         print("6.4.5")
         expectedVolatility[k] = np.sqrt(np.dot(w.T, np.dot(Sigma,w)))
