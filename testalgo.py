@@ -434,7 +434,7 @@ def calculate_optimal_generated_portfolio_sharpe(optimal_generated, log_returns,
 def generate_MEF_curve(tickers, min_hold, max_hold, log_returns, min_return, max_return):
     # initializes weights so all tickers in portfolio are equal to begin
     initial_weights = np.array([1/len(tickers)]*len(tickers))
-    bounds = [(0, max_hold) for _ in range(len(tickers))]
+    bounds = [(min_hold, max_hold) for _ in range(len(tickers))]
     Sigma = log_returns.cov() * 252
     meanLogRet = log_returns.mean() * 252
 
