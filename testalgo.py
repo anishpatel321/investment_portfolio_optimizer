@@ -101,7 +101,7 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
 
     print("6")
     # Step 6: Generate Random Portfolios
-    sharpeRatio, expectedVolatility, expectedReturn, weight, min_volatility, min_return, max_volatility, max_return = generate_random_portfolios(log_returns, risk_free_rate, tickers, min_hold, max_hold)
+    sharpeRatio, expectedVolatility, expectedReturn, weight, min_volatility, min_return, max_volatility, max_return, return_of_portfolio_with_min_volatility = generate_random_portfolios(log_returns, risk_free_rate, tickers, min_hold, max_hold)
 
     print("7")
     # Step 7: Calculate Optimal Generated Portfolio Allocations
@@ -110,7 +110,7 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
 
     print("8")
     # Step 8: Generate MEF Curve
-    volatility_opt, returns_range = generate_MEF_curve(tickers, min_hold, max_hold, log_returns, min_return, max_return)
+    volatility_opt, returns_range = generate_MEF_curve(tickers, min_hold, max_hold, log_returns, max_return, return_of_portfolio_with_min_volatility)
 
     print("9")
     # Step 9: Identify Optimal Generated Portfolio Below Risk Threshold
@@ -370,6 +370,7 @@ def generate_random_portfolios(log_returns, risk_free_rate, tickers, min_hold, m
     expectedVolatility = np.zeros(noOfPortfolios)
     sharpeRatio = np.zeros(noOfPortfolios)
 
+    min_volatility_index = 0
     min_volatility = float('inf')
     max_volatility = float('-inf')
     min_return = float('inf')
@@ -405,12 +406,17 @@ def generate_random_portfolios(log_returns, risk_free_rate, tickers, min_hold, m
         sharpeRatio[k] = (expectedReturn[k] - risk_free_rate)/expectedVolatility[k]
 
         # Update min and max volatility and returns
+        if expectedVolatility[k] < min_volatility:
+            min_volatility_index = k
+
+        # Update min and max volatility and returns
         min_volatility = min(min_volatility, expectedVolatility[k])
         max_volatility = max(max_volatility, expectedVolatility[k])
         min_return = min(min_return, expectedReturn[k])
         max_return = max(max_return, expectedReturn[k])
+        return_of_portfolio_with_min_volatility = expectedReturn[min_volatility_index]
 
-    return sharpeRatio, expectedVolatility, expectedReturn, weight, min_volatility, min_return, max_volatility, max_return
+    return sharpeRatio, expectedVolatility, expectedReturn, weight, min_volatility, min_return, max_volatility, max_return, return_of_portfolio_with_min_volatility
 
 def calculate_optimal_generated_portfolio_allocations(sharpeRatio, weight):
     maxIndex = sharpeRatio.argmax() 
@@ -431,7 +437,7 @@ def calculate_optimal_generated_portfolio_sharpe(optimal_generated, log_returns,
     optimal_generated_sharpe_ratio = sharpe_ratio(optimal_generated, log_returns, cov_matrix, risk_free_rate)
     return optimal_generated_sharpe_ratio
 
-def generate_MEF_curve(tickers, min_hold, max_hold, log_returns, min_return, max_return):
+def generate_MEF_curve(tickers, min_hold, max_hold, log_returns, max_return, return_of_portfolio_with_min_volatility):
     # initializes weights so all tickers in portfolio are equal to begin
     initial_weights = np.array([1/len(tickers)]*len(tickers))
     bounds = [(min_hold, max_hold) for _ in range(len(tickers))]
@@ -442,7 +448,7 @@ def generate_MEF_curve(tickers, min_hold, max_hold, log_returns, min_return, max
     # max_return = np.max(meanLogRet)
 
     # Dynamically adjust the range of returns based on min and max points
-    returns_range = np.linspace(min_return, max_return, 50)
+    returns_range = np.linspace(return_of_portfolio_with_min_volatility, max_return, 50)
     volatility_opt = []
 
     def minimizeMyVolatility(w):
