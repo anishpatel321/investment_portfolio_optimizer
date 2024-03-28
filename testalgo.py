@@ -62,7 +62,9 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
         df_historical_trendline (DataFrame): DataFrame of historical trendline for the tickers.
         df_forecast_trendline (DataFrame): DataFrame of forecasted trendline for the tickers.
         df_6month_trendline (DataFrame): DataFrame of 6 month forecasted trendline for the tickers.
+        df_12month_trendline (DataFrame): DataFrame of 12 month forecasted trendline for the tickers.
         month6_return: Projected return after 6 months.
+        month12_return: Projected return after 12 months.
         df_generated_portfolios (DataFrame): DataFrame of generated portfolios.
         df_optimal_theoretical (DataFrame): DataFrame of theoretically optimal portfolio.
         df_optimal_generated (DataFrame): DataFrame of generated optimal portfolio.
@@ -133,6 +135,8 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
     # start_date2 = datetime.strptime(start_date, '%Y-%m-%d').date()
     df_forecast_trendline = create_recommended_portfolio_forecast_trendline_df(df_historical, end_date, start_date)
     df_6month_trendline, month6_return = create_recommended_portfolio_6month_trendline_df(df_historical)
+    df_12month_trendline, month12_return = create_recommended_portfolio_12month_trendline_df(df_historical)
+
     
     print("12")
     # Step 12: Calculate Portfolio Metrics for Various Portfolios and Curves
@@ -166,7 +170,9 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
     'df_historical_trendline': df_historical_trendline.to_json(),
     'df_forecast_trendline': df_forecast_trendline.to_json(),
     'df_6month_trendline': df_6month_trendline.to_json(),
+    'df_12month_trendline': df_12month_trendline.to_json(),
     'sixmonth_projected_amount': month6_return,
+    'twelvemonth_projected_amount': month12_return,
     'df_generated_portfolios': df_generated_portfolios.to_json(),
     'df_optimal_theoretical': df_optimal_theoretical.to_json(),
     'df_optimal_generated': df_optimal_generated.to_json(),
@@ -221,6 +227,12 @@ def get_df_6month_trendline():
 
 def get_month6_return():
     return algo_results.get('month6_return', None)
+
+def get_df_12month_trendline():
+    return algo_results.get('df_12month_trendline', None)
+
+def get_month12_return():
+    return algo_results.get('month12_return', None)
 
 def get_df_generated_portfolios():
     return algo_results.get('df_generated_portfolios', None)
@@ -636,6 +648,49 @@ def create_recommended_portfolio_6month_trendline_df(df_historical):
 
     # Return both the DataFrame and the last return value
     return df_6month_trendline, month6_return
+
+def create_recommended_portfolio_12month_trendline_df(df_historical):
+    
+    print("11.18") 
+    forecast_period = timedelta(1*365)
+
+    print("11.19")
+    # Convert index to a numeric value for regression analysis (e.g., days)
+    df_historical['NumericDate'] = (df_historical.index - df_historical.index[0]).days
+
+    print("11.20")
+    # Historical dates and returns
+    historic_dates = df_historical[['NumericDate']].values
+    historic_returns = df_historical['Historical Returns'].values
+
+    print("11.21")
+    # Initialize and fit the linear regression model
+    model = LinearRegression()
+    model.fit(historic_dates, historic_returns)
+
+    print("11.22")
+    # Define future dates for which we want to predict returns
+    # Predict for the next 30 days
+    future_dates = np.array([[historic_dates[-1][0] + i] for i in range(1, forecast_period.days)])
+
+    print("11.23")
+    # Predict future returns
+    future_returns = model.predict(future_dates)
+
+    print("11.24")
+    # Convert future_dates back to datetime for plotting and analysis
+    forecast_start = df_historical.index[0]
+    future_dates_datetime = [forecast_start + pd.Timedelta(days=int(x[0])) for x in future_dates]
+
+    print("11.25")
+    # Create a DataFrame for future returns
+    df_12month_trendline = pd.DataFrame(future_returns, index=future_dates_datetime, columns=['Projected Returns'])
+    
+    # Get the last return value
+    month12_return = df_12month_trendline.iloc[-1]['Projected Returns']
+
+    # Return both the DataFrame and the last return value
+    return df_12month_trendline, month12_return
 
 def define_volatility_range(min_volatility, max_volatility):
     # Define the range for the CML & CAL to cover, extending from 0 to a bit beyond the max expected volatility
