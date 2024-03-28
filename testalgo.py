@@ -487,7 +487,7 @@ def generate_MEF_curve(tickers, min_hold, max_hold, log_returns, max_return, ret
     return volatility_opt, returns_range
 
 def return_index_of_optimal_generated_portfolio_below_risk_threshold(risk_threshold, sharpeRatio, expectedVolatility, expectedReturn, risk_free_rate):
-    risk_threshold = 0.3
+    risk_threshold = float(risk_threshold)
     # Find the index of the portfolio with maximum Sharpe ratio below risk_threshold
     valid_indices = np.where(expectedVolatility < risk_threshold)[0]
 
