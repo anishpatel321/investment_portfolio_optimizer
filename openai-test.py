@@ -90,11 +90,11 @@ def get_sentiment(tickers, api_key):
         df_sentiment_scores = pd.DataFrame(sentiment_scores, columns=['sentiment_score'])
         df_summaries = pd.DataFrame(summaries, columns=['summary'])
         dataframes[ticker] = (df_sentiment_scores, df_summaries)
-    return df_sentiment_scores, df_summaries, dataframes
+    return dataframes
 
-tickers = ['AAPL', 'TSLA']  # replace with your tickers
+tickers = ['AMZN']  # replace with your tickers
 api_key = os.getenv('ALPHA_VANTAGE_API_KEY')  # replace with your API key
-df_sent, df_summ, dfs = get_sentiment(tickers, api_key)
+dfs = get_sentiment(tickers, api_key)
 
 # print(df_sent.head(50))
 # print(df_summ.head(50))
@@ -106,6 +106,44 @@ print(dfs)
 #     print(df_sentiment_scores)
 #     print("\nSummaries for {ticker}:")
 #     print(df_summaries)
+
+import json
+
+def overall_sentiment(dfs):
+    overall_results = {}
+    for ticker, (df_sentiment_scores, _) in dfs.items():
+        # Convert sentiment scores to numeric values
+        df_sentiment_scores['sentiment_score'] = pd.to_numeric(df_sentiment_scores['sentiment_score'], errors='coerce')
+        average_score = df_sentiment_scores['sentiment_score'].mean()
+        
+        # Determine sentiment label based on average score
+        if average_score <= -0.35:
+            sentiment = "Bearish"
+        elif -0.35 < average_score <= -0.15:
+            sentiment = "Somewhat-Bearish"
+        elif -0.15 < average_score < 0.15:
+            sentiment = "Neutral"
+        elif 0.15 <= average_score < 0.35:
+            sentiment = "Somewhat_Bullish"
+        else:
+            sentiment = "Bullish"
+        
+        # Count sentiment occurrences
+        sentiment_counts = df_sentiment_scores['sentiment_score'].apply(lambda x: sentiment)
+        most_common_sentiment = sentiment_counts.mode().iloc[0]
+        
+        overall_results[ticker] = most_common_sentiment
+
+    # Print results
+    print("Most Common Sentiments:")
+    print(json.dumps(overall_results, indent=4))
+
+    return overall_results
+
+# Example usage:
+overall_results = overall_sentiment(dfs)
+# overall_results
+
 
 
 
