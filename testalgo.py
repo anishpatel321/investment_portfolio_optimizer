@@ -62,7 +62,7 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
         df_historical_trendline (DataFrame): DataFrame of historical trendline for the tickers.
         df_forecast_trendline (DataFrame): DataFrame of forecasted trendline for the tickers.
         df_6month_trendline (DataFrame): DataFrame of 6 month forecasted trendline for the tickers.
-        month6_return: Projected return after 6 months
+        month6_return: Projected return after 6 months.
         df_generated_portfolios (DataFrame): DataFrame of generated portfolios.
         df_optimal_theoretical (DataFrame): DataFrame of theoretically optimal portfolio.
         df_optimal_generated (DataFrame): DataFrame of generated optimal portfolio.
@@ -434,7 +434,7 @@ def calculate_optimal_generated_portfolio_sharpe(optimal_generated, log_returns,
 def generate_MEF_curve(tickers, min_hold, max_hold, log_returns, min_return, max_return):
     # initializes weights so all tickers in portfolio are equal to begin
     initial_weights = np.array([1/len(tickers)]*len(tickers))
-    bounds = [(min_hold, max_hold) for _ in range(len(tickers))]
+    bounds = [(0, max_hold) for _ in range(len(tickers))]
     Sigma = log_returns.cov() * 252
     meanLogRet = log_returns.mean() * 252
 
