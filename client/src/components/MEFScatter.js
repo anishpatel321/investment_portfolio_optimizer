@@ -10,8 +10,8 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  Dot,
 } from "recharts";
+import ScatterGraphDot from './ScatterGraphDot';
 
 function MEFScatter() {
   // Retrieve datasets from Redux store
@@ -34,12 +34,6 @@ function MEFScatter() {
 
 
   useEffect(() => {
-
-
-
-
-
-    
     // Function to format dataset for the chart
     const formatData = (data) => {
       return Object.keys(data.Volatility).map((key) => ({
@@ -94,18 +88,18 @@ function MEFScatter() {
   }, [dfMEF, dfCAL, dfCML, dfOptimal, dfGeneratedPortfolios]); // Dependency array includes all datasets
   
   return (
-    <ResponsiveContainer width="100%" height={800}>
+    <ResponsiveContainer width="100%" height={950}>
       <ComposedChart margin={{ top: 30, right: 30, bottom: 20, left: 70 }}>
-        <CartesianGrid />
+        <CartesianGrid strokeDasharray="3 3" />
         <XAxis type="number" dataKey="x" name="Volatility" stroke="white" label={{ value: 'Volatility', position: 'insideBottom', dy: 30, fill: 'white' } } domain={xDomain} tickFormatter={(value) => value.toFixed(2)}/>
         <YAxis type="number" dataKey="y" name="Returns" stroke="white" label={{ value: 'Returns', position: 'outsideLeft', dx: -50, fill: 'white' }} domain={yDomain} tickFormatter={(value) => value.toFixed(2)}/>
-        <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+        <Tooltip/>
         <Legend 
           verticalAlign="bottom" 
           align="center" 
              wrapperStyle={{ paddingBottom: '10px', paddingTop: '50px' }} 
            />
-        {GeneratedPortfoliosData.length > 0 && <Scatter name="Generated Portfolios" data={GeneratedPortfoliosData} fill="#fa8072" r={20}/>}
+        {GeneratedPortfoliosData.length > 0 && <Scatter name="Generated Portfolios" data={GeneratedPortfoliosData} fill="#fa8072" shape={<ScatterGraphDot />}/>}
         {/* Represent MEF as a Line */}
         {MEFData.length > 0 && <Line type="natural" dot={false} dataKey="y" data={MEFData} name="MEF" stroke="#8884d8" />}
         {/* Represent CAL as a Line */}

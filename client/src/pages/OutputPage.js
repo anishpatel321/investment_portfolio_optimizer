@@ -8,9 +8,9 @@ import PieChartGraph from '../components/PieChartGraph';
 import { Heatmap } from '../components/Heatmap';
 //get values for investment amount
 import { useSelector } from 'react-redux';
-import HistoricalChartGraph from '../components/HistoricalChartGraph';
-import MEFChartGraph from '../components/MEFChartGraph';
-import MEFScatterChart from '../components/MEFScatter';
+import MEFScatter from '../components/MEFScatter';
+import HistScatter from '../components/HistScatter';
+import PortScatter from '../components/PortScatter';
 
 
 
@@ -26,6 +26,7 @@ const OutputPage = () => {
 
   const investmentAmount = useSelector(state => state.inputs.investmentAmount);
   const projectedAmount = useSelector(state => state.outputs.sixmonth_projected_amount);
+  const sent = useSelector(state => state.outputs.senti);
 
   //const initialInvestmentAmount = 10000; // Placeholder value
   //const projectedInvestmentAmount = 15000; // Placeholder value
@@ -48,7 +49,7 @@ const OutputPage = () => {
           </StyledBox>
           <StyledBox style={{background: '#163A5F', borderRadius: '33px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)', margin: '7px', flex: 1}}>
             <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white' }}>Projected Investment Amount</Typography>
-            <Typography variant="h1" style={{ marginTop: '1vh', fontSize: '7vh', fontWeight: 'bold', color: 'white' }}>${projectedAmount}</Typography>
+            <Typography variant="h1" style={{ marginTop: '1vh', fontSize: '7vh', fontWeight: 'bold', color: 'white' }}>${sent}</Typography>
             <Typography variant="body1" style={{ marginTop: '2vh', fontSize: '1.5vh',color: 'white' }}>filler text to explain this metric</Typography>
           </StyledBox>
         </Grid>
@@ -68,7 +69,7 @@ const OutputPage = () => {
           <StyledBox style={{background: '#163A5F', borderRadius: '33px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)', margin: '7px'}}>
             <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white'}}>Markowitz Efficient Frontier (MEF)</Typography>
             {/* add MEF plot */}
-            <MEFScatterChart/> 
+            <MEFScatter/> 
               
           </StyledBox>
         </Grid>
@@ -76,8 +77,19 @@ const OutputPage = () => {
           <StyledBox style={{background: '#163A5F', borderRadius: '33px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)', margin: '7px'}}>
             <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white'}}>Historical Trend</Typography>
             {/* add Historical Data plot */}
-            <MEFChartGraph />
-            {/* <HistoricalChartGraph /> */}
+
+            <HistScatter />
+            
+          </StyledBox>
+
+        </Grid>
+        <Grid item xs={12} sm={6} md={12} style={{ padding: 0}}>
+          <StyledBox style={{background: '#163A5F', borderRadius: '33px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)', margin: '7px'}}>
+            <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white'}}>Portfolio</Typography>
+            {/* add Historical Data plot */}
+
+            <PortScatter />
+            
           </StyledBox>
 
         </Grid>

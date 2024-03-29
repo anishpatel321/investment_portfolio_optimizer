@@ -45,6 +45,7 @@ function MEFChartGraph() {
       xAxisLabel={"volatility"}
       yAxisLabel={"return"}
     />
+    
   );
 }
 

@@ -181,7 +181,8 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
     'df_CML': df_CML.to_json(),
     'df_CAL': df_CAL.to_json(),
     'df_risk_threshold': df_risk_threshold.to_json(),
-    'df_risk_free_rate': df_risk_free_rate.to_json(),  # Assuming this is a DataFrame; if it's a scalar, leave as is
+    'df_risk_free_rate': df_risk_free_rate.to_json(),  
+    'senti_analysis': "hello boi"
     }
 
     # Convert the entire dictionary to a JSON string

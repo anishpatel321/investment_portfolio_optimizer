@@ -124,6 +124,8 @@ const InputPage = () => {
 
   const handleSubmit = async () => {
 
+
+
     //const setInvestmentAmountAction = setInvestmentAmount(investmentAmount);
     //dispatch(setInvestmentAmountAction);
     
@@ -163,6 +165,8 @@ const InputPage = () => {
       console.log("Error response:", errorResponse);
       return;
     }
+
+    
     
     console.log("Send successful. Packaged data:", data);
 

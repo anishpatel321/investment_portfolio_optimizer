@@ -7,7 +7,18 @@ export const outputSlice = createSlice({
 
   initialState: {
     results: null,
-    df_adj_close: null,
+    df_adj_close: {
+      AVGO: {
+        '1647993600000': 123.12,
+        '1648080000000': 123.12,
+        '1648166400000': 111.12,
+      
+      },
+      TSLA: {
+        '1647993600000': 423.12,
+        '1648080000000': 423.12,
+        '1648166400000': 411.12,
+      }},
     risk_free_rate: null,
     log_returns: null,
     df_cov_matrix: null,
@@ -136,7 +147,8 @@ export const outputSlice = createSlice({
       }
     },
     df_risk_threshold: null,
-    df_risk_free_rate: null
+    df_risk_free_rate: null,
+    senti: "yo mum"
     // for now this is all from algo
   },
 
@@ -165,10 +177,16 @@ export const outputSlice = createSlice({
       state.df_risk_threshold = JSON.parse(action.payload.df_risk_threshold);
       state.df_risk_free_rate = JSON.parse(action.payload.df_risk_free_rate);
 
+      //
+      //parse sentiment from backend
+
+
       // Assign numerical values values directly
       state.sixmonth_projected_amount = action.payload.sixmonth_projected_amount;
       state.risk_free_rate = action.payload.risk_free_rate;
       state.threshold_state = action.payload.threshold_state;
+
+      state.senti= action.payload.senti_analysis;
       
     },
 
