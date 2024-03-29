@@ -26,9 +26,10 @@ function HistoricalChartGraph() {
       const genData = formatData(dfgeneratedportfolios);
 
       setChartData([
+
+        { name: 'Generated', data: genData, color: 'yellow' }, // Example color, adjust as needed
         { name: 'CML', data: cmlData, color: 'green' }, // Example color, adjust as needed
         { name: 'CAL', data: calData, color: 'red' }, // Example color, adjust as needed
-        { name: 'Generated', data: genData, color: 'yellow' }, // Example color, adjust as needed
         { name: 'MEF', data: mefData, color: 'blue'} // Example color, adjust as needed
       
     ]);

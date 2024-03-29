@@ -1,19 +1,17 @@
 import React from 'react';
 import TopBar from '../components/TopBar';
-import CardComponent from '../components/Card';
 import { Box, Typography, Grid } from '@mui/material';
 import { styled } from '@mui/system';
 //piechart inputs
 import PieChartGraph from '../components/PieChartGraph';
 //heatmap inputs
-import ReactDOM from 'react-dom';
-import HeatmapChart from '../components/HeatmapChart';
 import { Heatmap } from '../components/Heatmap';
 //get values for investment amount
 import { useSelector } from 'react-redux';
-import ScatterChartGraph from '../components/MEFChartGraph';
 import HistoricalChartGraph from '../components/HistoricalChartGraph';
 import MEFChartGraph from '../components/MEFChartGraph';
+import MEFScatterChart from '../components/MEFScatter';
+
 
 
 const StyledBox = styled(Box)(({ theme }) => ({
@@ -70,15 +68,16 @@ const OutputPage = () => {
           <StyledBox style={{background: '#163A5F', borderRadius: '33px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)', margin: '7px'}}>
             <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white'}}>Markowitz Efficient Frontier (MEF)</Typography>
             {/* add MEF plot */}
-          
-              <MEFChartGraph />
+            <MEFScatterChart/> 
+              
           </StyledBox>
         </Grid>
         <Grid item xs={12} sm={6} md={12} style={{ padding: 0}}>
           <StyledBox style={{background: '#163A5F', borderRadius: '33px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)', margin: '7px'}}>
             <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white'}}>Historical Trend</Typography>
             {/* add Historical Data plot */}
-            <HistoricalChartGraph />
+            <MEFChartGraph />
+            {/* <HistoricalChartGraph /> */}
           </StyledBox>
 
         </Grid>

@@ -23,7 +23,7 @@ function ScatterGraph({ chartData, xAxisLabel, yAxisLabel }) {
         labelStyle: { fill: 'white'},
         stroke: 'white !important'
       }]}
-      height={300}
+      height={950}
     />
   );
 }
