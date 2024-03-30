@@ -63,13 +63,6 @@ df_cor_matrix = None
 
 
 def process_data():
-
-        
-    data2 = {
-    'Ticker': ['MSFT', 'AAPL', 'AMZN', 'NVDA', 'AVGO'],
-    'Optimal Weights': [16.5788, 4.8821, 0.9022, 57.2737, 20.3633]
-    }
-
     try:
         data = request.get_json()
         print(data)
@@ -78,9 +71,13 @@ def process_data():
         algo_results = run_algo(data["tickers"], data["lookBackDate"], end_date, 
                                          data["riskThreshold"], data["investmentAmount"], 
                                          data["minAllocationBound"], data["maxAllocationBound"]) 
+
+        # Check if the result is empty
+        if not algo_results:
+            raise ValueError("The result is empty")
+        
         return algo_results, 200  # Returning 200 status code along with the result
-    
-    
+        
     except Exception as e:
         print("Error:", e)
         return jsonify({"error": str(e)}), 400  # Return a 400 status code for any errors

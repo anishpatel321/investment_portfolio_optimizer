@@ -78,8 +78,10 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
     
     print("1")
     # Step 1: Fetch Adjusted Close Prices
-    
     df_adj_close = fetch_adj_close(tickers, start_date, end_date)
+    if df_adj_close.empty:
+        return {}
+    tickers = df_adj_close.columns.tolist() # update tickers that were pulled 
 
     print("2")
     # Step 2: Calculate Log Returns
@@ -270,9 +272,10 @@ def fetch_adj_close(tickers, start_date, end_date):
     """
     Fetch adjusted close prices for given tickers between startdate and end_date.
     """
-    df_adj_close = pd.DataFrame()
-    for ticker in tickers:
-        df_adj_close[ticker] = yf.download(ticker, start=start_date, end=end_date)['Adj Close']
+    # df_adj_close = pd.DataFrame()
+    df_adj_close = get_all_data(tickers, start_date, end_date)
+    # for ticker in tickers:
+    #     df_adj_close[ticker] = yf.download(ticker, start=start_date, end=end_date)['Adj Close']
     return df_adj_close
 
 def calculate_log_returns(df_adj_close):
@@ -369,7 +372,8 @@ def generate_random_portfolios(log_returns, risk_free_rate, tickers, min_hold, m
     print("6.1")
     min_hold = float(min_hold)
     max_hold = float(max_hold)
-    noOfPortfolios = 10000
+    # noOfPortfolios = 10000
+    noOfPortfolios = 5000
     noOfTickers = len(tickers)
 
     print("6.2")

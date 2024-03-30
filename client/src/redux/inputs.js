@@ -10,6 +10,7 @@ export const inputSlice = createSlice({
     maxAllocationBound: 0.9, // default maximum allocation bound
     investmentAmount: 1000, // default investment amount
     package: null, // initialize package property as null
+    error: null,
   },
   
   reducers: {
@@ -51,6 +52,12 @@ export const inputSlice = createSlice({
         investmentAmount: state.investmentAmount,
       };
     },
+    setError: (state, action) => { // Add this reducer to update the error state
+      state.error = action.payload;
+    },
+    clearError: (state) => { // Add this reducer to clear the error state
+      state.error = null;
+    },
   },
 });
 
@@ -64,6 +71,8 @@ export const {
   setMaxAllocation,
   setInvestment,
   packageData,
+  setError,
+  clearError,
 } = inputSlice.actions;
 
 export default inputSlice.reducer;

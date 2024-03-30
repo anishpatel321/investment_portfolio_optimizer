@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TopBar from '../components/TopBar';
 import { Box, TextField, Typography, Grid, InputAdornment, FormHelperText } from '@mui/material';
 import { styled } from '@mui/system';
@@ -7,7 +7,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { MuiChipsInput } from 'mui-chips-input'
 import { useDispatch } from 'react-redux';
-import { addTicker, removeTicker, setInvestment,  setRisk,  setLookBack,  setMinAllocation,  setMaxAllocation, packageData, } from '../redux/inputs';
+import { addTicker, removeTicker, setInvestment,  setRisk,  setLookBack,  setMinAllocation,  setMaxAllocation, packageData, setError} from '../redux/inputs';
 import { setData } from '../redux/outputs';
 import { Link as RouterLink } from 'react-router-dom'; // Import Link
 import OutputPage from './OutputPage'; // Import OutputPage
@@ -58,6 +58,7 @@ const InputPage = () => {
   const [maxAllocationBound, setMaxAllocationBound] = useState('');
   const [description, setDescription] = useState("");
   const [title_desc, setTitleDesc] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const dispatch = useDispatch(); //dispatch to add or remove tickers
   //const history = useHistory(); // Use useHistory hook to navigate
@@ -121,13 +122,13 @@ const InputPage = () => {
     setTickers(uppercaseNewChips);
   };
  
+  useEffect(() => {
+    if (isSubmitting) {
+      navigate('/loading');
+    }
+  }, [isSubmitting]);
 
   const handleSubmit = async () => {
-
-
-
-    //const setInvestmentAmountAction = setInvestmentAmount(investmentAmount);
-    //dispatch(setInvestmentAmountAction);
     
     dispatch(setInvestment(investmentAmount));
     dispatch(setRisk(riskThreshold));
@@ -137,8 +138,6 @@ const InputPage = () => {
     //dispatch(packageData());
 
     // FFS const packagedData = useSelector(state => state.inputs.package);
-
-    
 
     const data = {
       tickers,
@@ -151,36 +150,38 @@ const InputPage = () => {
 
     console.log("datas ending:", data);
 
+    // navigate('/loading') //nav to loading page while waiting 
+    setIsSubmitting(true);
 
-    const response = await fetch('/process_data', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) {
-      const errorResponse = await response.json();
-      console.log("Error response:", errorResponse);
-      return;
-    }
-
-    
-    
-    console.log("Send successful. Packaged data:", data);
-
-    const result = await response.json();
-
-    console.log('Algorithm results:', result);  // Log the raw data to the console
-
-      // Dispatch an action to update the Redux store with the fetched data
-      //dispatch(updateAlgoResults(data));
-    
-
-    dispatch(setData(result)); //set the data that comes from algo
-
-    navigate('/output');
+    setTimeout(async () => {
+      const response = await fetch('/process_data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+  
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        console.log("Error response:", errorResponse);
+        // navigate('/loading')
+        dispatch(setError(errorResponse.error))
+        return;
+      }
+      
+      console.log("Send successful. Packaged data:", data);
+  
+      const result = await response.json();
+  
+      console.log('Algorithm results:', result);  // Log the raw data to the console
+  
+        // Dispatch an action to update the Redux store with the fetched data
+        //dispatch(updateAlgoResults(data));
+      dispatch(setData(result)); //set the data that comes from algo
+      setIsSubmitting(false);
+      navigate('/output');
+    }, 2000);
 
   };  
     
