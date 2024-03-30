@@ -373,7 +373,7 @@ def generate_random_portfolios(log_returns, risk_free_rate, tickers, min_hold, m
     min_hold = float(min_hold)
     max_hold = float(max_hold)
     # noOfPortfolios = 10000
-    noOfPortfolios = 5000
+    noOfPortfolios = 1000
     noOfTickers = len(tickers)
 
     print("6.2")

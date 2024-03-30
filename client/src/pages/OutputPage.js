@@ -25,7 +25,9 @@ const StyledBox = styled(Box)(({ theme }) => ({
 const OutputPage = () => {
 
   const investmentAmount = useSelector(state => state.inputs.investmentAmount);
+  const formattedInvestmentAmount = parseFloat(investmentAmount).toFixed(2);
   const projectedAmount = useSelector(state => state.outputs.sixmonth_projected_amount);
+  const formattedProjectedAmount = parseFloat(projectedAmount).toFixed(2);
   const sent = useSelector(state => state.outputs.senti);
 
   //const initialInvestmentAmount = 10000; // Placeholder value
@@ -44,13 +46,13 @@ const OutputPage = () => {
         <Grid item xs={12} sm={6} md={4} style={{padding: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
           <StyledBox style={{background: '#163A5F', borderRadius: '33px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)', margin: '7px', flex: 1}}>
             <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white'}}>Initial Investment Amount</Typography>
-            <Typography variant="h1" style={{ marginTop: '1vh', fontSize: '7vh', fontWeight: 'bold', color: 'white'}}>${investmentAmount}</Typography>
-            <Typography variant="body1" style={{ marginTop: '2vh', fontSize: '1.5vh',color: 'white' }}>filler text to explain this metric</Typography>
+            <Typography variant="h1" style={{ marginTop: '1vh', fontSize: '7vh', fontWeight: 'bold', color: 'white'}}>${formattedInvestmentAmount}</Typography>
+            <Typography variant="body1" style={{ marginTop: '2vh', fontSize: '1.5vh',color: '#FFECB3' }}>This amount is the inital investment capital alloted to this calculation.</Typography>
           </StyledBox>
           <StyledBox style={{background: '#163A5F', borderRadius: '33px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)', margin: '7px', flex: 1}}>
             <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white' }}>Projected Investment Amount</Typography>
-            <Typography variant="h1" style={{ marginTop: '1vh', fontSize: '7vh', fontWeight: 'bold', color: 'white' }}>${projectedAmount}</Typography>
-            <Typography variant="body1" style={{ marginTop: '2vh', fontSize: '1.5vh',color: 'white' }}>filler text to explain this metric</Typography>
+            <Typography variant="h1" style={{ marginTop: '1vh', fontSize: '7vh', fontWeight: 'bold', color: 'white' }}>${formattedProjectedAmount}</Typography>
+            <Typography variant="body1" style={{ marginTop: '2vh', fontSize: '1.5vh',color: '#FFECB3' }}>This is the current projected amount for the optimal portfolio suggested for a 6-month period.</Typography>
           </StyledBox>
         </Grid>
         <Grid item xs={12} sm={6} md={8} style={{ padding: 0}}>

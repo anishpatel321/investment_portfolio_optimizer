@@ -106,8 +106,7 @@ function MEFScatter() {
         {CALData.length > 0 && <Line type="natural" dot={false} dataKey="y" data={CALData} name="CAL" stroke="#82ca9d" />}
         {/* Represent CML as a Line */}
         {CMLData.length > 0 && <Line type="natural" dot={false} dataKey="y" data={CMLData} name="CML" stroke="#ffc658" />}
-        {OptimalData.length > 0 && <Scatter name="Optimal Theoretical" data={OptimalData} fill="#ffffff" />}
-        
+        {OptimalData.length > 0 && <Scatter name="Optimal Theoretical" data={OptimalData} fill="#ffffff" />}     
       </ComposedChart>
     </ResponsiveContainer>
   );

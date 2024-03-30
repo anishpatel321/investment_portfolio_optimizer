@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardContent, Typography, Box } from '@mui/material';
+import { Card, CardContent, Typography, Box, FormHelperText } from '@mui/material';
 import { styled } from '@mui/system';
 import NumberPill from './NumberPill'; 
 import ContinueButton from './ContinueButton';
@@ -22,7 +22,7 @@ const StyledCardContent = styled(CardContent)({
     paddingTop: '15%', 
 });
 
-const CardComponent = ({ title, subtitle, body, height, hasButton, hasNumberPill, hastransition, onClick, children }) => {
+const CardComponent = ({ title, subtitle, body, height, hasButton, hasNumberPill, hastransition, onClick, children, isDisabled }) => {
   return (
     <StyledCard height={height} hastransition={hastransition}>
       {hasNumberPill && <NumberPill>{title}</NumberPill>}
@@ -34,7 +34,12 @@ const CardComponent = ({ title, subtitle, body, height, hasButton, hasNumberPill
           {body}
         </Typography>
         {children}
-        {hasButton && <Box sx={{ position: 'absolute', bottom: '3.1vh', right: '1vh' }}><ContinueButton onClick={onClick}/></Box>}
+        {hasButton && 
+          <Box sx={{ position: 'absolute', bottom: '3.1vh', right: '1vh' }}>
+            <ContinueButton onClick={onClick} disabled={isDisabled}/>
+          </Box>
+        }
+        {isDisabled && <FormHelperText error style={{position: 'absolute', left: '2vw', top: '62.5vh', fontWeight: 'bolder', color:'palevioletred', fontSize: '1.7vh'}}>Please fill out all the text fields.</FormHelperText>}
       </StyledCardContent>
     </StyledCard>
   );

@@ -60,6 +60,10 @@ const InputPage = () => {
   const [title_desc, setTitleDesc] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const isFormValid = () => {
+    return tickers.length > 0 && investmentAmount && riskThreshold && lookBackDate && minAllocationBound && maxAllocationBound;
+  };
+
   const dispatch = useDispatch(); //dispatch to add or remove tickers
   //const history = useHistory(); // Use useHistory hook to navigate
   const navigate = useNavigate();
@@ -128,61 +132,62 @@ const InputPage = () => {
     }
   }, [isSubmitting]);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (isFormValid()) {
+      dispatch(setInvestment(investmentAmount));
+      dispatch(setRisk(riskThreshold));
+      dispatch(setLookBack(new Date().toISOString())); // convert to string
+      dispatch(setMinAllocation(minAllocationBound));
+      dispatch(setMaxAllocation(maxAllocationBound));
+      //dispatch(packageData());
+
+      // FFS const packagedData = useSelector(state => state.inputs.package);
+
+      const data = {
+        tickers,
+        investmentAmount,
+        riskThreshold,
+        lookBackDate: lookBackDate.toISOString().split('T')[0],
+        minAllocationBound,
+        maxAllocationBound,
+      };
+
+      console.log("datas ending:", data);
+
+      // navigate('/loading') //nav to loading page while waiting 
+      setIsSubmitting(true);
+
+      setTimeout(async () => {
+        const response = await fetch('/process_data', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
     
-    dispatch(setInvestment(investmentAmount));
-    dispatch(setRisk(riskThreshold));
-    dispatch(setLookBack(new Date().toISOString())); // convert to string
-    dispatch(setMinAllocation(minAllocationBound));
-    dispatch(setMaxAllocation(maxAllocationBound));
-    //dispatch(packageData());
-
-    // FFS const packagedData = useSelector(state => state.inputs.package);
-
-    const data = {
-      tickers,
-      investmentAmount,
-      riskThreshold,
-      lookBackDate: lookBackDate.toISOString().split('T')[0],
-      minAllocationBound,
-      maxAllocationBound,
-    };
-
-    console.log("datas ending:", data);
-
-    // navigate('/loading') //nav to loading page while waiting 
-    setIsSubmitting(true);
-
-    setTimeout(async () => {
-      const response = await fetch('/process_data', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-  
-      if (!response.ok) {
-        const errorResponse = await response.json();
-        console.log("Error response:", errorResponse);
-        // navigate('/loading')
-        dispatch(setError(errorResponse.error))
-        return;
-      }
-      
-      console.log("Send successful. Packaged data:", data);
-  
-      const result = await response.json();
-  
-      console.log('Algorithm results:', result);  // Log the raw data to the console
-  
-        // Dispatch an action to update the Redux store with the fetched data
-        //dispatch(updateAlgoResults(data));
-      dispatch(setData(result)); //set the data that comes from algo
-      setIsSubmitting(false);
-      navigate('/output');
-    }, 2000);
-
+        if (!response.ok) {
+          const errorResponse = await response.json();
+          console.log("Error response:", errorResponse);
+          // navigate('/loading')
+          dispatch(setError(errorResponse.error))
+          return;
+        }
+        
+        console.log("Send successful. Packaged data:", data);
+    
+        const result = await response.json();
+    
+        console.log('Algorithm results:', result);  // Log the raw data to the console
+    
+          // Dispatch an action to update the Redux store with the fetched data
+          //dispatch(updateAlgoResults(data));
+        dispatch(setData(result)); //set the data that comes from algo
+        setIsSubmitting(false);
+        navigate('/output');
+      }, 2000);
+    }
   };  
     
   return (
@@ -199,7 +204,7 @@ const InputPage = () => {
           <CardComponent title="Definitions" subtitle={title_desc || "Input Definitions"} body={description || "Hover over each input item to find out more about what each input means!"} height={'67.5vh'} hastransition={true}/>
         </Grid>
         <Grid item xs={12} sm={6} md={8} style={{padding: 0}}>
-          <CardComponent title="Inputs" height={'67.5vh'} hasButton={true} onClick={handleSubmit} hasInputs={true}>
+          <CardComponent title="Inputs" height={'67.5vh'} hasButton={true} onClick={handleSubmit} hasInputs={true} isDisabled={!isFormValid()}>
             <Box sx={{ position: 'absolute', top: '4.5vh', left: '4vw'}}
               onMouseEnter={() => handleMouseEnter("Tickers", "The Tickers field is where the identifier for each stock is inputted. Type in any stock and press enter to add it to the list. The calculations will be done only on the tickers specified here.")}
               onMouseLeave={() => handleMouseLeave()}
