@@ -56,6 +56,7 @@ export const outputSlice = createSlice({
     df_forecast_trendline: null,
     df_6month_trendline: null,
     sixmonth_projected_amount: 3,
+    twelvemonth_projected_amount: 0,
     df_generated_portfolios: {
       'Volatility': {
         0: 0.778981,
@@ -183,6 +184,7 @@ export const outputSlice = createSlice({
 
       // Assign numerical values values directly
       state.sixmonth_projected_amount = action.payload.sixmonth_projected_amount;
+      state.twelvemonth_projected_amount = action.payload.twelvemonth_projected_amount;
       state.risk_free_rate = action.payload.risk_free_rate;
       state.threshold_state = action.payload.threshold_state;
 

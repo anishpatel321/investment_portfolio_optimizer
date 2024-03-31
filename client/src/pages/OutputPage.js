@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TopBar from '../components/TopBar';
 import { Box, Typography, Grid } from '@mui/material';
 import { styled } from '@mui/system';
+import { Radio, RadioGroup, FormControlLabel, FormControl } from '@mui/material';
 //piechart inputs
 import PieChartGraph from '../components/PieChartGraph';
 //heatmap inputs
@@ -11,8 +12,15 @@ import { useSelector } from 'react-redux';
 import MEFScatter from '../components/MEFScatter';
 import HistScatter from '../components/HistScatter';
 import PortScatter from '../components/PortScatter';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#ffffff',
+    },
+  },
+});
 
 const StyledBox = styled(Box)(({ theme }) => ({
   backgroundColor: 'white',
@@ -26,15 +34,19 @@ const OutputPage = () => {
 
   const investmentAmount = useSelector(state => state.inputs.investmentAmount);
   const formattedInvestmentAmount = parseFloat(investmentAmount).toFixed(2);
-  const projectedAmount = useSelector(state => state.outputs.sixmonth_projected_amount);
-  const formattedProjectedAmount = parseFloat(projectedAmount).toFixed(2);
+  const six_mo_projectedAmount = useSelector(state => state.outputs.sixmonth_projected_amount);
+  const twelve_mo_projectedAmount = useSelector(state => state.outputs.twelvemonth_projected_amount);
+  const formatted_six_ProjectedAmount = parseFloat(six_mo_projectedAmount).toFixed(2);
+  const formatted_twelve_ProjectedAmount = parseFloat(twelve_mo_projectedAmount).toFixed(2);
   const sent = useSelector(state => state.outputs.senti);
+  const [value, setValue] = useState('six');
 
-  //const initialInvestmentAmount = 10000; // Placeholder value
-  //const projectedInvestmentAmount = 15000; // Placeholder value
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
 
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <TopBar />
       <Grid sx={{ width: '95%', mx: 'auto', color: 'white' }}>
         <Typography variant="h3" component="h1" gutterBottom align="left"
@@ -47,12 +59,32 @@ const OutputPage = () => {
           <StyledBox style={{background: '#163A5F', borderRadius: '33px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)', margin: '7px', flex: 1}}>
             <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white'}}>Initial Investment Amount</Typography>
             <Typography variant="h1" style={{ marginTop: '1vh', fontSize: '7vh', fontWeight: 'bold', color: 'white'}}>${formattedInvestmentAmount}</Typography>
-            <Typography variant="body1" style={{ marginTop: '2vh', fontSize: '1.5vh',color: '#FFECB3' }}>This amount is the inital investment capital alloted to this calculation.</Typography>
+            <Typography variant="body1" style={{ marginTop: '1vh', fontSize: '1.5vh',color: '#FFECB3' }}>This amount is the inital investment capital alloted to this calculation.</Typography>
           </StyledBox>
           <StyledBox style={{background: '#163A5F', borderRadius: '33px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)', margin: '7px', flex: 1}}>
             <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white' }}>Projected Investment Amount</Typography>
-            <Typography variant="h1" style={{ marginTop: '1vh', fontSize: '7vh', fontWeight: 'bold', color: 'white' }}>${formattedProjectedAmount}</Typography>
-            <Typography variant="body1" style={{ marginTop: '2vh', fontSize: '1.5vh',color: '#FFECB3' }}>This is the current projected amount for the optimal portfolio suggested for a 6-month period.</Typography>
+            <Typography variant="h1" style={{ marginTop: '1vh', fontSize: '7vh', fontWeight: 'bold', color: 'white' }}>
+              ${value === 'six' ? formatted_six_ProjectedAmount : formatted_twelve_ProjectedAmount}
+            </Typography>
+            <Typography variant="body1" style={{ marginTop: '1vh', fontSize: '1.5vh',color: '#FFECB3', paddingBottom: '1vh' }}>This is the current projected amount for the optimal portfolio suggested for a {value === 'six' ? '6-month' : '12-month'} period.</Typography>
+            <Box display="flex" justifyContent="center">
+              <FormControl component="fieldset">
+                <RadioGroup row aria-label="position" name="position" value={value} onChange={handleChange}>
+                  <FormControlLabel style={{color: 'white'}}
+                    value="six"
+                    control={<Radio color="primary" style={{color: 'white'}} />}
+                    label="6 Months"
+                    labelPlacement="bottom"
+                  />
+                  <FormControlLabel style={{color: 'white'}}
+                    value="twelve"
+                    control={<Radio color="primary" style={{color: 'white'}} />}
+                    label="12 Months"
+                    labelPlacement="bottom"
+                  />
+                </RadioGroup>
+              </FormControl>
+            </Box>
           </StyledBox>
         </Grid>
         <Grid item xs={12} sm={6} md={8} style={{ padding: 0}}>
@@ -96,7 +128,7 @@ const OutputPage = () => {
 
         </Grid>
       </Grid>
-    </>
+    </ThemeProvider>
   );
 };
 

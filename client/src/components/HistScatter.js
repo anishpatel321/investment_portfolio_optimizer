@@ -10,22 +10,34 @@ function SynchronizedLineChart() {
   const [chartData, setChartData] = useState([]);
   const [xDomain, setXDomain] = useState([0, 0]);
   const [yDomain, setYDomain] = useState([0, 0]);
+  const [xTicks, setXTicks] = useState([]);
+  const [yTicks, setYTicks] = useState([]);
   
   const colors = [
     '#FF5733', // Red
-    '#33FF57', // Green
-    '#3357FF', // Blue
-    '#FF33E6', // Pink
-    '#33E6FF', // Cyan
     '#FFC300', // Yellow
-    '#8533FF', // Purple
-    '#FF336B', // Salmon
-    '#FF5733', // Orange
-    '#33FF57'  // Lime
+    '#FFFFFF', // White
+    '#FF33E6', // Pink
+    '#33FF57', // Lime
+    '#F0E68C', // Khaki
+    '#FFE4B5', // Moccasin
+    '#FFDEAD', // NavajoWhite
+    '#FFE4C4', // Bisque
+    '#FFDAB9', // PeachPuff
+    '#E6E6FA', // Lavender
+    '#FFF0F5', // LavenderBlush
+    '#FFE4E1', // MistyRose
+    '#FFF5EE', // SeaShell
+    '#F5FFFA', // MintCream
+    '#F0FFF0', // Honeydew
+    '#F0FFFF', // Azure
+    '#F0F8FF', // AliceBlue
+    '#F8F8FF', // GhostWhite
+    '#FFF5EE', // SeaShell
   ];
   
-  const getRandomColor = () => {
-    return colors[Math.floor(Math.random() * colors.length)];
+  const getColor = (index) => {
+    return colors[index % colors.length];
   };
 
   // Effect to format data
@@ -62,6 +74,22 @@ function SynchronizedLineChart() {
         maxY = Math.max(maxY, d.y);
       });
 
+      // Generate an array of x-axis ticks from min to max with 10 steps
+      const newXticks = Array.from({length: 9}, (_, i) => parseFloat((minX + i * (maxX - minX) / 8).toFixed(2)));
+
+      // Transform minY and maxY to logarithmic scale
+      let logMinY = Math.log10(minY);
+      let logMaxY = Math.log10(maxY);
+
+      // Generate an array of y-axis ticks from min to max with 10 steps
+      const newYticks = Array.from({length: 11}, (_, i) => {
+        let logValue = logMinY + i * (logMaxY - logMinY) / 10;
+        return Math.pow(10, logValue);
+      });
+
+      setXTicks(newXticks);
+      setYTicks(newYticks);
+
       // Update state with new domain values, expanding them slightly for padding
       setXDomain([minX - 0.01, maxX + 0.01]);
       setYDomain([minY - 0.01, maxY + 0.01]);
@@ -76,7 +104,7 @@ function SynchronizedLineChart() {
     margin={{ top: 30, right: 30, bottom: 20, left: 70 }}
     data={chartData}
   >
-    <CartesianGrid strokeDasharray="3 3" />
+    <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.4} />
     <XAxis
       type="number"
       dataKey="x"
@@ -84,15 +112,19 @@ function SynchronizedLineChart() {
       label={{ value: 'Date', position: 'insideBottom', dy: 30, fill: 'white' }}
       tickFormatter={value => new Date(value).toISOString().split('T')[0]}
       stroke="white" // Set the stroke color to white
+      ticks={xTicks} 
     />
     <YAxis 
         type="number"
         domain={yDomain} 
-        label={{ value: 'Price ($)', position: 'outsideLeft', dx: -50, fill: 'white' }}
-        tickFormatter={(value) => value.toFixed(2)}
+        label={{ value: 'Price ($) - Log scale', position: 'outsideLeft', angle:-90, dx: -50, fill: 'white' }}
+        // tickFormatter={(value) => value.toFixed(0)}
+        tickFormatter={(value) => `${value >= 1 ? value.toFixed(0) : value.toFixed(2)}`}
         stroke="white" // Set the stroke color to white
+        scale="log"
+        ticks={yTicks} 
     />
-    <Tooltip />
+    <Tooltip contentStyle={{ color: 'black' }} itemStyle={{ color: 'black' }} formatter={(value) => value.toFixed(2)}/>
     <Legend 
       verticalAlign="bottom" 
       align="center" 
@@ -106,8 +138,7 @@ function SynchronizedLineChart() {
         dataKey="y"
         data={chartData.filter(entry => entry.ticker === ticker)}
         name={ticker}
-        // stroke={getRandomColor} // Random color
-        stroke={`#${Math.floor(Math.random()*16777215).toString(16)}`}
+        stroke={getColor(index)}
       />
     ))}
   </LineChart>

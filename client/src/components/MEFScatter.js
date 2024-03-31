@@ -31,7 +31,8 @@ function MEFScatter() {
   
   const [xDomain, setXDomain] = useState([0, 0]);
   const [yDomain, setYDomain] = useState([0, 0]);
-
+  const [xTicks, setXTicks] = useState([]);
+  const [yTicks, setYTicks] = useState([]);
 
   useEffect(() => {
     // Function to format dataset for the chart
@@ -81,6 +82,15 @@ function MEFScatter() {
       // Update state with new domain values, expanding them slightly for padding
       setXDomain([minX - 0.01, maxX + 0.01]);
       setYDomain([minY - 0.01, maxY + 0.01]);
+
+      // Generate an array of x-axis ticks from min to max with 10 steps
+      const newXticks = Array.from({length: 11}, (_, i) => parseFloat((minX + i * (maxX - minX) / 10).toFixed(2)));
+      
+      // Generate an array of y-axis ticks from min to max with 10 steps
+      const newYticks = Array.from({length: 11}, (_, i) => parseFloat((minY + i * (maxY - minY) / 10).toFixed(2)));
+
+      setXTicks(newXticks);
+      setYTicks(newYticks);
     
       setGeneratedPortfoliosData(generatedData);
     }
@@ -90,10 +100,10 @@ function MEFScatter() {
   return (
     <ResponsiveContainer width="100%" height={950}>
       <ComposedChart margin={{ top: 30, right: 30, bottom: 20, left: 70 }}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis type="number" dataKey="x" name="Volatility" stroke="white" label={{ value: 'Volatility', position: 'insideBottom', dy: 30, fill: 'white' } } domain={xDomain} tickFormatter={(value) => value.toFixed(2)}/>
-        <YAxis type="number" dataKey="y" name="Returns" stroke="white" label={{ value: 'Returns', position: 'outsideLeft', dx: -50, fill: 'white' }} domain={yDomain} tickFormatter={(value) => value.toFixed(2)}/>
-        <Tooltip/>
+        <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.4}/>
+        <XAxis type="number" dataKey="x" name="Volatility" stroke="white" label={{ value: 'Volatility', position: 'insideBottom', dy: 30, fill: 'white' } } domain={xDomain} tickFormatter={(value) => value.toFixed(2)} />
+        <YAxis type="number" dataKey="y" name="Returns" stroke="white" label={{ value: 'Returns', position: 'outsideLeft', angle:-90, dx: -50, fill: 'white' }} domain={yDomain} tickFormatter={(value) => value.toFixed(2)}/>
+        <Tooltip formatter={(value) => value.toFixed(3)}/>
         <Legend 
           verticalAlign="bottom" 
           align="center" 

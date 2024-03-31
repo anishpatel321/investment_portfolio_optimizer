@@ -160,6 +160,9 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
     # Return relevant data and DataFrames
     global algo_results
     
+    if 'NumericDate' in df_historical.columns:
+        df_historical = df_historical.drop(columns=['NumericDate'])
+    
     algo_results = {
     'df_adj_close': df_adj_close.to_json(),
     'risk_free_rate': risk_free_rate,  # Assuming this is a scalar value
@@ -290,6 +293,7 @@ def calculate_covariance_matrix(log_returns):
     Calculate the covariance matrix of the log returns.
     """
     cov_matrix = log_returns.cov() * 252
+    # cov_matrix = log_returns.cov()
     return cov_matrix
 
 def cov_matrix_as_df(cov_matrix, log_returns):
@@ -308,6 +312,7 @@ def cor_matrix_as_df(cor_matrix, log_returns):
     return df_cor
 
 def standard_deviation(weights, cov_matrix):
+    # variance = (weights.T * 252) @ (cov_matrix @ weights)
     variance = weights.T @ cov_matrix @ weights
     return np.sqrt(variance)
 
@@ -373,7 +378,7 @@ def generate_random_portfolios(log_returns, risk_free_rate, tickers, min_hold, m
     min_hold = float(min_hold)
     max_hold = float(max_hold)
     # noOfPortfolios = 10000
-    noOfPortfolios = 1000
+    noOfPortfolios = 5000
     noOfTickers = len(tickers)
 
     print("6.2")
@@ -465,7 +470,8 @@ def generate_MEF_curve(tickers, min_hold, max_hold, log_returns, max_return, ret
     # max_return = np.max(meanLogRet)
 
     # Dynamically adjust the range of returns based on min and max points
-    returns_range = np.linspace(return_of_portfolio_with_min_volatility, max_return, 50)
+    # returns_range = np.linspace(return_of_portfolio_with_min_volatility, max_return, 50)
+    returns_range = np.linspace(min(max_return, return_of_portfolio_with_min_volatility), max(max_return, return_of_portfolio_with_min_volatility), 50)
     volatility_opt = []
 
     def minimizeMyVolatility(w):

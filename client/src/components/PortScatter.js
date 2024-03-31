@@ -6,6 +6,43 @@ function PortScatter() {
   // Retrieve datasets from Redux store
   const dfHistorical = useSelector(state => state.outputs.df_historical);
   const dfHistTrend = useSelector(state => state.outputs.df_historical_trendline);
+  const [xTicks, setXTicks] = useState([]);
+  const [yTicks, setYTicks] = useState([]);
+
+  const colors = [
+    '#FF5733', // Red
+    '#FFC300', // Yellow
+    '#FFFFFF', // White
+    '#FF33E6', // Pink
+    '#FF336B', // Salmon
+    '#FF5733', // Orange
+    '#33FF57', // Lime
+    '#FFA500', // Orange
+    '#FFFF00', // Yellow
+    '#ADFF2F', // GreenYellow
+    '#FFD700', // Gold
+    '#F0E68C', // Khaki
+    '#FAFAD2', // LightGoldenRodYellow
+    '#FFE4B5', // Moccasin
+    '#FFDEAD', // NavajoWhite
+    '#FFE4C4', // Bisque
+    '#FFDAB9', // PeachPuff
+    '#E6E6FA', // Lavender
+    '#FFF0F5', // LavenderBlush
+    '#FFE4E1', // MistyRose
+    '#FFF5EE', // SeaShell
+    '#F5FFFA', // MintCream
+    '#F0FFF0', // Honeydew
+    '#F0FFFF', // Azure
+    '#F0F8FF', // AliceBlue
+    '#F8F8FF', // GhostWhite
+    '#F5F5F5', // WhiteSmoke
+    '#FFF5EE', // SeaShell
+  ];
+  
+  const getColor = (index) => {
+    return colors[index % colors.length];
+  };
 
   // State for formatted data
   const [chartData, setChartData] = useState([]);
@@ -47,15 +84,23 @@ function PortScatter() {
         minY = Math.min(minY, d.y);
         maxY = Math.max(maxY, d.y);
       });
-
-    if(dfHistTrend){
-      setHistTrendChartData(formatData(dfHistTrend));
-    }
       
+      // Generate an array of x-axis ticks from min to max with 10 steps
+      const newXticks = Array.from({length: 9}, (_, i) => parseFloat((minX + i * (maxX - minX) / 8).toFixed(2)));
+
+      // Generate an array of y-axis ticks from min to max with 10 steps
+      const newYticks = Array.from({length: 11}, (_, i) => parseFloat((minY + i * (maxY - minY) / 10).toFixed(2)));
+
+      if(dfHistTrend){
+        setHistTrendChartData(formatData(dfHistTrend));
+      }
+      
+      setXTicks(newXticks);
+      setYTicks(newYticks);
 
       // Update state with new domain values, expanding them slightly for padding
-      setXDomain([minX - 0.01, maxX + 500000]);
-      setYDomain([minY - 0.01, maxY + 20]);
+      setXDomain([minX - 0.01, maxX + 0.01]);
+      setYDomain([minY - 0.01, maxY + 0.01]);
 
       setChartData(historicalFormatted);
     }
@@ -67,7 +112,7 @@ function PortScatter() {
         margin={{ top: 30, right: 30, bottom: 20, left: 70 }}
         data={chartData}
       >
-        <CartesianGrid strokeDasharray="3 3" />
+        <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.4}/>
         <XAxis
           type="number"
           dataKey="x"
@@ -75,15 +120,17 @@ function PortScatter() {
           label={{ value: 'Date', position: 'insideBottom', dy: 30, fill: 'white' }}
           tickFormatter={value => new Date(value).toISOString().split('T')[0]}
           stroke="white"
+          ticks={xTicks}
         />
         <YAxis 
             type="number"
             domain={yDomain} 
-            label={{ value: 'Price ($)', position: 'outsideLeft', dx: -50, fill: 'white' }}
+            label={{ value: 'Price ($)', position: 'outsideLeft', angle:-90, dx: -50, fill: 'white' }}
             tickFormatter={(value) => value.toFixed(0)}
             stroke="white"
+            ticks={yTicks}
         />
-        <Tooltip />
+        <Tooltip formatter={(value) => value.toFixed(2)}/>
         <Legend 
           verticalAlign="bottom" 
           align="center" 
@@ -97,7 +144,7 @@ function PortScatter() {
             dataKey="y"
             data={chartData.filter(entry => entry.ticker === ticker)}
             name={ticker}
-            stroke={`#${Math.floor(Math.random()*16777215).toString(16)}`} // Random color
+            stroke='#FFA500' // Random color
           />
         ))}
         {histTrendChartData.length > 0 && (
@@ -107,7 +154,7 @@ function PortScatter() {
             dataKey="y"
             data={histTrendChartData}
             name="Historical Trend"
-            stroke="#ff7300"
+            stroke='#33FF57'
           />
         )}
       </ComposedChart>
