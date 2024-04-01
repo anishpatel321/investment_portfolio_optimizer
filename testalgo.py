@@ -507,7 +507,7 @@ def generate_MEF_curve(tickers, min_hold, max_hold, log_returns, max_return, ret
     meanLogRet = log_returns.mean() * 252
 
     # min_return = np.min(meanLogRet)
-    # max_return = np.max(meanLogRet)
+    max_return = np.max(meanLogRet)
 
     # Dynamically adjust the range of returns based on min and max points
     # returns_range = np.linspace(return_of_portfolio_with_min_volatility, max_return, 50)
