@@ -582,9 +582,11 @@ def create_recommended_portfolio_historical_returns_df(optimal_valid, log_return
     print("11.3")
     # Convert log returns to simple returns for plotting
     historical_simple_returns = np.exp(historical_returns.cumsum())
+     # Normalize the returns so that the last value is equal to 1
+    normalized_returns = historical_simple_returns / historical_simple_returns.iloc[-1]
     print("11.4")
     # Create DataFrames for Historical and Projected Returns
-    df_historical = pd.DataFrame(historical_simple_returns, columns=['Historical Returns'])
+    df_historical = pd.DataFrame(normalized_returns, columns=['Historical Returns'])
 
     return df_historical
 
