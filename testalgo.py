@@ -2,20 +2,27 @@ import numpy as np
 import pandas as pd
 from fredapi import Fred
 from data import get_all_data
+from openai_test import dynamic_corr
 from scipy.optimize import minimize
-#for testing
-
-import yfinance as yf
+import os
+from openai import OpenAI
+from dotenv import load_dotenv
 import pandas as pd
 from datetime import datetime, timedelta
 import numpy as np
 from scipy.optimize import minimize
 from sklearn.linear_model import LinearRegression
+import json, re
 
-import json
+load_dotenv()
 
+# # Get the API key from the environment variables
+api_key = os.getenv("OPENAI_API_KEY")
 
-
+# # Pass the API key when creating the OpenAI client
+client = OpenAI(
+  api_key=api_key
+)
 
  # Add algo into testalgo.py and print here.
     # tickers
@@ -42,7 +49,6 @@ import json
 #max_hold = 1
 #risk_threshold = 0.2
 #investment_amount = 500000
-
 
 
 def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, min_hold, max_hold):
@@ -91,6 +97,10 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
     # Step 3: Calculate Covariance and Correlation Matrices
     cov_matrix = calculate_covariance_matrix(log_returns)
     cor_matrix = calculate_correlation_matrix(log_returns)
+    
+    dynamic_corr_text = dynamic_corr(cor_matrix)
+    # Testing dynamic text from correlation matrix
+    # dynamic_corr(cor_matrix)
 
     print("4")
     # Step 4: Fetch the Risk-Free Rate
@@ -187,7 +197,8 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
     'df_CAL': df_CAL.to_json(),
     'df_risk_threshold': df_risk_threshold.to_json(),
     'df_risk_free_rate': df_risk_free_rate.to_json(),  
-    'senti_analysis': "hello boi"
+    'senti_analysis': "hello boi",
+    'dynamic_corr_text': dynamic_corr_text,
     }
 
     # Convert the entire dictionary to a JSON string

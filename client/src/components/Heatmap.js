@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import * as d3 from 'd3';
 import { Grid, Typography } from '@mui/material';
 
-export const Heatmap = ({ width, height }) => {
+export const Heatmap = ({ width, height, text }) => {
   const svgRef = useRef(null);
 
   const selectorData = useSelector(state => state.outputs.df_cor_matrix);
@@ -76,7 +76,7 @@ export const Heatmap = ({ width, height }) => {
   d3.selectAll(".y-axis .tick line").remove();
 
   return (
-    <Grid sx={{color: 'white', position: 'relative'}}>
+    <Grid sx={{color: 'white', position: 'relative', overflow: 'hidden'}}>
       <svg ref={svgRef} width={width} height={height} />
       <svg width={'3vw'} height={height}>
         <defs>
@@ -89,8 +89,9 @@ export const Heatmap = ({ width, height }) => {
         <text x="50%" y="15%" textAnchor="middle" fill="white" fontWeight={'bold'}>High</text>
         <text x="50%" y="86%" textAnchor="middle" fill="white" fontWeight={'bold'}>Low</text>
       </svg>
-      <Typography variant="h5" style={{ position: 'absolute', top: '2vh', left: width, marginLeft: '6vw', marginRight: '2vw', color: 'white'}}>filler text to explain this metric: The Correlation matrix to the left can be interprested using the heat map colors, blue being very low Correlation and red being very high.</Typography>
+      <Typography variant="h5" style={{ position: 'absolute', top: '0vh', left: width, marginLeft: '5.5vw', marginRight: '0vw', bottom: '1.5vw', color: 'white', overflow: 'auto', maxHeight: '70vh'}}
+        dangerouslySetInnerHTML={{ __html: text || "Filler text to explain this metric: The Correlation matrix to the left can be interpreted using the heat map colors, blue being very low Correlation and red being very high."}}>
+      </Typography>
     </Grid>
   );
-  
 };

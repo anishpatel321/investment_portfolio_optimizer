@@ -55,7 +55,7 @@ export const outputSlice = createSlice({
     df_historical_trendline: null,
     df_forecast_trendline: null,
     df_6month_trendline: null,
-    sixmonth_projected_amount: 3,
+    sixmonth_projected_amount: 0,
     twelvemonth_projected_amount: 0,
     df_generated_portfolios: {
       'Volatility': {
@@ -149,7 +149,8 @@ export const outputSlice = createSlice({
     },
     df_risk_threshold: null,
     df_risk_free_rate: null,
-    senti: "yo mum"
+    senti: "",
+    dynamic_corr: ""
     // for now this is all from algo
   },
 
@@ -187,8 +188,8 @@ export const outputSlice = createSlice({
       state.twelvemonth_projected_amount = action.payload.twelvemonth_projected_amount;
       state.risk_free_rate = action.payload.risk_free_rate;
       state.threshold_state = action.payload.threshold_state;
-
       state.senti= action.payload.senti_analysis;
+      state.dynamic_corr = action.payload.dynamic_corr_text;
       
     },
 

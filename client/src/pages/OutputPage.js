@@ -39,6 +39,7 @@ const OutputPage = () => {
   const formatted_six_ProjectedAmount = parseFloat(six_mo_projectedAmount).toFixed(2);
   const formatted_twelve_ProjectedAmount = parseFloat(twelve_mo_projectedAmount).toFixed(2);
   const sent = useSelector(state => state.outputs.senti);
+  const corr_text = useSelector(state => state.outputs.dynamic_corr);
   const [value, setValue] = useState('six');
 
   const handleChange = (event) => {
@@ -96,7 +97,7 @@ const OutputPage = () => {
         <Grid item xs={12} sm={6} md={12} style={{ padding: 0}}>
           <StyledBox style={{background: '#163A5F', borderRadius: '33px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)', margin: '7px'}}>
             <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white'}}>Correlation Matrix</Typography>
-            <Heatmap width={900} height={600}/>
+            <Heatmap width={550} height={400} text={corr_text}/>
           </StyledBox>
         </Grid>
         <Grid item xs={12} sm={6} md={12} style={{ padding: 0}}>
