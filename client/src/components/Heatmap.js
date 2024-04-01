@@ -89,7 +89,7 @@ export const Heatmap = ({ width, height, text }) => {
         <text x="50%" y="15%" textAnchor="middle" fill="white" fontWeight={'bold'}>High</text>
         <text x="50%" y="86%" textAnchor="middle" fill="white" fontWeight={'bold'}>Low</text>
       </svg>
-      <Typography variant="h5" style={{ position: 'absolute', top: '0vh', left: width, marginLeft: '5.5vw', marginRight: '0vw', bottom: '1.5vw', color: 'white', overflow: 'auto', maxHeight: '70vh'}}
+      <Typography variant="h5" style={{ position: 'absolute', top: '0vh', left: width, marginLeft: '5.5vw', marginRight: '0vw', bottom: '1.5vw', color: 'white', overflow: 'auto', maxHeight: '70vh', fontSize: '2vh'}}
         dangerouslySetInnerHTML={{ __html: text || "Filler text to explain this metric: The Correlation matrix to the left can be interpreted using the heat map colors, blue being very low Correlation and red being very high."}}>
       </Typography>
     </Grid>

@@ -150,7 +150,8 @@ export const outputSlice = createSlice({
     df_risk_threshold: null,
     df_risk_free_rate: null,
     senti: "",
-    dynamic_corr: ""
+    dynamic_corr: "",
+    dynamic_pie: ""
     // for now this is all from algo
   },
 
@@ -190,6 +191,7 @@ export const outputSlice = createSlice({
       state.threshold_state = action.payload.threshold_state;
       state.senti= action.payload.senti_analysis;
       state.dynamic_corr = action.payload.dynamic_corr_text;
+      state.dynamic_pie = action.payload.dynamic_pie_text;
       
     },
 

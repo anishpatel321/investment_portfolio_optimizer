@@ -19,22 +19,13 @@ function SynchronizedLineChart() {
     '#FFFFFF', // White
     '#FF33E6', // Pink
     '#33FF57', // Lime
-    '#F0E68C', // Khaki
-    '#FFE4B5', // Moccasin
-    '#FFDEAD', // NavajoWhite
-    '#FFE4C4', // Bisque
-    '#FFDAB9', // PeachPuff
-    '#E6E6FA', // Lavender
-    '#FFF0F5', // LavenderBlush
-    '#FFE4E1', // MistyRose
-    '#FFF5EE', // SeaShell
-    '#F5FFFA', // MintCream
-    '#F0FFF0', // Honeydew
-    '#F0FFFF', // Azure
-    '#F0F8FF', // AliceBlue
-    '#F8F8FF', // GhostWhite
-    '#FFF5EE', // SeaShell
-  ];
+    '#00FFFF', // Cyan
+    '#2F99FF', // Blue
+    '#808080', // Gray
+    '#000000', // Black
+    '#008000', // Green
+    '#FFA500', // Orange
+];
   
   const getColor = (index) => {
     return colors[index % colors.length];

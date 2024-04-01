@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from fredapi import Fred
 from data import get_all_data
-from openai_test import dynamic_corr
+from openai_test import dynamic_corr, dynamic_pie, overall_sentiment, get_sentiment, dynamic_sentiment
 from scipy.optimize import minimize
 import os
 from openai import OpenAI
@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 import numpy as np
 from scipy.optimize import minimize
 from sklearn.linear_model import LinearRegression
-import json, re
+import json, re, requests
 
 load_dotenv()
 
@@ -24,6 +24,7 @@ client = OpenAI(
   api_key=api_key
 )
 
+alpha_api_key = os.getenv('ALPHA_VANTAGE_API_KEY')
  # Add algo into testalgo.py and print here.
     # tickers
 # etf_5 = ['SPY','BND','GLD','QQQ','VTI']
@@ -88,6 +89,8 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
     if df_adj_close.empty:
         return {}
     tickers = df_adj_close.columns.tolist() # update tickers that were pulled 
+    sentiments = overall_sentiment(tickers, alpha_api_key)
+    overall_senti = dynamic_sentiment(sentiments)
 
     print("2")
     # Step 2: Calculate Log Returns
@@ -132,6 +135,8 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
     optimal_below_threshold_sharpe_ratio = calculate_optimal_generated_porfolio_allocations_below_risk_threshold_sharpe(weight, validIndex, log_returns, cov_matrix, risk_free_rate)
     df_max_sharpe_below_threshold_generated_portfolio, optimal_valid = optimal_generated_porfolio_allocations_below_risk_threshold_as_df(tickers, weight, validIndex)
 
+    dynamic_pie_text = dynamic_pie(df_max_sharpe_below_threshold_generated_portfolio, investment_amount)
+    
     print("10")
     # Step 10: Create CML & CAL lines
     volatility_range = define_volatility_range(min_volatility, max_volatility)
@@ -197,8 +202,9 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
     'df_CAL': df_CAL.to_json(),
     'df_risk_threshold': df_risk_threshold.to_json(),
     'df_risk_free_rate': df_risk_free_rate.to_json(),  
-    'senti_analysis': "hello boi",
+    'senti_analysis': overall_senti,
     'dynamic_corr_text': dynamic_corr_text,
+    'dynamic_pie_text': dynamic_pie_text,
     }
 
     # Convert the entire dictionary to a JSON string
