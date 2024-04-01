@@ -24,9 +24,13 @@ def dynamic_corr(correlation_matrix):
     # Get the tickers from the correlation matrix
     tickers = correlation_matrix.columns
 
+    # Find the minimum correlation value
+    min_corr = round(correlation_matrix.min().min(),2)
+
     # Create a prompt for the OpenAI API
     prompt = "I have a heatmap correlation matrix of stock tickers: " + ', '.join(tickers) + ". "
-    prompt += "This matrix is represented using a heatmap which uses a color scheme that goes from blue (representing a correlation of -1) to red (representing a correlation of 1), with purple representing a correlation close to 0. "
+    prompt += f"This matrix is represented using a heatmap which uses a color scheme that goes from blue (representing a correlation of {min_corr}) to red (representing a correlation of 1). "
+    prompt += "In this case, blue represents the minimum correlation value in the matrix, red represents the maximum correlation value, and colors in between represent correlation values between these two extremes. "
     prompt += "Now, let's analyze this correlation matrix:\n\n"
 
     # Add the correlations to the prompt
@@ -34,16 +38,16 @@ def dynamic_corr(correlation_matrix):
         for j in range(i+1, len(tickers)):  # Only consider each pair once
             prompt += f"The correlation between **{tickers[i]}** and **{tickers[j]}** is **{correlation_matrix.iloc[i, j]:.2f}**.\n"
 
-    prompt += "In a really short paragraph, briefly explain how to read a heatmap correlation matrix (based on the colors) and explain the importance of correlation for diversification in portfolio management based on the modern portfolio theory. "
-    prompt += "\nThen, provide a new paragraph with a concise analysis of the correlation matrix, highlighting key potential concerns (having high correlations) and suggesting improvements such as alternate industries they can explore to balance out the high correlations. Also mention any promising correlations (in the context of portfolio management, neutral or negative) that contribute to making the portfolio diverse and robust."
+    prompt += "In a short paragraph, briefly explain why min and max values are used for the range and what the values are. Then, mention how to read a heatmap correlation matrix (based on the colors) and explain the importance of correlation for diversification in portfolio management based on the modern portfolio theory. "
+    prompt += "\nThen, provide a new paragraph with an analysis of the correlation matrix, highlighting all potential concerns (having high correlations) and suggesting improvements such as which alternate industries they can explore to balance out the high correlations. Also mention any promising correlations (in the context of portfolio management, neutral or negative) that contribute to making the portfolio diverse and robust."
     prompt += "\nThe goal is to provide the user with a holistic view of their portfolio and alert them about certain concerns such as relatively high positive correlations, so craft your response in that way. The goal is not to instill fear and uncertainty to the point they keep trying with new tickers until they get a good message. Keep the paragraphs very concise and specific."
-    prompt += "\nPlease provide a response that is concise and to the point, and use bold styling for the tickers and all values."
+    prompt += "\nPlease provide a response that is summarized, concise and to the point, and use bold styling for the tickers and all values."
     
     # Send the prompt to the OpenAI API
     completion = client.chat.completions.create(
         model="gpt-4",
         messages=[
-            {"role": "system", "content": "You are a financial assistant, skilled in analyzing and summarizing complex financial data in a concise manner. You do so in a positive, but professional tone, keeping out the casualness in your replies. Consider you may be addressing potentially new investors who have not invested much in stocks before and address them directly."},
+            {"role": "system", "content": "You are a financial assistant, skilled in analyzing and summarizing complex financial data. You do so in a positive, but professional tone, keeping out the casualness in your replies. Consider you may be addressing potentially new investors who have not invested much in stocks before and address them directly."},
             {"role": "user", "content": prompt}
         ]
     )
@@ -55,6 +59,7 @@ def dynamic_corr(correlation_matrix):
     response_text = response_text.replace('\n', '<br/>')
     response_text = re.sub(r'\*\*(.*?)\*\*', r'<span style="color: #FFECB3;"><strong>\1</strong></span>', response_text)
     return response_text
+
 
 
 def dynamic_pie(df_max_sharpe_below_threshold_generated_portfolio, investment_amount):
@@ -69,7 +74,7 @@ def dynamic_pie(df_max_sharpe_below_threshold_generated_portfolio, investment_am
     prompt = "I have a portfolio with the following allocations: \n\n"
     for i in range(len(tickers)):
         prompt += f"**{tickers[i]}**: **{optimal_weights[i]*100:.2f}%** (equivalent to **${investment_amounts[i]:.2f}**).\n"
-    prompt += "\nPlease provide a very short description of this portfolio by mentioning all of the allocation amounts for each company name in two to three lines."
+    prompt += "\nPlease provide a short description of this portfolio by mentioning all of the allocation amounts for each company (mention name and ticker) in three to four lines."
     prompt += "\nMake sure that the numbers/percentages and stock ticker and company names are bolded using the double asterisks."
     # Send the prompt to the OpenAI API
     completion = client.chat.completions.create(
@@ -215,7 +220,7 @@ def dynamic_sentiment(overall_results):
     completion = client.chat.completions.create(
         model="gpt-4",
         messages=[
-            {"role": "system", "content": "You are a financial assistant, skilled in analyzing and summarizing complex financial data in a concise manner. You do so in a positive, but professional tone, keeping out the casualness in your replies. Do not refer to yourself at all. Consider you may be addressing potentially new investors who have not invested much in stocks before and address them directly."},
+            {"role": "system", "content": "You are a financial assistant, skilled in analyzing and summarizing complex financial data in a very concise manner. You do so in a positive, but professional tone, keeping out the casualness in your replies. Do not refer to yourself at all. Consider you may be addressing potentially new investors who have not invested much in stocks before and address them directly."},
             {"role": "user", "content": prompt}
         ]
     )
