@@ -83,6 +83,10 @@ def run_algo(tickers, start_date, end_date, risk_threshold, investment_amount, m
         df_risk_free_rate (DataFrame): DataFrame of risk-free rate.
     """
     
+    print("0.5")
+    # Adjust min, max hold if invalid
+    min_hold, max_hold = adjust_min_max_hold(min_hold, max_hold)
+
     print("1")
     # Step 1: Fetch Adjusted Close Prices
     df_adj_close = fetch_adj_close(tickers, start_date, end_date)
@@ -287,6 +291,25 @@ def get_df_risk_free_rate():
 
 #All of the functions for the data processing
 #----------------------------------------------------------------------------------------------------------------------#
+def adjust_min_max_hold(tickers, min_hold, max_hold):
+    # Calculate the equal-weighted allocation
+    equal_weight = 1 / len(tickers)
+    
+    # Check and adjust min_hold to be within [0, 1] range
+    if min_hold < 0:
+        min_hold = 0
+    # Adjust min_hold if it's within 5% of equal-weighted allocation
+    elif min_hold > equal_weight - 0.05:
+        min_hold = max(equal_weight - 0.05, 0)
+
+    # Check and adjust max_hold to be within [0, 1] range
+    if max_hold > 1:
+        max_hold = 1
+    # Adjust max_hold if it's within 5% of equal-weighted allocation
+    elif max_hold < equal_weight + 0.05:
+        max_hold = min(equal_weight + 0.05, 1)
+
+    return min_hold, max_hold
 
 def fetch_adj_close(tickers, start_date, end_date):
     """
