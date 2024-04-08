@@ -61,12 +61,12 @@ const OutputPage = () => {
       <Grid container spacing={1} justifyContent="center" sx={{ width: '95%', mx: 'auto' }}>
         <Grid item xs={12} sm={6} md={4} style={{padding: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
           <StyledBox style={{background: '#163A5F', borderRadius: '33px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)', margin: '7px', flex: 0.85}}>
-            <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white'}}>Initial Investment Amount</Typography>
+            <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white', background: '#192435', borderRadius: '30px', padding: '0.6vh 1vw', display: 'inline-block'}}>Initial Investment Amount</Typography>
             <Typography variant="h1" style={{ marginTop: '2vh', fontSize: '7.5vh', fontWeight: 'bold', color: 'white'}}>${formattedInvestmentAmount}</Typography>
             <Typography variant="body1" style={{ marginTop: '2vh', fontSize: '2vh',color: '#FFECB3' }}>This amount is the inital investment capital alloted to this calculation.</Typography>
           </StyledBox>
           <StyledBox style={{background: '#163A5F', borderRadius: '33px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)', margin: '7px', flex: 1.15}}>
-            <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white' }}>Projected Investment Amount</Typography>
+            <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white', background: '#192435', borderRadius: '30px', padding: '0.6vh 1vw', display: 'inline-block' }}>Projected Investment Amount</Typography>
             <Typography variant="h1" style={{ marginTop: '2vh', fontSize: '7.5vh', fontWeight: 'bold', color: 'white' }}>
               ${value === 'six' ? formatted_six_ProjectedAmount : formatted_twelve_ProjectedAmount}
             </Typography>
@@ -92,8 +92,8 @@ const OutputPage = () => {
           </StyledBox>
         </Grid>
         <Grid item xs={12} sm={6} md={8} style={{ padding: 0}}>
-          <StyledBox style={{background: '#163A5F', borderRadius: '33px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)', margin: '7px'}}>
-            <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white'}}>Optimal Allocation</Typography>
+          <StyledBox style={{background: '#163A5F', borderRadius: '33px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)', margin: '7px', minHeight: '65vh'}}>
+            <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white', background: '#192435', borderRadius: '30px', padding: '0.6vh 1vw', display: 'inline-block'}}>Optimal Allocation</Typography>
               <PieChartGraph />
               <div style={{ marginTop: '2vh', padding: '1vw', overflow: 'auto', maxHeight: '25vh'}}>
                 <Typography variant="body1" style={{color: 'white', fontSize: '2vh'}}
@@ -104,13 +104,13 @@ const OutputPage = () => {
         </Grid>
         <Grid item xs={12} sm={6} md={12} style={{ padding: 0}}>
           <StyledBox style={{background: '#163A5F', borderRadius: '33px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)', margin: '7px'}}>
-            <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white'}}>Correlation Matrix</Typography>
+            <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white', background: '#192435', borderRadius: '30px', padding: '0.6vh 1vw', display: 'inline-block'}}>Correlation Matrix</Typography>
             <Heatmap width={650} height={450} text={corr_text}/>
           </StyledBox>
         </Grid>
         <Grid item xs={12} sm={6} md={12} style={{ padding: 0}}>
           <StyledBox style={{background: '#163A5F', borderRadius: '33px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)', margin: '7px'}}>
-            <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white'}}>Markowitz Efficient Frontier (MEF)</Typography>
+            <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white', background: '#192435', borderRadius: '30px', padding: '0.6vh 1vw', display: 'inline-block'}}>Markowitz Efficient Frontier (MEF)</Typography>
             {/* add MEF plot */}
             <MEFScatter/> 
             <Typography variant="h5" style={{ color: 'white', overflow: 'auto', maxHeight: '20vh', fontSize: '2vh', paddingLeft: '1vw', paddingRight: '0.5vw', paddingBottom: '1vw'}}
@@ -120,7 +120,7 @@ const OutputPage = () => {
         </Grid>
         <Grid item xs={12} sm={6} md={12} style={{ padding: 0}}>
           <StyledBox style={{background: '#163A5F', borderRadius: '33px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)', margin: '7px'}}>
-            <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white'}}>Historical Trend</Typography>
+            <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white', background: '#192435', borderRadius: '30px', padding: '0.6vh 1vw', display: 'inline-block'}}>Historical Trend</Typography>
             {/* add Historical Data plot */}
             <HistScatter />
             <Typography variant="h5" style={{ color: 'white', overflow: 'auto', maxHeight: '10vh', fontSize: '2vh', paddingLeft: '1vw', paddingRight: '0.5vw', paddingBottom: '1vw'}}
@@ -130,7 +130,7 @@ const OutputPage = () => {
         </Grid>
         <Grid item xs={12} sm={6} md={12} style={{ padding: 0}}>
           <StyledBox style={{background: '#163A5F', borderRadius: '33px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)', margin: '7px'}}>
-            <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white'}}>Portfolio</Typography>
+            <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white', background: '#192435', borderRadius: '30px', padding: '0.6vh 1vw', display: 'inline-block'}}>Portfolio</Typography>
             <PortScatter />
             <Typography variant="h5" style={{ color: 'white', overflow: 'auto', maxHeight: '10vh', fontSize: '2vh', paddingLeft: '1vw', paddingRight: '0.5vw', paddingBottom: '1vw'}}
               dangerouslySetInnerHTML={{ __html: hist_price_text || "This graph shows the historical returns of the portfolio for the lookback period defined. It also shows a linear trendline across to give an overall positive or negative growth indication."}}>
@@ -139,7 +139,7 @@ const OutputPage = () => {
         </Grid>
         <Grid item xs={12} sm={6} md={12} style={{ padding: 0}}>
           <StyledBox style={{background: '#163A5F', borderRadius: '33px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)', margin: '7px'}}>
-            <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white'}}>Sentiment</Typography>           
+            <Typography variant="h4" style={{ fontSize: '3vh', fontWeight: 'bold', color: 'white', background: '#192435', borderRadius: '30px', padding: '0.6vh 1vw', display: 'inline-block'}}>Sentiment</Typography>           
             <div style={{ padding: '1vw', paddingRight: '0.5vw', overflow: 'auto'}}>
               <Typography variant="body1" style={{color: 'white', fontSize: '2vh'}}
                 dangerouslySetInnerHTML={{ __html: sentiment || "Filler text to explain sentiments."}}>

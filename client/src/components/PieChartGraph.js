@@ -31,10 +31,10 @@ function PieChartGraph() {
         series={[{
           data: pieChartData,
           highlightScope: { faded: 'global', highlighted: 'item' },
-          faded: { innerRadius: 70, additionalRadius: -20, color: 'gray' },
-          innerRadius: 50,
+          faded: { innerRadius: 110, additionalRadius: -30, color: 'gray' },
+          innerRadius: 90,
         }]}
-        height={350}
+        height={420}
         colors={palette}
       />
     </div>

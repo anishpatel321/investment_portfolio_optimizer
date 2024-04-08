@@ -117,24 +117,26 @@ function PortScatter() {
           type="number"
           dataKey="x"
           domain={xDomain}
-          label={{ value: 'Date', position: 'insideBottom', dy: 30, fill: 'white' }}
+          label={{ value: 'Date', position: 'insideBottom', dy: 30, fill: 'white', fontSize: '2.5vh' }}
           tickFormatter={value => new Date(value).toISOString().split('T')[0]}
           stroke="white"
           ticks={xTicks}
+          tick={{ fontSize: '2vh' }}
         />
         <YAxis 
             type="number"
             domain={yDomain} 
-            label={{ value: 'Price ($)', position: 'outsideLeft', angle:-90, dx: -50, fill: 'white' }}
+            label={{ value: 'Price ($)', position: 'outsideLeft', angle:-90, dx: -50, fill: 'white', fontSize: '2.5vh' }}
             tickFormatter={(value) => value.toFixed(0)}
             stroke="white"
             ticks={yTicks}
+            tick={{ fontSize: '2vh' }}
         />
         <Tooltip formatter={(value) => value.toFixed(2)}/>
         <Legend 
           verticalAlign="bottom" 
           align="center" 
-          wrapperStyle={{ paddingBottom: '10px', paddingTop: '50px' }} 
+          wrapperStyle={{ paddingBottom: '10px', paddingTop: '50px', fontSize: '2.2vh' }} 
         />
         {Object.keys(dfHistorical).map((ticker, index) => (
           <Line
@@ -145,6 +147,7 @@ function PortScatter() {
             data={chartData.filter(entry => entry.ticker === ticker)}
             name={ticker}
             stroke='#FFA500' // Random color
+            strokeWidth={'0.25vh'}
           />
         ))}
         {histTrendChartData.length > 0 && (
@@ -155,6 +158,7 @@ function PortScatter() {
             data={histTrendChartData}
             name="Historical Trend"
             stroke='#33FF57'
+            strokeWidth={'0.25vh'}
           />
         )}
       </ComposedChart>

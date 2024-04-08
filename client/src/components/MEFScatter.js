@@ -101,22 +101,22 @@ function MEFScatter() {
     <ResponsiveContainer width="100%" height={950}>
       <ComposedChart margin={{ top: 30, right: 30, bottom: 20, left: 70 }}>
         <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.4}/>
-        <XAxis type="number" dataKey="x" name="Volatility" stroke="white" label={{ value: 'Volatility', position: 'insideBottom', dy: 30, fill: 'white' } } domain={xDomain} tickFormatter={(value) => value.toFixed(2)} />
-        <YAxis type="number" dataKey="y" name="Returns" stroke="white" label={{ value: 'Returns', position: 'outsideLeft', angle:-90, dx: -50, fill: 'white' }} domain={yDomain} tickFormatter={(value) => value.toFixed(2)}/>
+        <XAxis type="number" dataKey="x" name="Volatility" stroke="white" label={{ value: 'Volatility', position: 'insideBottom', dy: 30, fill: 'white', fontSize: '2.5vh' } } domain={xDomain} tickFormatter={(value) => value.toFixed(2)} ticks={xTicks} tick={{ fontSize: '2.2vh' }}/>
+        <YAxis type="number" dataKey="y" name="Returns" stroke="white" label={{ value: 'Returns', position: 'outsideLeft', angle:-90, dx: -50, fill: 'white', fontSize: '2.5vh' }} domain={yDomain} tickFormatter={(value) => value.toFixed(2)} ticks={yTicks} tick={{ fontSize: '2.2vh' }}/>
         <Tooltip formatter={(value) => value.toFixed(3)}/>
         <Legend 
           verticalAlign="bottom" 
           align="center" 
-             wrapperStyle={{ paddingBottom: '10px', paddingTop: '50px' }} 
+             wrapperStyle={{ paddingBottom: '10px', paddingTop: '50px', fontSize: '2.2vh' }} 
            />
         {GeneratedPortfoliosData.length > 0 && <Scatter name="Generated Portfolios" data={GeneratedPortfoliosData} fill="#fa8072" shape={<ScatterGraphDot />}/>}
         {/* Represent MEF as a Line */}
-        {MEFData.length > 0 && <Line type="natural" dot={false} dataKey="y" data={MEFData} name="MEF" stroke="#8884d8" />}
+        {MEFData.length > 0 && <Line type="natural" dot={false} dataKey="y" data={MEFData} name="MEF" stroke="#00FFFF" strokeWidth={5} />}
         {/* Represent CAL as a Line */}
-        {CALData.length > 0 && <Line type="natural" dot={false} dataKey="y" data={CALData} name="CAL" stroke="#82ca9d" />}
+        {CALData.length > 0 && <Line type="natural" dot={false} dataKey="y" data={CALData} name="CAL" stroke="#82ca9d" strokeWidth={2} />}
         {/* Represent CML as a Line */}
-        {CMLData.length > 0 && <Line type="natural" dot={false} dataKey="y" data={CMLData} name="CML" stroke="#ffc658" />}
-        {OptimalData.length > 0 && <Scatter name="Optimal Theoretical" data={OptimalData} fill="#ffffff" />}     
+        {CMLData.length > 0 && <Line type="natural" dot={false} dataKey="y" data={CMLData} name="CML" stroke="#ffc658" strokeWidth={2}  />}
+        {OptimalData.length > 0 && <Scatter name="Optimal Theoretical" data={OptimalData} fill="#FF0356" />}     
       </ComposedChart>
     </ResponsiveContainer>
   );

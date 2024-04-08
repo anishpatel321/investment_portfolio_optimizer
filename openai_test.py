@@ -93,44 +93,6 @@ def dynamic_pie(df_max_sharpe_below_threshold_generated_portfolio, investment_am
     response_text = re.sub(r'\*\*(.*?)\*\*', r'<span style="color: #FFECB3;"><strong>\1</strong></span>', response_text)
     return response_text
 
-
-# Setup client
-# finnhub_client = finnhub.Client(api_key=os.getenv('FINNHUB_API_KEY'))
-
-# today = datetime.today()
-# one_year_ago = today - timedelta(days = 365)
-
-# date_today = today.strftime('%Y-%m-%d')
-# date_one_yr = one_year_ago.strftime('%Y-%m-%d')
-
-# print(date_today)
-# print(date_one_yr)
-
-# Get company news
-# company_news = finnhub_client.company_news('AAPL', date_one_yr, date_today)
-# for news in company_news:
-#     print(news['summary'])
-    
-    
-# url = 'https://www.alphavantage.co/query'
-
-# # Define the parameters
-# params = {
-#     'function': 'NEWS_SENTIMENT',
-#     'tickers': 'AAPL',
-#     'apikey': os.getenv('ALPHA_VANTAGE_API_KEY')
-# }
-
-# # Make the request
-# response = requests.get(url, params=params)
-
-# # Parse the JSON response
-# data = response.json()
-
-# # Print the data
-# print(data)
-
-
 # SENTIMENT ANALYSIS:
 
 import requests
@@ -158,14 +120,6 @@ def get_sentiment(tickers, api_key):
             dataframes[ticker] = (pd.DataFrame(), pd.DataFrame())  # Placeholder value for tickers with no data
     return dataframes
 
-# tickers = ['AMZN']  # replace with your tickers
-# api_key = os.getenv('ALPHA_VANTAGE_API_KEY')  # replace with your API key
-
-# print(df_sent.head(50))
-# print(df_summ.head(50))
-
-# print(dfs)
-
 import json
 
 def overall_sentiment(tickers, api_key):
@@ -177,28 +131,23 @@ def overall_sentiment(tickers, api_key):
         else:
             # Convert sentiment scores to numeric values
             df_sentiment_scores['sentiment_score'] = pd.to_numeric(df_sentiment_scores['sentiment_score'], errors='coerce')
-            average_score = df_sentiment_scores['sentiment_score'].mean()
             
-            # Determine sentiment label based on average score
-            if average_score <= -0.35:
-                sentiment = "Bearish"
-            elif -0.35 < average_score <= -0.15:
-                sentiment = "Somewhat-Bearish"
-            elif -0.15 < average_score < 0.15:
-                sentiment = "Neutral"
-            elif 0.15 <= average_score < 0.35:
-                sentiment = "Somewhat_Bullish"
-            else:
-                sentiment = "Bullish"
+            # Determine sentiment label based on score
+            df_sentiment_scores['sentiment_label'] = df_sentiment_scores['sentiment_score'].apply(
+                lambda x: "Bearish" if x <= -0.35 else
+                          "Somewhat-Bearish" if -0.35 < x <= -0.15 else
+                          "Neutral" if -0.15 < x < 0.15 else
+                          "Somewhat_Bullish" if 0.15 <= x < 0.35 else
+                          "Bullish"
+            )
             
             # Count sentiment occurrences
-            sentiment_counts = df_sentiment_scores['sentiment_score'].apply(lambda x: sentiment)
-            most_common_sentiment = sentiment_counts.mode().iloc[0]
+            sentiment_counts = df_sentiment_scores['sentiment_label'].value_counts().to_dict()
             
-            overall_results[ticker] = most_common_sentiment
+            overall_results[ticker] = sentiment_counts
 
     # Print results
-    print("Most Common Sentiments:")
+    print("Sentiment Counts:")
     print(json.dumps(overall_results, indent=4))
 
     return overall_results
@@ -214,7 +163,7 @@ def dynamic_sentiment(overall_results):
     for ticker, sentiment in overall_results.items():
         prompt += f"The sentiment for **{ticker}** is **{sentiment}**.\n"
 
-    prompt += "\nPlease provide a very concise summary of these sentiments, explaining what each sentiment means in the context of stock market investment and diversifying your portfolio."
+    prompt += "\nPlease provide a very concise insight of these sentiment counts for each stock, explaining what each sentiment means in the context of stock market investment and diversifying your portfolio."
     prompt += "\nMake sure that the tickers and sentiments are bolded."
     # Send the prompt to the OpenAI API
     completion = client.chat.completions.create(
